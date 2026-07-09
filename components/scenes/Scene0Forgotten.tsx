@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   m,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -12,15 +13,13 @@ import {
 import Fragment from "@/components/artifacts/Fragments";
 import { fragments, opening, type FragmentSpec } from "@/content/scenes";
 
-type Phase = "void" | "line1" | "gap" | "line2" | "field";
+const PHASES = ["void", "line1", "gap", "line2", "field"] as const;
+type Phase = (typeof PHASES)[number];
 
-/** Storyboard timeline, in ms from arrival. */
-const TIMELINE: Array<[number, Phase]> = [
-  [3000, "line1"],
-  [8000, "gap"],
-  [10000, "line2"],
-  [15000, "field"],
-];
+/** Storyboard timeline: ms from each phase to the next. */
+const STEP_MS = [2500, 4000, 1800, 3700];
+/** The machine yields to impatience: scroll fast-forwards each step. */
+const HURRIED_STEP_MS = 160;
 
 /**
  * Scene 0 — The Forgotten Interfaces.
@@ -33,9 +32,11 @@ const TIMELINE: Array<[number, Phase]> = [
 export default function Scene0Forgotten() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const [phase, setPhase] = useState<Phase>("void");
+  const [phaseIdx, setPhaseIdx] = useState(0);
+  const phase: Phase = PHASES[phaseIdx];
   const [shown, setShown] = useState(0);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [hurried, setHurried] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -61,27 +62,40 @@ export default function Scene0Forgotten() {
     return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
 
-  // Reduced motion compresses the timeline; the sequence (and the idea)
-  // survive, the waiting doesn't.
+  // A chained step timeline: each phase schedules only the next, so a
+  // mid-sequence hurry (or reduced motion) compresses what remains
+  // without ever replaying what happened. The sequence survives; the
+  // waiting doesn't.
   useEffect(() => {
-    if (!witnessed) return;
-    const scale = reduced ? 0.15 : 1;
-    const timers = TIMELINE.map(([ms, p]) =>
-      setTimeout(() => setPhase(p), ms * scale),
+    if (!witnessed || phaseIdx >= PHASES.length - 1) return;
+    const base = STEP_MS[phaseIdx];
+    const delay = reduced ? base * 0.15 : hurried ? HURRIED_STEP_MS : base;
+    const t = setTimeout(
+      () => setPhaseIdx((i) => Math.min(i + 1, PHASES.length - 1)),
+      delay,
     );
-    return () => timers.forEach(clearTimeout);
-  }, [reduced, witnessed]);
+    return () => clearTimeout(t);
+  }, [witnessed, phaseIdx, reduced, hurried]);
 
-  // One fragment per second — the cadence of a day's interruptions.
+  // One fragment per second — the cadence of a day's interruptions —
+  // unless the visitor has already moved on.
   useEffect(() => {
     if (phase !== "field" || shown >= fragments.length) return;
-    const t = setTimeout(() => setShown((s) => s + 1), reduced ? 100 : 1000);
+    const t = setTimeout(
+      () => setShown((s) => s + 1),
+      reduced ? 100 : hurried ? 120 : 1000,
+    );
     return () => clearTimeout(t);
-  }, [phase, shown, reduced]);
+  }, [phase, shown, reduced, hurried]);
 
-  useEffect(() => progress.on("change", (v) => {
-    if (v > 0.01) setHasScrolled(true);
-  }), [scrollYProgress]);
+  // Scrolling before the field has finished is the visitor telling the
+  // machine to hurry. The machine obliges.
+  useMotionValueEvent(progress, "change", (v) => {
+    if (v > 0.01) {
+      setHasScrolled(true);
+      setHurried(true);
+    }
+  });
 
   // The void releases into the working dark as the visitor leaves.
   const background = useTransform(progress, [0.45, 0.85], ["#000000", "#0a0a0b"]);
@@ -117,10 +131,10 @@ export default function Scene0Forgotten() {
         >
           <AnimatePresence mode="wait">
             {phase === "line1" && (
-              <Statement key="line1">{opening.line1}</Statement>
+              <Statement key="line1" quick={hurried}>{opening.line1}</Statement>
             )}
             {(phase === "line2" || phase === "field") && (
-              <Statement key="line2">
+              <Statement key="line2" quick={hurried}>
                 {opening.line2}
                 {/* The one amber in this room: the machine, waiting. */}
                 <span
@@ -163,12 +177,12 @@ export default function Scene0Forgotten() {
   );
 }
 
-function Statement({ children }: { children: React.ReactNode }) {
+function Statement({ quick, children }: { quick?: boolean; children: React.ReactNode }) {
   return (
     <m.p
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: 1.8, ease: "easeOut" } }}
-      exit={{ opacity: 0, transition: { duration: 0.9, ease: "easeIn" } }}
+      animate={{ opacity: 1, transition: { duration: quick ? 0.45 : 1.8, ease: "easeOut" } }}
+      exit={{ opacity: 0, transition: { duration: quick ? 0.2 : 0.9, ease: "easeIn" } }}
       className="font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
     >
       {children}

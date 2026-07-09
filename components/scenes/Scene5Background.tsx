@@ -1,7 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { m, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  m,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
 import Fragment from "@/components/artifacts/Fragments";
 import type { FragmentKind } from "@/content/scenes";
 import { background, remembering, threshold } from "@/content/scenes";
@@ -15,10 +22,11 @@ import { background, remembering, threshold } from "@/content/scenes";
  * someone made. Scroll is the only instrument left.
  */
 
-/** Question windows on scene progress. */
+/** Question windows on scene progress — derived from the corpus. */
+const N = background.questions.length;
 const Q_START = 0.13;
 const Q_END = 0.93;
-const QW = (Q_END - Q_START) / 7;
+const QW = (Q_END - Q_START) / N;
 const windowOf = (i: number): [number, number] => [Q_START + i * QW, Q_START + (i + 1) * QW];
 
 const OPEN_W = [0.015, 0.05, 0.095, 0.13];
@@ -27,7 +35,7 @@ const TAKEAWAY_W = [0.945, 0.985];
 /** Reduced-motion snap points: opening, each question, takeaway. */
 const CENTERS = [
   0.07,
-  ...Array.from({ length: 7 }, (_, i) => Q_START + (i + 0.5) * QW),
+  ...Array.from({ length: N }, (_, i) => Q_START + (i + 0.5) * QW),
   0.97,
 ];
 
@@ -45,12 +53,19 @@ export default function Scene5Background() {
   const openingO = useTransform(progress, OPEN_W, [0, 1, 1, 0]);
   const takeawayO = useTransform(progress, TAKEAWAY_W, [0, 1]);
 
+  // Which questions have been reached — the pattern break latches on.
+  const [reached, setReached] = useState(-1);
+  useMotionValueEvent(progress, "change", (v) => {
+    const idx = Math.floor((v - Q_START) / QW);
+    if (idx >= 0 && idx < N) setReached((r) => Math.max(r, idx));
+  });
+
   return (
     <section
       ref={ref}
       data-scene={5}
       aria-label="Designing the Background"
-      className="relative h-[650vh]"
+      className="relative h-[520vh]"
     >
       <h2 className="sr-only">Designing the Background</h2>
 
@@ -64,7 +79,13 @@ export default function Scene5Background() {
 
         <div className="grid w-full place-items-center">
           {background.questions.map((q, i) => (
-            <Question key={q.label} progress={progress} window={windowOf(i)} q={q} />
+            <Question
+              key={q.label}
+              progress={progress}
+              window={windowOf(i)}
+              q={q}
+              active={reached >= i}
+            />
           ))}
         </div>
 
@@ -85,16 +106,33 @@ function Question({
   progress,
   window: [a, b],
   q,
+  active,
 }: {
   progress: MotionValue<number>;
   window: [number, number];
   q: { label: string; question: string; example: string };
+  active: boolean;
 }) {
+  // The pattern break: for the live artifact, the example acts FIRST
+  // and the question arrives only after it has finished.
+  const live = q.example === "maps-live";
+  const qDelay = live ? 0.028 : 0;
+
   // A quiet cascade tied to scroll: label, then question, then the
   // artifact — each a beat behind the last. All leave together.
   const labelO = useTransform(progress, [a, a + 0.02, b - 0.02, b], [0, 1, 1, 0]);
-  const questionO = useTransform(progress, [a + 0.012, a + 0.034, b - 0.02, b], [0, 1, 1, 0]);
-  const exampleO = useTransform(progress, [a + 0.026, a + 0.05, b - 0.02, b], [0, 0.6, 0.6, 0]);
+  const questionO = useTransform(
+    progress,
+    [a + 0.012 + qDelay, a + 0.034 + qDelay, b - 0.02, b],
+    [0, 1, 1, 0],
+  );
+  const exampleO = useTransform(
+    progress,
+    live
+      ? [a, a + 0.018, b - 0.02, b]
+      : [a + 0.026, a + 0.05, b - 0.02, b],
+    live ? [0, 0.85, 0.85, 0] : [0, 0.6, 0.6, 0],
+  );
   const y = useTransform(progress, [a, a + 0.045], [10, 0]);
 
   return (
@@ -115,9 +153,39 @@ function Question({
         {q.question}
       </m.p>
       <m.div style={{ opacity: exampleO }} className="mt-12">
-        <Example kind={q.example} />
+        {live ? <MapsLive active={active} /> : <Example kind={q.example} />}
       </m.div>
     </m.div>
+  );
+}
+
+/**
+ * The one artifact that acts in this room: the reroute happens to the
+ * visitor — again — and only then is the question asked.
+ */
+function MapsLive({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
+  const [rerouted, setRerouted] = useState(false);
+  useEffect(() => {
+    if (!active || rerouted) return;
+    const t = setTimeout(() => setRerouted(true), reduced ? 100 : 1200);
+    return () => clearTimeout(t);
+  }, [active, rerouted, reduced]);
+  return (
+    <div className="flex w-max items-center gap-2 rounded-[var(--r-3)] border border-line bg-surface px-3.5 py-2.5 font-mono text-[0.6875rem] tracking-[0.02em] text-ink-dim">
+      <m.svg
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="currentColor"
+        aria-hidden
+        animate={{ rotate: rerouted ? 32 : 0 }}
+        transition={{ duration: reduced ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <path d="M6 0.5 11 11 6 8.5 1 11Z" />
+      </m.svg>
+      {rerouted ? "Rerouted." : "Rerouting…"}
+    </div>
   );
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { m, useReducedMotion } from "motion/react";
+import { m, useInView, useReducedMotion } from "motion/react";
 import MachineText from "@/components/systems/MachineText";
 import { terminal } from "@/content/scenes";
 
@@ -25,8 +25,9 @@ const VOICE_CLASS: Record<Voice, string> = {
 
 /** ms of machine latency before it answers. The 1970s were not instant. */
 const LATENCY = 450;
-/** Idle ms before the machine offers a dim hint. */
-const IDLE_HINT = 18000;
+/** Idle ms before the machine offers a dim hint. Frustration is the
+ * lesson; abandonment is failure — mercy arrives early. */
+const IDLE_HINT = 8000;
 
 /**
  * Scene 1 — Demanding Attention.
@@ -38,6 +39,8 @@ const IDLE_HINT = 18000;
  */
 export default function Scene1Terminal() {
   const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { amount: 0.25 });
   const inputRef = useRef<HTMLInputElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(0);
@@ -58,6 +61,8 @@ export default function Scene1Terminal() {
     listed: false,
     hinted: { list: false, open: false },
     lastActivity: Date.now(),
+    startedAt: 0,
+    warnedLeaving: false,
   });
 
   const print = useCallback((texts: Array<[string, Voice]>) => {
@@ -98,6 +103,20 @@ export default function Scene1Terminal() {
     setBooted(true);
     print(terminal.boot.map((t) => [t, "machine"] as [string, Voice]));
   }, [booted, print]);
+
+  // The visitor scrolls away unsolved: the machine notes it, once, in
+  // its own voice — and Scene 3 will remember the debt.
+  useEffect(() => {
+    const s = state.current;
+    if (inView || !booted || done || s.warnedLeaving) return;
+    s.warnedLeaving = true;
+    print([[terminal.stillWaiting, "machine"]]);
+    try {
+      if (!localStorage.getItem("ii.commands")) {
+        localStorage.setItem("ii.abandoned", "1");
+      }
+    } catch {}
+  }, [inView, booted, done, print]);
 
   // A dim hint when the visitor has been stuck in silence too long.
   useEffect(() => {
@@ -142,7 +161,10 @@ export default function Scene1Terminal() {
         if (!arg) out.push([terminal.errors.openWhat, "error"]);
         else if (arg === "BEACH.PIC") {
           out.push(...terminal.files[arg].map((l) => [l, "art"] as [string, Voice]));
-          out.push([terminal.success(s.commands), "machine"]);
+          const seconds = s.startedAt
+            ? Math.max(1, Math.round((Date.now() - s.startedAt) / 1000))
+            : undefined;
+          out.push([terminal.success(s.commands, seconds), "machine"]);
         } else if (terminal.files[arg]) {
           out.push(...terminal.files[arg].map((l) => [l, "machine"] as [string, Voice]));
         } else out.push([terminal.errors.noFile(arg), "error"]);
@@ -182,8 +204,16 @@ export default function Scene1Terminal() {
       setBusy(false);
       if (solved) {
         setDone(true);
+        // The machine remembers across visits — that is the point.
         try {
-          sessionStorage.setItem("ii.commands", String(s.commands));
+          localStorage.setItem("ii.commands", String(s.commands));
+          if (s.startedAt) {
+            localStorage.setItem(
+              "ii.seconds",
+              String(Math.max(1, Math.round((Date.now() - s.startedAt) / 1000))),
+            );
+          }
+          localStorage.removeItem("ii.abandoned");
         } catch {}
       }
     }, reduced ? 60 : LATENCY);
@@ -191,6 +221,7 @@ export default function Scene1Terminal() {
 
   return (
     <section
+      ref={sectionRef}
       data-scene={1}
       aria-label="Demanding Attention"
       className="flex min-h-screen flex-col items-center justify-center px-6 py-[var(--pause-m)]"
@@ -250,6 +281,7 @@ export default function Scene1Terminal() {
           disabled={done}
           onChange={(e) => {
             state.current.lastActivity = Date.now();
+            if (!state.current.startedAt) state.current.startedAt = Date.now();
             setInput(e.target.value);
           }}
           onKeyDown={(e) => {

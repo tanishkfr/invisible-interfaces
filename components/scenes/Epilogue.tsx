@@ -22,8 +22,10 @@ export default function Epilogue() {
   // Function-based on purpose — see Scene 2: keeps these JS-driven.
   const progress = useTransform(scrollYProgress, (v) => v);
   const background = useTransform(progress, [0, 0.22], ["#0a0a0b", "#000000"]);
-  const line1Opacity = useTransform(progress, [0.2, 0.35, 0.86, 0.97], [0, 1, 1, 0]);
-  const line2Opacity = useTransform(progress, [0.4, 0.55, 0.86, 0.97], [0, 1, 1, 0]);
+  const line1Opacity = useTransform(progress, [0.18, 0.32, 0.7, 0.8], [0, 1, 1, 0]);
+  const line2Opacity = useTransform(progress, [0.36, 0.5, 0.7, 0.8], [0, 1, 1, 0]);
+  // The machine's only address to the visitor's future — then void.
+  const turnOpacity = useTransform(progress, [0.85, 0.91, 0.965, 1], [0, 1, 1, 0]);
 
   return (
     <section ref={ref} data-scene={6} aria-label="Epilogue" className="relative h-[260vh]">
@@ -42,6 +44,13 @@ export default function Epilogue() {
             {epilogue.line2}
           </m.span>
         </h2>
+
+        <m.p
+          style={{ opacity: turnOpacity }}
+          className="absolute bottom-[22vh] left-0 w-full text-center font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint"
+        >
+          {epilogue.turn}
+        </m.p>
       </m.div>
     </section>
   );

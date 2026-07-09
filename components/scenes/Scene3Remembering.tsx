@@ -9,7 +9,7 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
-import BeachPhoto from "@/components/artifacts/BeachPhoto";
+import Photo from "@/components/artifacts/Photo";
 import MachineText from "@/components/systems/MachineText";
 import { remembering } from "@/content/scenes";
 
@@ -229,9 +229,10 @@ function ReplyBeat({ active }: { active: boolean }) {
 function CalendarBeat({ active }: { active: boolean }) {
   const stage = useStagedTimeline(active, 1, 900);
   return (
+    // Slides in from the side — from the conversation it was taken from.
     <m.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: stage >= 1 ? 1 : 0 }}
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: stage >= 1 ? 1 : 0, x: stage >= 1 ? 0 : -10 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       className={CARD}
       role="group"
@@ -255,17 +256,22 @@ function CalendarBeat({ active }: { active: boolean }) {
 function MemoryBeat({ active }: { active: boolean }) {
   const stage = useStagedTimeline(active, 2, 1600);
   // Read lazily — the visitor writes this memory in Scene 1, long
-  // after this component has mounted.
-  const [commands, setCommands] = useState<string | null>(null);
+  // after this component has mounted. Solvers get their cost back;
+  // deserters get the gentler, sharper truth.
+  const [memoryLine, setMemoryLine] = useState<string | null>(null);
   useEffect(() => {
     if (stage < 1) return;
     try {
-      setCommands(sessionStorage.getItem("ii.commands"));
+      const commands = localStorage.getItem("ii.commands");
+      if (commands) setMemoryLine(remembering.memory.selfReference(commands));
+      else if (localStorage.getItem("ii.abandoned"))
+        setMemoryLine(remembering.memory.selfReferenceAbandoned);
     } catch {}
   }, [stage]);
 
   return (
-    <div className="flex w-[19rem] flex-col">
+    // The photograph's homecoming stands larger than the forms before it.
+    <div className="flex w-[min(24rem,88vw)] flex-col">
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 1 ? 1 : 0 }}
@@ -274,22 +280,22 @@ function MemoryBeat({ active }: { active: boolean }) {
         role="group"
         aria-label="A photo memory appearing on its own"
       >
-        <div className="h-[13rem]">
-          <BeachPhoto />
+        <div className="h-[min(16rem,58vw)]">
+          <Photo era="full" />
         </div>
         <div className="bg-surface px-4 py-3 font-serif text-[0.95rem] italic text-ink-dim">
           {remembering.memory.caption}
         </div>
       </m.div>
 
-      {commands && (
+      {memoryLine && (
         <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: stage >= 2 ? 1 : 0 }}
           transition={{ duration: 0.9 }}
           className="mt-5 text-center font-mono text-[0.6875rem] tracking-[0.14em] text-ink-faint"
         >
-          {remembering.memory.selfReference(commands)}
+          {memoryLine}
         </m.p>
       )}
     </div>

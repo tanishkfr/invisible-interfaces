@@ -49,16 +49,37 @@ export const terminal = {
     list: "TRY: LIST",
     open: "TRY: OPEN <FILE>",
   },
-  success: (n: number) => `DISPLAYED. THAT TOOK ${n} COMMAND${n === 1 ? "" : "S"}.`,
+  success: (n: number, s?: number) =>
+    `DISPLAYED. THAT TOOK ${n} COMMAND${n === 1 ? "" : "S"}${s ? ` AND ${s} SECONDS` : ""}.`,
+  stillWaiting: "STILL WAITING.",
   takeaway: "It demanded your complete attention. It always did.",
 };
 
 /** Scene 2 — the morph. One task, five paradigms. */
 export const simplification = {
-  /** Machine-voice captions naming the act of each era. */
-  captions: ["TYPE WHERE IT IS", "POINT AT IT", "TOUCH IT", "ASK FOR IT", ""],
+  /** Machine-voice captions naming the act of each era, dated honestly —
+   * search predates touch as technology; the sequence is the order in
+   * which each became the dominant way of finding things. */
+  captions: [
+    "TYPE WHERE IT IS · 1978",
+    "POINT AT IT · 1984",
+    "TOUCH IT · 2007",
+    "ASK FOR IT · SINCE 1998",
+    "",
+  ],
   guiTitle: "PHOTOS",
-  guiStatus: "3 items",
+  guiStatus: "3 items · 231K in disk",
+  /** The attention ledger — the cost of the same task, per era.
+   * Terminal-era values are replaced by the visitor's own when known. */
+  ledger: [
+    "22 KEYSTROKES · 7 DECISIONS · ~90 SEC",
+    "6 CLICKS · 4 DECISIONS · ~20 SEC",
+    "1 TAP · 1 DECISION · ~5 SEC",
+    "5 KEYSTROKES · 1 DECISION · ~4 SEC",
+    "0 INPUT · 0 DECISIONS · ATTENTION: YOURS AGAIN.",
+  ],
+  personalLedger: (n: string, s: string | null) =>
+    `${n} COMMANDS · ${n} DECISIONS · ${s ? `${s} SEC` : "~90 SEC"} — YOURS`,
   searchQuery: "beach",
   /** The machine's first sentence in the human voice. */
   predictionCaption: "From this day, three years ago.",
@@ -67,7 +88,8 @@ export const simplification = {
     "The same task, five ways. First you type where the photograph is. " +
     "Then you point at it. Then you touch it. Then you ask for it. " +
     "Finally, the photograph simply appears before you ask. " +
-    "Each paradigm asks a little less of you.",
+    "Each paradigm asks a little less of you: the cost falls from " +
+    "ninety seconds of typed commands to nothing at all.",
 };
 
 /** Scene 3 — software acting before being asked. */
@@ -90,6 +112,7 @@ export const remembering = {
   memory: {
     caption: "A day at the shore — three years ago.",
     selfReference: (n: string) => `LAST TIME, THIS TOOK YOU ${n} COMMANDS.`,
+    selfReferenceAbandoned: "YOU NEVER FOUND THE PHOTOGRAPH. IT FOUND YOU ANYWAY.",
   },
   takeaway: "You found the photograph once. Since then, it finds you.",
 };
@@ -107,6 +130,22 @@ export const threshold = {
     "REMINDER: SET FOR 7:05",
   ],
   outcome: "Dinner tomorrow, 7:30. You’ll need to leave by 7:05.",
+  /** The choreography stage: node positions in % of the stage. */
+  nodes: [
+    { label: "CALENDAR", conclusion: "THU 7:30", x: 14, y: 14 },
+    { label: "MAPS", conclusion: "25 MIN", x: 84, y: 12 },
+    { label: "TRAFFIC", conclusion: "LIGHT", x: 88, y: 52 },
+    { label: "WEATHER", conclusion: "CLEAR", x: 10, y: 54 },
+    { label: "RESERVATION", conclusion: "TABLE FOR 2", x: 26, y: 88 },
+    { label: "REMINDER", conclusion: "LEAVE 7:05", x: 72, y: 90 },
+  ],
+  /** Which systems feed which — the threads. */
+  edges: [
+    ["CALENDAR", "RESERVATION"],
+    ["MAPS", "TRAFFIC"],
+    ["TRAFFIC", "REMINDER"],
+    ["WEATHER", "RESERVATION"],
+  ] as Array<[string, string]>,
   hold: "HOLD TO SEE THE WORK",
   takeaway: "All of it was interface. You saw one sentence.",
 };
@@ -116,11 +155,9 @@ export const background = {
   opening: "Invisible still means designed.",
   questions: [
     { label: "TRUST", question: "How much should it do without asking?", example: "autofill" },
-    { label: "CONTROL", question: "Who decided where you’re going?", example: "maps" },
-    { label: "CONSENT", question: "When did you agree to this?", example: "otp" },
-    { label: "TIMING", question: "Is now the right moment to interrupt?", example: "calendar" },
-    { label: "TRANSPARENCY", question: "Should you have to see the work?", example: "syslog" },
-    { label: "EXPLAINABILITY", question: "Could it tell you why?", example: "spotify" },
+    { label: "CONTROL", question: "Who decided where you’re going?", example: "maps-live" },
+    { label: "CONSENT", question: "When did you agree to this — and to when?", example: "otp" },
+    { label: "TRANSPARENCY", question: "Should you see the work? Could it explain itself?", example: "syslog" },
     { label: "REVERSIBILITY", question: "Can you take it back?", example: "reply" },
   ] as const,
   takeaway: "The interfaces got quieter. The questions got louder.",
@@ -129,6 +166,9 @@ export const background = {
 export const epilogue = {
   line: "Interfaces haven’t disappeared.",
   line2: "They’ve disappeared from your attention.",
+  /** The machine's only address to the visitor's future. */
+  turn: "YOU’LL NOTICE ONE TONIGHT.",
+  aboutLink: "ABOUT THIS ESSAY",
 };
 
 /** Scene 0 ambient fragments — everyday invisible interfaces. */
