@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ————— Token sheet (see VISUAL_SYSTEM.md) ————— */
+:root {
+  /* color */
+  --void: #000000;
+  --canvas: #0a0a0b;
+  --surface: #111113;
+  --ink: #e8e6e3;
+  --ink-dim: #918e88;
+  /* ≥4.5:1 on canvas AND surface — dim never means illegible (VISUAL_SYSTEM §4). */
+  --ink-faint: #827e76;
+  --line: rgba(232, 230, 227, 0.1);
+  --accent: #e8a33d;
+
+  /* space */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2.5rem;
+  --s-7: 4rem;
+  --s-8: 6.5rem;
+  --pause-s: 30vh;
+  --pause-m: 60vh;
+  --pause-l: 100vh;
+
+  /* radius (era-indexed) */
+  --r-0: 0px;
+  --r-1: 2px;
+  --r-2: 8px;
+  --r-3: 14px;
+
+  /* motion */
+  --t-instant: 0ms;
+  --t-step: 120ms;
+  --t-settle: 400ms;
+  --t-dissolve: 900ms;
+  --t-dwell: 1800ms;
+  --t-breathe: 6000ms;
+  --e-settle: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-void: var(--void);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --font-serif: var(--font-newsreader), georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+html {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-faint) transparent;
+}
+
+body {
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--void);
+}
+
+/* Focus is demanded attention — same token as the machine's. */
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Machine-era motion: the cursor does not fade, it is or isn't. */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: blink 1.06s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink {
+    animation: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

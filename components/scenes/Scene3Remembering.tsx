@@ -1,0 +1,297 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import {
+  m,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
+import BeachPhoto from "@/components/artifacts/BeachPhoto";
+import MachineText from "@/components/systems/MachineText";
+import { remembering } from "@/content/scenes";
+
+/**
+ * Scene 3 — When Software Started Remembering.
+ *
+ * A pinned stage: the page holds still while scroll carries four
+ * demonstrations through it — a login fills itself, a reply drafts
+ * itself, a calendar entry appears from a conversation, and the
+ * photograph returns as a memory, unasked. Each acts on its own the
+ * first time its moment arrives; scrubbing back doesn't rewind them —
+ * what software remembers stays remembered.
+ */
+
+/** Opening statement window, then four beat windows on scene progress. */
+const OPEN_W = [0.02, 0.06, 0.1, 0.14];
+const BEATS: Array<[number, number]> = [
+  [0.14, 0.36],
+  [0.36, 0.58],
+  [0.58, 0.8],
+  [0.8, 1.0],
+];
+/** Reduced-motion snap points: statement + one per beat. */
+const CENTERS = [0.08, 0.25, 0.47, 0.69, 0.92];
+
+export default function Scene3Remembering() {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+
+  // Function-based on purpose — see Scene 2: keeps every downstream
+  // transform JS-driven (no WAAPI promotion) and snaps to discrete
+  // moments under reduced motion.
+  const progress = useTransform(scrollYProgress, (v) =>
+    reduced ? CENTERS.reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a)) : v,
+  );
+
+  // Beats latch on when their window is reached and never un-play.
+  const [reached, setReached] = useState(-1);
+  useMotionValueEvent(progress, "change", (v) => {
+    const idx = BEATS.findIndex(([a, b]) => v >= a + 0.03 && v < b);
+    if (idx >= 0) setReached((r) => Math.max(r, idx));
+  });
+
+  const openingO = useTransform(progress, OPEN_W, [0, 1, 1, 0]);
+
+  return (
+    <section
+      ref={ref}
+      data-scene={3}
+      aria-label="When Software Started Remembering"
+      className="relative h-[450vh]"
+    >
+      <h2 className="sr-only">When Software Started Remembering</h2>
+
+      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-6">
+        {/* The human thought that opens the room */}
+        <m.p
+          style={{ opacity: openingO }}
+          className="absolute max-w-[34rem] text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
+        >
+          {remembering.opening}
+        </m.p>
+
+        {/* The four demonstrations, swapped in place by scroll */}
+        <div className="grid place-items-center">
+          <BeatShell progress={progress} window={BEATS[0]}>
+            <AutofillBeat active={reached >= 0} />
+          </BeatShell>
+          <BeatShell progress={progress} window={BEATS[1]}>
+            <ReplyBeat active={reached >= 1} />
+          </BeatShell>
+          <BeatShell progress={progress} window={BEATS[2]}>
+            <CalendarBeat active={reached >= 2} />
+          </BeatShell>
+          <BeatShell progress={progress} window={BEATS[3]} holdToEnd>
+            <MemoryBeat active={reached >= 3} />
+          </BeatShell>
+        </div>
+      </div>
+
+      {/* The one explanation, after the room */}
+      <m.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.8 }}
+        transition={{ duration: 1.8, ease: "easeOut" }}
+        className="absolute bottom-[6vh] left-1/2 w-full max-w-[34rem] -translate-x-1/2 px-6 text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
+      >
+        {remembering.takeaway}
+      </m.p>
+    </section>
+  );
+}
+
+/* ————— Pinned-stage plumbing ————— */
+
+function BeatShell({
+  progress,
+  window: [a, b],
+  holdToEnd,
+  children,
+}: {
+  progress: MotionValue<number>;
+  window: [number, number];
+  holdToEnd?: boolean;
+  children: React.ReactNode;
+}) {
+  const opacity = useTransform(
+    progress,
+    [a, a + 0.04, b - 0.04, b],
+    [0, 1, 1, holdToEnd ? 1 : 0],
+  );
+  // Appear verb: opacity plus a settle of a few pixels — never a slide.
+  const y = useTransform(progress, [a, a + 0.05], [10, 0]);
+  return (
+    <m.div style={{ opacity, y }} className="[grid-area:1/1]">
+      {children}
+    </m.div>
+  );
+}
+
+/** Staged timeline that begins the first time its beat is reached. */
+function useStagedTimeline(active: boolean, count: number, stepMs: number) {
+  const reduced = useReducedMotion();
+  const [stage, setStage] = useState(0);
+  useEffect(() => {
+    if (!active || stage >= count) return;
+    const t = setTimeout(
+      () => setStage((s) => s + 1),
+      stage === 0 ? 550 : reduced ? 150 : stepMs,
+    );
+    return () => clearTimeout(t);
+  }, [active, stage, count, stepMs, reduced]);
+  return stage;
+}
+
+const CARD =
+  "w-[19rem] rounded-[var(--r-3)] border border-line bg-surface p-5 font-mono text-[0.8125rem] leading-relaxed";
+
+/* ————— Beat 1: the login that fills itself ————— */
+
+function AutofillBeat({ active }: { active: boolean }) {
+  const stage = useStagedTimeline(active, 3, 900);
+  return (
+    <div className={CARD} role="group" aria-label="A sign-in form filling itself">
+      <p aria-live="polite" className="sr-only">
+        {stage >= 3 ? "The form filled itself and signed in." : ""}
+      </p>
+      <div className="text-[0.6875rem] text-ink-faint">EMAIL</div>
+      <div className="mt-1 border-b border-line pb-1 text-ink">
+        <m.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: stage >= 1 ? 1 : 0 }}
+          transition={{ duration: 0.15 }}
+          className="rounded-[2px] bg-[rgba(232,163,61,0.08)] px-1"
+        >
+          {remembering.login.email}
+        </m.span>
+      </div>
+      <div className="mt-4 text-[0.6875rem] text-ink-faint">PASSWORD</div>
+      <div className="mt-1 border-b border-line pb-1 tracking-[0.2em] text-ink">
+        <m.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: stage >= 2 ? 1 : 0 }}
+          transition={{ duration: 0.15 }}
+          className="rounded-[2px] bg-[rgba(232,163,61,0.08)] px-1"
+        >
+          ••••••••••
+        </m.span>
+      </div>
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 3 ? 1 : 0 }}
+        transition={{ duration: 0.9 }}
+        className="mt-4 text-ink-dim"
+      >
+        {remembering.login.signedIn}
+      </m.div>
+    </div>
+  );
+}
+
+/* ————— Beat 2: the reply that drafts itself ————— */
+
+function ReplyBeat({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
+  const stage = useStagedTimeline(active, 2, 1100);
+  return (
+    <div className={CARD} role="group" aria-label="A message reply suggesting itself">
+      <div className="w-max max-w-[85%] rounded-[var(--r-3)] rounded-bl-[4px] border border-line px-3 py-2 text-ink-dim">
+        {remembering.reply.incoming}
+      </div>
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 2 ? 1 : 0 }}
+        transition={{ duration: 0.6 }}
+        className="mt-5"
+      >
+        <div className="text-[0.625rem] tracking-[0.14em] text-ink-faint">
+          {remembering.reply.label}
+        </div>
+        <div className="mt-1.5 border-b border-line pb-1 text-ink">
+          {stage >= 2 ? (
+            <MachineText text={remembering.reply.suggested} instant={!!reduced} />
+          ) : (
+            " "
+          )}
+        </div>
+      </m.div>
+    </div>
+  );
+}
+
+/* ————— Beat 3: the calendar that heard you ————— */
+
+function CalendarBeat({ active }: { active: boolean }) {
+  const stage = useStagedTimeline(active, 1, 900);
+  return (
+    <m.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: stage >= 1 ? 1 : 0 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className={CARD}
+      role="group"
+      aria-label="A calendar event created from a conversation"
+    >
+      <div className="flex items-baseline justify-between">
+        <span className="font-serif text-[1.05rem] not-italic text-ink">
+          {remembering.calendar.title}
+        </span>
+        <span className="text-[0.6875rem] text-ink-dim">{remembering.calendar.when}</span>
+      </div>
+      <div className="mt-3 text-[0.625rem] tracking-[0.14em] text-ink-faint">
+        {remembering.calendar.source}
+      </div>
+    </m.div>
+  );
+}
+
+/* ————— Beat 4: the memory — and the page remembering you ————— */
+
+function MemoryBeat({ active }: { active: boolean }) {
+  const stage = useStagedTimeline(active, 2, 1600);
+  // Read lazily — the visitor writes this memory in Scene 1, long
+  // after this component has mounted.
+  const [commands, setCommands] = useState<string | null>(null);
+  useEffect(() => {
+    if (stage < 1) return;
+    try {
+      setCommands(sessionStorage.getItem("ii.commands"));
+    } catch {}
+  }, [stage]);
+
+  return (
+    <div className="flex w-[19rem] flex-col">
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 1 ? 1 : 0 }}
+        transition={{ duration: 1.4, ease: "easeOut" }}
+        className="overflow-hidden rounded-[var(--r-3)] border border-line"
+        role="group"
+        aria-label="A photo memory appearing on its own"
+      >
+        <div className="h-[13rem]">
+          <BeachPhoto />
+        </div>
+        <div className="bg-surface px-4 py-3 font-serif text-[0.95rem] italic text-ink-dim">
+          {remembering.memory.caption}
+        </div>
+      </m.div>
+
+      {commands && (
+        <m.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: stage >= 2 ? 1 : 0 }}
+          transition={{ duration: 0.9 }}
+          className="mt-5 text-center font-mono text-[0.6875rem] tracking-[0.14em] text-ink-faint"
+        >
+          {remembering.memory.selfReference(commands)}
+        </m.p>
+      )}
+    </div>
+  );
+}
