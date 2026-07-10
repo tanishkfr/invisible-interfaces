@@ -25,6 +25,25 @@ export default function Experience() {
   const journey = useTransform(scrollYProgress, (v) => v);
   const [activeScene, setActiveScene] = useState(0);
 
+  // The tab notices your attention leaving — and says what the
+  // terminal says. Restored the moment you return.
+  useEffect(() => {
+    const onVisibility = () => {
+      document.title = document.hidden ? "STILL WAITING." : "Invisible Interfaces";
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  // For the visitors who open the other terminal.
+  useEffect(() => {
+    console.log(
+      "%cREADY.\n%c> YOU FOUND THE OTHER TERMINAL. IT HAS NO PHOTOGRAPHS.",
+      "font-family:monospace;color:#E8A33D",
+      "font-family:monospace;color:#918E88",
+    );
+  }, []);
+
   // Which room spans the center of the viewport.
   useEffect(() => {
     const sections = mainRef.current?.querySelectorAll<HTMLElement>("[data-scene]");
