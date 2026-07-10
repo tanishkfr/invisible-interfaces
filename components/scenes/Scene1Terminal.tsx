@@ -52,6 +52,8 @@ export default function Scene1Terminal() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [invite, setInvite] = useState(false);
 
   // The machine's memory of this visitor — read again in Scene 3.
   const state = useRef({
@@ -117,6 +119,14 @@ export default function Scene1Terminal() {
       }
     } catch {}
   }, [inView, booted, done, print]);
+
+  // A quiet invitation if the visitor arrives but never reaches for
+  // the keyboard — not a rule, just the room asking to be entered.
+  useEffect(() => {
+    if (!booted || touched || done) return;
+    const t = setTimeout(() => setInvite(true), 3000);
+    return () => clearTimeout(t);
+  }, [booted, touched, done]);
 
   // A dim hint when the visitor has been stuck in silence too long.
   useEffect(() => {
@@ -224,7 +234,7 @@ export default function Scene1Terminal() {
       ref={sectionRef}
       data-scene={1}
       aria-label="Demanding Attention"
-      className="flex min-h-svh flex-col items-center justify-center px-6 py-[var(--pause-m)]"
+      className="flex min-h-svh flex-col items-center justify-center px-6 py-[var(--pause-l)]"
     >
       <h2 className="sr-only">Demanding Attention</h2>
 
@@ -240,8 +250,24 @@ export default function Scene1Terminal() {
         {terminal.task}
       </m.p>
 
-      <div
+      <m.div
         onClick={() => inputRef.current?.focus()}
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: booted ? 1 : 0,
+          boxShadow:
+            booted && !touched && !done && !reduced
+              ? [
+                  "0 0 0px rgba(232,163,61,0)",
+                  "0 0 14px rgba(232,163,61,0.16)",
+                  "0 0 0px rgba(232,163,61,0)",
+                ]
+              : "0 0 0px rgba(232,163,61,0)",
+        }}
+        transition={{
+          opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+          boxShadow: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
+        }}
         className="w-full max-w-2xl cursor-text border border-line bg-black p-5 focus-within:[outline:1px_solid_var(--accent)] focus-within:[outline-offset:4px] sm:p-7"
         style={{ borderRadius: "var(--r-0)" }}
       >
@@ -272,6 +298,19 @@ export default function Scene1Terminal() {
               <span aria-hidden className="cursor-blink inline-block h-[1em] w-[0.55em] translate-y-[0.15em] bg-accent [box-shadow:0_0_12px_rgba(232,163,61,0.45)]" />
             </div>
           )}
+
+          {/* A quiet invitation — not an instruction, a room asking to
+              be entered. Gone the instant the visitor reaches for it. */}
+          {invite && !touched && (
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-2 text-ink-faint"
+            >
+              TYPE ANYTHING.
+            </m.div>
+          )}
         </div>
 
         {/* Real input, visually merged with the prompt line — the OS
@@ -281,9 +320,11 @@ export default function Scene1Terminal() {
           type="text"
           value={input}
           disabled={done}
+          onFocus={() => setTouched(true)}
           onChange={(e) => {
             state.current.lastActivity = Date.now();
             if (!state.current.startedAt) state.current.startedAt = Date.now();
+            setTouched(true);
             setInput(e.target.value);
           }}
           onKeyDown={(e) => {
@@ -297,7 +338,7 @@ export default function Scene1Terminal() {
           enterKeyHint="send"
           className="h-px w-px text-base opacity-0"
         />
-      </div>
+      </m.div>
 
       {/* Release. Explanation only after the experience. */}
       <m.p
