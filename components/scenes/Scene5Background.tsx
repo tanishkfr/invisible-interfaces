@@ -69,10 +69,10 @@ export default function Scene5Background() {
     >
       <h2 className="sr-only">Designing the Background</h2>
 
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-6">
+      <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden px-6">
         <m.p
           style={{ opacity: openingO }}
-          className="absolute max-w-[34rem] text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
+          className="absolute max-w-[34rem] text-balance text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
         >
           {background.opening}
         </m.p>
@@ -91,7 +91,7 @@ export default function Scene5Background() {
 
         <m.p
           style={{ opacity: takeawayO }}
-          className="absolute max-w-[34rem] text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
+          className="absolute max-w-[34rem] text-balance text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
         >
           {background.takeaway}
         </m.p>
@@ -148,7 +148,7 @@ function Question({
       </m.p>
       <m.p
         style={{ opacity: questionO }}
-        className="mt-6 max-w-[36rem] font-serif text-[clamp(1.5rem,3.4vw,2.3rem)] font-light leading-[1.35] text-ink"
+        className="mt-6 max-w-[36rem] text-balance font-serif text-[clamp(1.5rem,3.4vw,2.3rem)] font-light leading-[1.35] text-ink"
       >
         {q.question}
       </m.p>
@@ -192,11 +192,14 @@ function MapsLive({ active }: { active: boolean }) {
 /** The artifacts return — small, dim, and finally legible as decisions. */
 function Example({ kind }: { kind: string }) {
   if (kind === "syslog") {
+    // Framed as an exhibit — the work you were never shown, on a plinth.
     return (
-      <div className="space-y-1.5 text-left font-mono text-[0.625rem] tracking-[0.1em] text-ink-faint">
-        {threshold.systems.slice(0, 3).map((s) => (
-          <div key={s}>{s}</div>
-        ))}
+      <div className="rounded-[var(--r-3)] border border-line bg-surface px-4 py-3">
+        <div className="space-y-1.5 text-left font-mono text-[0.625rem] tracking-[0.1em] text-ink-faint">
+          {threshold.systems.slice(0, 3).map((s) => (
+            <div key={s}>{s}</div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -204,7 +207,7 @@ function Example({ kind }: { kind: string }) {
     return (
       <div className="rounded-[var(--r-3)] border border-line bg-surface px-3.5 py-2.5 text-left font-mono text-[0.6875rem] text-ink-dim">
         {remembering.reply.suggested}
-        <span className="ml-3 text-[0.575rem] tracking-[0.14em] text-ink-faint">SENT</span>
+        <span className="ml-3 text-[0.625rem] tracking-[0.14em] text-ink-faint">SENT</span>
       </div>
     );
   }

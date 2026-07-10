@@ -27,6 +27,10 @@ import { simplification } from "@/content/scenes";
 /** Era breakpoints: [t, t, g, g, tc, tc, s, s, p, p] */
 const P = [0, 0.17, 0.22, 0.4, 0.5, 0.62, 0.72, 0.82, 0.92, 1];
 
+/** The files arrive a breath behind the frame — objects renegotiating
+ * their places, not one sheet stretching. */
+const PE = P.map((v, i) => (i === 0 || i === P.length - 1 ? v : Math.min(1, v + 0.015)));
+
 /** Where reduced motion snaps to — the five plateaus. */
 const PLATEAUS = [0.08, 0.31, 0.56, 0.77, 0.96];
 
@@ -46,12 +50,15 @@ interface Geo {
   frame: EntityGeo;
   term1: [number, number];
   term2: [number, number];
+  colHeader: [number, number, number];
   guiStatus: [number, number];
   rowGlow: [number, number, number, number];
+  preview: [number, number, number, number];
   ptrX: [number, number];
   ptrY: [number, number];
   tap: [number, number];
   search: [number, number, number];
+  searchMeta: [number, number, number];
   predCapY: number;
   A: EntityGeo;
   B: EntityGeo;
@@ -63,34 +70,37 @@ const DESKTOP: Geo = {
   sh: 560,
   frame: {
     x: spread(30, 60, 190, 30, 30),
-    y: spread(70, 60, 30, 40, 40),
+    y: spread(70, 105, 30, 40, 40),
     w: spread(620, 560, 300, 620, 620),
-    h: spread(380, 400, 480, 480, 480),
+    h: spread(380, 310, 480, 480, 480),
   },
   term1: [75, 136],
   term2: [75, 280],
-  guiStatus: [84, 430],
-  rowGlow: [84, 196, 512, 44],
+  colHeader: [84, 140, 512],
+  guiStatus: [84, 376],
+  rowGlow: [84, 256, 512, 44],
+  preview: [452, 288, 148, 112],
   ptrX: [470, 320],
-  ptrY: [330, 232],
+  ptrY: [330, 278],
   tap: [318, 344],
   search: [140, 120, 400],
+  searchMeta: [190, 410, 300],
   predCapY: 432,
   A: {
     x: spread(75, 84, 206, 206, 206),
-    y: spread(192, 100, 130, 130, 130),
+    y: spread(192, 160, 130, 130, 130),
     w: spread(200, 512, 128, 128, 128),
     h: spread(20, 44, 128, 128, 128),
   },
   B: {
     x: spread(75, 84, 350, 350, 350),
-    y: spread(214, 148, 130, 130, 130),
+    y: spread(214, 208, 130, 130, 130),
     w: spread(200, 512, 128, 128, 128),
     h: spread(20, 44, 128, 128, 128),
   },
   C: {
     x: spread(75, 84, 206, 190, 140),
-    y: spread(236, 196, 278, 210, 140),
+    y: spread(236, 256, 278, 210, 140),
     w: spread(200, 512, 272, 300, 400),
     h: spread(20, 44, 172, 190, 270),
   },
@@ -103,34 +113,37 @@ const COMPACT: Geo = {
   sh: 600,
   frame: {
     x: spread(10, 10, 40, 10, 10),
-    y: spread(90, 80, 50, 70, 70),
+    y: spread(90, 95, 50, 70, 70),
     w: spread(340, 340, 280, 340, 340),
-    h: spread(300, 330, 430, 430, 430),
+    h: spread(300, 300, 430, 430, 430),
   },
   term1: [34, 126],
   term2: [34, 270],
-  guiStatus: [26, 380],
-  rowGlow: [26, 206, 308, 40],
+  colHeader: [26, 126, 308],
+  guiStatus: [26, 360],
+  rowGlow: [26, 226, 308, 40],
+  preview: [180, 272, 130, 96],
   ptrX: [300, 190],
-  ptrY: [330, 226],
+  ptrY: [330, 246],
   tap: [156, 307],
   search: [20, 110, 320],
+  searchMeta: [40, 384, 280],
   predCapY: 384,
   A: {
     x: spread(34, 26, 56, 56, 56),
-    y: spread(176, 126, 120, 120, 120),
+    y: spread(176, 146, 120, 120, 120),
     w: spread(200, 308, 120, 120, 120),
     h: spread(20, 40, 120, 120, 120),
   },
   B: {
     x: spread(34, 26, 184, 184, 184),
-    y: spread(198, 166, 120, 120, 120),
+    y: spread(198, 186, 120, 120, 120),
     w: spread(200, 308, 120, 120, 120),
     h: spread(20, 40, 120, 120, 120),
   },
   C: {
     x: spread(34, 26, 56, 40, 20),
-    y: spread(220, 206, 256, 180, 120),
+    y: spread(220, 226, 256, 180, 120),
     w: spread(200, 308, 248, 280, 320),
     h: spread(20, 40, 150, 190, 230),
   },
@@ -200,9 +213,10 @@ function Stage({ geo }: { geo: Geo }) {
   // Era dressing opacities.
   const termO = useTransform(progress, P, spread(1, 0, 0, 0, 0));
   const guiO = useTransform(progress, P, spread(0, 1, 0, 0, 0));
-  const searchO = useTransform(progress, P, spread(0, 0, 0, 1, 0));
+  // The search field materializes a beat AFTER the frame has dissolved
+  // — the first interface that arrives from nowhere.
+  const searchO = useTransform(progress, [0.66, 0.74, 0.82, 0.92], [0, 1, 1, 0]);
   const predCapO = useTransform(progress, P, spread(0, 0, 0, 0, 1));
-  const takeawayO = useTransform(progress, [0.96, 1], [0, 1]);
 
   // GUI pointer: it travels to the photograph, then the row lights up.
   const ptrX = useTransform(progress, [0.26, 0.36], geo.ptrX);
@@ -220,7 +234,11 @@ function Stage({ geo }: { geo: Geo }) {
       Math.round(Math.max(0, Math.min(1, (v - 0.7) / 0.06)) * simplification.searchQuery.length),
     ),
   );
-  const caretO = useTransform(progress, P, spread(0, 0, 0, 1, 0));
+  const caretO = useTransform(progress, [0.66, 0.74, 0.82, 0.92], [0, 1, 1, 0]);
+
+  // The GUI preview window: the photograph at 1-bit fidelity, opened
+  // by the pointer's double-click.
+  const previewO = useTransform(progress, [0.365, 0.385, 0.41, 0.44], [0, 1, 1, 0]);
 
   // Representation bands for the file objects.
   const tileO = useTransform(progress, P, spread(0, 0, 1, 0, 0));
@@ -254,7 +272,7 @@ function Stage({ geo }: { geo: Geo }) {
       <h2 className="sr-only">The Great Simplification</h2>
       <p className="sr-only">{simplification.srNarrative}</p>
 
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
+      <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden">
         <div
           aria-hidden
           className="relative"
@@ -308,12 +326,40 @@ function Stage({ geo }: { geo: Geo }) {
             <span className="cursor-blink ml-1 inline-block h-[0.9em] w-[0.5em] translate-y-[0.1em] bg-accent" />
           </m.div>
 
+          {/* GUI column header */}
+          <m.div
+            style={{ opacity: guiO, left: geo.colHeader[0], top: geo.colHeader[1], width: geo.colHeader[2] }}
+            className="absolute flex justify-between border-b border-line pb-1 font-mono text-[0.625rem] tracking-[0.08em] text-ink-faint"
+          >
+            <span>NAME</span>
+            <span>SIZE</span>
+          </m.div>
+
           {/* GUI status line */}
           <m.div
             style={{ opacity: guiO, left: geo.guiStatus[0], top: geo.guiStatus[1] }}
             className="absolute font-mono text-[0.6875rem] text-ink-faint"
           >
             {simplification.guiStatus}
+          </m.div>
+
+          {/* The preview: the photograph, finally seen — at one bit. */}
+          <m.div
+            style={{
+              opacity: previewO,
+              left: geo.preview[0],
+              top: geo.preview[1],
+              width: geo.preview[2],
+              height: geo.preview[3],
+            }}
+            className="absolute overflow-hidden border border-line bg-[#111113] p-1"
+          >
+            <div className="h-[calc(100%-16px)] w-full overflow-hidden">
+              <Photo era="dither" />
+            </div>
+            <div className="pt-1 text-center font-mono text-[0.625rem] tracking-[0.08em] text-ink-faint">
+              BEACH.PIC
+            </div>
           </m.div>
 
           {/* GUI row glow behind the photograph's row */}
@@ -381,10 +427,18 @@ function Stage({ geo }: { geo: Geo }) {
             />
           </m.div>
 
+          {/* The search era gets a floor: proof the machine looked. */}
+          <m.div
+            style={{ opacity: searchO, left: geo.searchMeta[0], top: geo.searchMeta[1], width: geo.searchMeta[2] }}
+            className="absolute text-center font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
+          >
+            1 RESULT · 0.02 SEC
+          </m.div>
+
           {/* ——— Prediction caption: the machine, speaking human ——— */}
           <m.p
             style={{ opacity: predCapO, top: geo.predCapY }}
-            className="absolute left-0 w-full text-center font-serif text-[1.05rem] font-light italic text-ink-dim"
+            className="absolute left-0 w-full text-balance text-center font-serif text-[1.05rem] font-light italic text-ink-dim"
           >
             {simplification.predictionCaption}
           </m.p>
@@ -395,13 +449,7 @@ function Stage({ geo }: { geo: Geo }) {
           <Caption o={cap2O}>{simplification.captions[2]}</Caption>
           <Caption o={cap3O}>{simplification.captions[3]}</Caption>
 
-          {/* The scene's one explanation, earned at the end */}
-          <m.p
-            style={{ opacity: takeawayO }}
-            className="absolute bottom-0 left-0 w-full text-center font-serif text-[1.2rem] font-light italic text-ink-dim"
-          >
-            {simplification.takeaway}
-          </m.p>
+          {/* No takeaway here — the ledger already said it. */}
         </div>
       </div>
     </section>
@@ -454,11 +502,11 @@ interface EntityProps {
  * fidelity improves era by era.
  */
 function Entity({ progress, geo, o, label, isPhoto, progressBands }: EntityProps) {
-  const mx = useTransform(progress, P, geo.x);
-  const my = useTransform(progress, P, geo.y);
-  const mw = useTransform(progress, P, geo.w);
-  const mh = useTransform(progress, P, geo.h);
-  const mr = useTransform(progress, P, spread(0, 0, 8, 8, 8));
+  const mx = useTransform(progress, PE, geo.x);
+  const my = useTransform(progress, PE, geo.y);
+  const mw = useTransform(progress, PE, geo.w);
+  const mh = useTransform(progress, PE, geo.h);
+  const mr = useTransform(progress, PE, spread(0, 0, 8, 8, 8));
   const mo = useTransform(progress, P, o);
   // Tiles need a surface; text representations don't.
   const tileBg = useTransform(progressBands.tile, (v) =>

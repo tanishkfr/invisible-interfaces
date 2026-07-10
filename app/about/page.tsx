@@ -43,7 +43,7 @@ export default function About() {
         About this essay
       </h1>
 
-      <p className="mt-8 leading-[1.7] text-ink-dim">
+      <p className="mt-8 leading-[1.7] text-ink">
         <em>Invisible Interfaces</em> is an interactive essay about how
         interaction design gave people their attention back. Its claim is not
         that interfaces disappeared — it is that they disappeared from our
@@ -68,7 +68,7 @@ export default function About() {
       <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
         READING ROOM
       </h2>
-      <p className="mt-6 leading-[1.65] text-ink-dim">
+      <p className="mt-6 leading-[1.65] text-ink">
         The argument is inherited; the staging is the contribution. It stands
         on three works in particular:
       </p>
@@ -85,7 +85,7 @@ export default function About() {
       <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
         A NOTE ON CHRONOLOGY
       </h2>
-      <p className="mt-6 leading-[1.65] text-ink-dim">
+      <p className="mt-6 leading-[1.65] text-ink">
         The middle scene orders its eras terminal → windows → touch → search
         → prediction. As technology, search predates touch — desktop search
         shipped in the 1990s, the multi-touch phone in 2007. The essay's
@@ -97,7 +97,7 @@ export default function About() {
       <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
         COLOPHON
       </h2>
-      <p className="mt-6 leading-[1.65] text-ink-dim">
+      <p className="mt-6 leading-[1.65] text-ink">
         Designed and built by{" "}
         <a
           href="https://github.com/tanishkfr"

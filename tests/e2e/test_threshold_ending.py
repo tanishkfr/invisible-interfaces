@@ -42,7 +42,9 @@ with sync_playwright() as p:
     page.wait_for_timeout(900)
     released = float(stage.evaluate("el => getComputedStyle(el).opacity"))
     results["hold_cycle"] = [rest, held, released]
-    results["hold_ok"] = rest < 0.3 and held > 0.85 and released < 0.3
+    # At rest the stage breathes between 0.28 and 0.44 — the discovery
+    # affordance — so "rest" is anything clearly below the held state.
+    results["hold_ok"] = rest < 0.5 and held > 0.85 and released < 0.5
 
     # ——— Epilogue: two lines, then the turn, then void ———
     s6 = sect(page, 6)

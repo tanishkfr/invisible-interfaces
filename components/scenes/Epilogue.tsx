@@ -31,9 +31,9 @@ export default function Epilogue() {
     <section ref={ref} data-scene={6} aria-label="Epilogue" className="relative h-[260vh]">
       <m.div
         style={{ background }}
-        className="sticky top-0 flex h-screen items-center justify-center px-6"
+        className="sticky top-0 flex h-svh items-center justify-center px-6"
       >
-        <h2 className="max-w-[44rem] text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em]">
+        <h2 className="max-w-[44rem] text-balance text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em]">
           <m.span style={{ opacity: line1Opacity }} className="block text-ink">
             {epilogue.line}
           </m.span>

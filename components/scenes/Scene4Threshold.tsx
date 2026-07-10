@@ -55,8 +55,16 @@ export default function Scene4Threshold() {
   };
 
   const settled = phase === "settled";
+  // At rest the structure breathes once — the discovery affordance —
+  // then holds at a residue that is dim but findable.
   const stageOpacity =
-    phase === "waiting" ? 0 : settled ? (held ? 0.95 : 0.16) : 0.65;
+    phase === "waiting"
+      ? 0
+      : !settled
+        ? 0.65
+        : held
+          ? 0.95
+          : [0.28, 0.44, 0.28];
 
   const nodeIndex = (label: string) => threshold.nodes.findIndex((n) => n.label === label);
 
@@ -65,7 +73,7 @@ export default function Scene4Threshold() {
       ref={sectionRef}
       data-scene={4}
       aria-label="The Invisible Threshold"
-      className="flex min-h-screen flex-col items-center justify-center px-6 py-[var(--pause-l)]"
+      className="flex min-h-svh flex-col items-center justify-center px-6 py-[var(--pause-l)]"
     >
       <h2 className="sr-only">The Invisible Threshold</h2>
 
@@ -80,7 +88,7 @@ export default function Scene4Threshold() {
         <m.span
           initial={{ opacity: 0 }}
           animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ duration: 1.8, ease: "easeOut" }}
+          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
           className="font-serif text-[clamp(1.4rem,3vw,2rem)] font-light text-ink"
         >
           <span className={phase === "waiting" ? "text-ink-dim" : "text-ink"}>
@@ -110,7 +118,11 @@ export default function Scene4Threshold() {
             tabIndex={0}
             aria-label="Hold to reveal the systems that did the work"
             animate={{ opacity: stageOpacity }}
-            transition={{ duration: reduced ? 0 : 0.6, ease: "easeOut" }}
+            transition={
+              Array.isArray(stageOpacity)
+                ? { duration: reduced ? 0 : 4.5, times: [0, 0.4, 1], delay: 1.4, ease: "easeInOut" }
+                : { duration: reduced ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }
+            }
             className="absolute inset-0 cursor-pointer touch-none select-none outline-offset-8"
           >
             {/* Dependency threads */}
@@ -149,34 +161,36 @@ export default function Scene4Threshold() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: awake > i ? 1 : 0 }}
                   transition={{ duration: reduced ? 0 : 0.4 }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[0.5625rem] tracking-[0.18em] text-ink-dim"
+                  className="absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[0.6875rem] tracking-[0.18em] text-ink-dim"
                   style={{ left: `${node.x}%`, top: `${node.y}%` }}
                 >
                   {node.label}
                 </m.span>
-                {/* The conclusion travels into the sentence. */}
+                {/* The conclusion falls into the sentence — each along
+                    its own slight arc, at its own pace. Uniform motion
+                    is machinery; this era is supposed to feel grown. */}
                 <m.span
-                  initial={{ opacity: 0, left: `${node.x}%`, top: `${node.y + 7}%` }}
+                  initial={{ opacity: 0, left: `${node.x}%`, top: `${node.y + 8}%` }}
                   animate={
                     settled
                       ? {
                           opacity: [0.9, 0.9, 0],
-                          left: "50%",
-                          top: "47%",
+                          left: [`${node.x}%`, `${(node.x + 50) / 2 + (node.x < 50 ? 4 : -4)}%`, "50%"],
+                          top: [`${node.y + 8}%`, `${(node.y + 8 + 76) / 2 - 5}%`, "76%"],
                         }
                       : { opacity: awake > i ? 0.9 : 0 }
                   }
                   transition={
                     settled
                       ? {
-                          duration: reduced ? 0 : 0.9,
-                          delay: reduced ? 0 : i * 0.1,
+                          duration: reduced ? 0 : 0.8 + (i % 3) * 0.14,
+                          delay: reduced ? 0 : [0, 0.16, 0.06, 0.22, 0.1, 0.19][i],
                           ease: [0.22, 1, 0.36, 1],
                         }
                       : { duration: reduced ? 0 : 0.4 }
                   }
-                  className="absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[0.625rem] tracking-[0.1em] text-ink"
-                  style={{ left: `${node.x}%`, top: `${node.y + 7}%` }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[0.6875rem] tracking-[0.1em] text-ink"
+                  style={{ left: `${node.x}%`, top: `${node.y + 8}%` }}
                 >
                   {node.conclusion}
                 </m.span>
@@ -190,9 +204,9 @@ export default function Scene4Threshold() {
           <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.8, ease: "easeOut", delay: reduced ? 0 : 0.8 }}
+            transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 0.8 }}
             aria-live="polite"
-            className="pointer-events-none absolute left-1/2 top-[47%] w-full -translate-x-1/2 -translate-y-1/2 text-center font-serif text-[clamp(1.2rem,2.4vw,1.6rem)] font-light text-ink"
+            className="pointer-events-none absolute left-1/2 top-[76%] w-full -translate-x-1/2 -translate-y-1/2 text-balance text-center font-serif text-[clamp(1.2rem,2.4vw,1.6rem)] font-light text-ink"
           >
             {threshold.outcome}
           </m.p>
@@ -204,9 +218,9 @@ export default function Scene4Threshold() {
           <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: held ? 0 : 1 }}
-            transition={{ duration: 0.9, delay: held ? 0 : 1.6 }}
+            transition={{ duration: 0.9, delay: held ? 0 : 6.5 }}
             aria-hidden
-            className="mt-4 font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
+            className="mt-6 font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
           >
             {threshold.hold}
           </m.p>
@@ -215,7 +229,7 @@ export default function Scene4Threshold() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.8, delay: 2.6 }}
-            className="mt-[var(--pause-s)] max-w-[34rem] text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
+            className="mt-[12vh] max-w-[34rem] text-balance text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
           >
             {threshold.takeaway}
           </m.p>

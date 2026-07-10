@@ -224,7 +224,7 @@ export default function Scene1Terminal() {
       ref={sectionRef}
       data-scene={1}
       aria-label="Demanding Attention"
-      className="flex min-h-screen flex-col items-center justify-center px-6 py-[var(--pause-m)]"
+      className="flex min-h-svh flex-col items-center justify-center px-6 py-[var(--pause-m)]"
     >
       <h2 className="sr-only">Demanding Attention</h2>
 
@@ -233,9 +233,9 @@ export default function Scene1Terminal() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 1 }}
-        transition={{ duration: 1.8, ease: "easeOut" }}
+        transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
         onAnimationComplete={boot}
-        className="mb-10 font-serif text-[clamp(1.25rem,2.5vw,1.75rem)] font-light text-ink"
+        className="mb-10 text-balance font-serif text-[clamp(1.25rem,2.5vw,1.75rem)] font-light text-ink"
       >
         {terminal.task}
       </m.p>
@@ -245,11 +245,13 @@ export default function Scene1Terminal() {
         className="w-full max-w-2xl cursor-text border border-line bg-black p-5 focus-within:[outline:1px_solid_var(--accent)] focus-within:[outline-offset:4px] sm:p-7"
         style={{ borderRadius: "var(--r-0)" }}
       >
+        {/* The faint bloom is the phosphor, not decoration: glyphs on
+            this machine emit; they don't merely sit. */}
         <div
           ref={logRef}
           role="log"
           aria-live="polite"
-          className="h-[19rem] overflow-y-auto font-mono text-[0.8125rem] leading-[1.7] sm:h-[21rem] sm:text-sm"
+          className="h-[19rem] overflow-y-auto font-mono text-[0.8125rem] leading-[1.7] [text-shadow:0_0_10px_rgba(232,230,227,0.12)] sm:h-[21rem] sm:text-sm"
         >
           {lines.map((l) => (
             <div key={l.id} className={VOICE_CLASS[l.voice]}>
@@ -301,9 +303,9 @@ export default function Scene1Terminal() {
       <m.p
         initial={{ opacity: 0 }}
         animate={{ opacity: done ? 1 : 0 }}
-        transition={{ duration: 1.8, ease: "easeOut", delay: 1.2 }}
+        transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
         aria-hidden={!done}
-        className="mt-12 max-w-[34rem] text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
+        className="mt-12 max-w-[34rem] text-balance text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
       >
         {terminal.takeaway}
       </m.p>

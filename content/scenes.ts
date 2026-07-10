@@ -130,14 +130,15 @@ export const threshold = {
     "REMINDER: SET FOR 7:05",
   ],
   outcome: "Dinner tomorrow, 7:30. You’ll need to leave by 7:05.",
-  /** The choreography stage: node positions in % of the stage. */
+  /** The choreography stage: the systems hang above the sentence's
+   * baseline, never on it. Positions in % of the stage. */
   nodes: [
-    { label: "CALENDAR", conclusion: "THU 7:30", x: 14, y: 14 },
-    { label: "MAPS", conclusion: "25 MIN", x: 84, y: 12 },
-    { label: "TRAFFIC", conclusion: "LIGHT", x: 88, y: 52 },
-    { label: "WEATHER", conclusion: "CLEAR", x: 10, y: 54 },
-    { label: "RESERVATION", conclusion: "TABLE FOR 2", x: 26, y: 88 },
-    { label: "REMINDER", conclusion: "LEAVE 7:05", x: 72, y: 90 },
+    { label: "CALENDAR", conclusion: "THU 7:30", x: 16, y: 12 },
+    { label: "MAPS", conclusion: "25 MIN", x: 80, y: 10 },
+    { label: "TRAFFIC", conclusion: "LIGHT", x: 87, y: 40 },
+    { label: "WEATHER", conclusion: "CLEAR", x: 11, y: 42 },
+    { label: "RESERVATION", conclusion: "TABLE FOR 2", x: 34, y: 60 },
+    { label: "REMINDER", conclusion: "LEAVE 7:05", x: 66, y: 62 },
   ],
   /** Which systems feed which — the threads. */
   edges: [

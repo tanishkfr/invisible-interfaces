@@ -65,11 +65,11 @@ export default function Scene3Remembering() {
     >
       <h2 className="sr-only">When Software Started Remembering</h2>
 
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-6">
+      <div className="sticky top-0 flex h-svh items-center justify-center overflow-hidden px-6">
         {/* The human thought that opens the room */}
         <m.p
           style={{ opacity: openingO }}
-          className="absolute max-w-[34rem] text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
+          className="absolute max-w-[34rem] text-balance text-center font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
         >
           {remembering.opening}
         </m.p>
@@ -85,22 +85,14 @@ export default function Scene3Remembering() {
           <BeatShell progress={progress} window={BEATS[2]}>
             <CalendarBeat active={reached >= 2} />
           </BeatShell>
-          <BeatShell progress={progress} window={BEATS[3]} holdToEnd>
+          {/* The memory recedes at the very end — handing the room to
+              the intent waiting below. No takeaway: the receipt already
+              said it. */}
+          <BeatShell progress={progress} window={BEATS[3]}>
             <MemoryBeat active={reached >= 3} />
           </BeatShell>
         </div>
       </div>
-
-      {/* The one explanation, after the room */}
-      <m.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.8 }}
-        transition={{ duration: 1.8, ease: "easeOut" }}
-        className="absolute bottom-[6vh] left-1/2 w-full max-w-[34rem] -translate-x-1/2 px-6 text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
-      >
-        {remembering.takeaway}
-      </m.p>
     </section>
   );
 }
@@ -159,6 +151,13 @@ function AutofillBeat({ active }: { active: boolean }) {
       <p aria-live="polite" className="sr-only">
         {stage >= 3 ? "The form filled itself and signed in." : ""}
       </p>
+      <div className="mb-4 flex items-center gap-2 border-b border-line pb-3 text-[0.625rem] tracking-[0.14em] text-ink-faint">
+        <svg width="9" height="11" viewBox="0 0 9 11" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden>
+          <rect x="1" y="4.5" width="7" height="5.5" />
+          <path d="M2.5 4.5V3a2 2 0 0 1 4 0v1.5" />
+        </svg>
+        CLOUD ACCOUNT
+      </div>
       <div className="text-[0.6875rem] text-ink-faint">EMAIL</div>
       <div className="mt-1 border-b border-line pb-1 text-ink">
         <m.span
@@ -200,6 +199,9 @@ function ReplyBeat({ active }: { active: boolean }) {
   const stage = useStagedTimeline(active, 2, 1100);
   return (
     <div className={CARD} role="group" aria-label="A message reply suggesting itself">
+      <div className="mb-3 text-[0.625rem] tracking-[0.14em] text-ink-faint">
+        SAM · 6:42 PM
+      </div>
       <div className="w-max max-w-[85%] rounded-[var(--r-3)] rounded-bl-[4px] border border-line px-3 py-2 text-ink-dim">
         {remembering.reply.incoming}
       </div>
@@ -275,7 +277,7 @@ function MemoryBeat({ active }: { active: boolean }) {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 1 ? 1 : 0 }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
+        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
         className="overflow-hidden rounded-[var(--r-3)] border border-line"
         role="group"
         aria-label="A photo memory appearing on its own"

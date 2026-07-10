@@ -108,7 +108,7 @@ export default function Scene0Forgotten() {
     <section ref={ref} data-scene={0} aria-label="The Forgotten Interfaces" className="relative h-[220vh]">
       <m.div
         style={{ background }}
-        className="sticky top-0 flex h-screen items-center justify-center overflow-hidden"
+        className="sticky top-0 flex h-svh items-center justify-center overflow-hidden"
       >
         {/* The field — periphery */}
         <div aria-hidden className="absolute inset-0 hidden sm:block">
@@ -181,9 +181,9 @@ function Statement({ quick, children }: { quick?: boolean; children: React.React
   return (
     <m.p
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: quick ? 0.45 : 1.8, ease: "easeOut" } }}
+      animate={{ opacity: 1, transition: { duration: quick ? 0.45 : 1.8, ease: [0.22, 1, 0.36, 1] } }}
       exit={{ opacity: 0, transition: { duration: quick ? 0.2 : 0.9, ease: "easeIn" } }}
-      className="font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
+      className="text-balance font-serif text-[clamp(1.6rem,4.5vw,2.6rem)] font-light leading-[1.3] tracking-[-0.01em] text-ink"
     >
       {children}
     </m.p>
@@ -212,7 +212,7 @@ function FieldItem({ spec, index, visible, progress, reduced }: FieldItemProps) 
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: visible ? 1 : 0 }}
-        transition={{ duration: reduced ? 0.4 : 0.9, ease: "easeOut" }}
+        transition={{ duration: reduced ? 0.4 : 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
         <m.div
           animate={

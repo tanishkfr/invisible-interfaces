@@ -54,7 +54,7 @@ export default function Header({ progress }: HeaderProps) {
     <m.header
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 2.2, duration: 1.8, ease: "easeOut" }}
+      transition={{ delay: 2.2, duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-20"
     >
       <div className="flex h-12 items-center justify-between px-5">
