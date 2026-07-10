@@ -92,6 +92,25 @@ export default function Scene3Remembering() {
             <MemoryBeat active={reached >= 3} />
           </BeatShell>
         </div>
+
+        {/* The residue: what software did while you only watched,
+            accumulating at the foot of the room. */}
+        <p
+          aria-hidden
+          className="absolute bottom-[10vh] left-0 w-full text-center font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
+        >
+          {remembering.residue.slice(0, Math.max(0, reached)).map((token, i) => (
+            <m.span
+              key={token}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.8 }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {i > 0 && <span className="mx-2 text-ink-faint">·</span>}
+              {token}
+            </m.span>
+          ))}
+        </p>
       </div>
     </section>
   );

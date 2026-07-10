@@ -27,6 +27,7 @@ const MECHANISMS = [
   ["The motion", "early scenes move mechanically, stepped and instant; later scenes settle and breathe. Motion ages alongside the interfaces."],
   ["The photograph", "one image threads every era: a filename, a window row, a tile, a search result, a prediction, a memory. Its fidelity improves as the effort to reach it falls."],
   ["The memory", "the essay remembers how you solved — or abandoned — its terminal, and returns that cost to you two scenes later."],
+  ["The dinner", "one evening threads the whole essay — the toast in the opening field, the message, the calendar entry, the booking. The machine drafts the intent because it read the conversation; you watched it learn to."],
 ];
 
 export default function About() {

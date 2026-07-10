@@ -5,7 +5,7 @@
 
 export const opening = {
   line1: "You probably used hundreds of interfaces today.",
-  line2: "You probably remember almost none of them.",
+  line2: "You remember almost none of them.",
   scrollCue: "scroll",
 };
 
@@ -23,7 +23,7 @@ export const terminal = {
   task: "Find the photograph.",
   boot: ["READY."],
   files: {
-    "LETTER.TXT": ["DEAR MARGARET,", "THE WEATHER HERE IS FINE.", "WISH YOU WERE HERE."],
+    "LETTER.TXT": ["DEAR MARGARET,", "THE SEA WAS CALM TODAY.", "WISH YOU WERE HERE."],
     "NOTES.TXT": ["REMEMBER:", "PHOTOS END IN .PIC"],
     "BEACH.PIC": [
       "          .   \\  /",
@@ -68,7 +68,7 @@ export const simplification = {
     "",
   ],
   guiTitle: "PHOTOS",
-  guiStatus: "3 items · 231K in disk",
+  guiStatus: "3 items · 231K in disk · 168K available",
   /** The attention ledger — the cost of the same task, per era.
    * Terminal-era values are replaced by the visitor's own when known. */
   ledger: [
@@ -79,11 +79,10 @@ export const simplification = {
     "0 INPUT · 0 DECISIONS · ATTENTION: YOURS AGAIN.",
   ],
   personalLedger: (n: string, s: string | null) =>
-    `${n} COMMANDS · ${n} DECISIONS · ${s ? `${s} SEC` : "~90 SEC"} — YOURS`,
+    `${n} COMMANDS · ${s ? `${s} SEC` : "~90 SEC"} — YOURS`,
   searchQuery: "beach",
   /** The machine's first sentence in the human voice. */
   predictionCaption: "From this day, three years ago.",
-  takeaway: "Each time, it asked a little less of you.",
   srNarrative:
     "The same task, five ways. First you type where the photograph is. " +
     "Then you point at it. Then you touch it. Then you ask for it. " +
@@ -101,7 +100,8 @@ export const remembering = {
   },
   reply: {
     incoming: "Are we still on for dinner?",
-    suggested: "Yes — see you at 7.",
+    // One evening threads the whole essay — the clocks must agree.
+    suggested: "Yes — see you at 7:30.",
     label: "SUGGESTED",
   },
   calendar: {
@@ -114,7 +114,8 @@ export const remembering = {
     selfReference: (n: string) => `LAST TIME, THIS TOOK YOU ${n} COMMANDS.`,
     selfReferenceAbandoned: "YOU NEVER FOUND THE PHOTOGRAPH. IT FOUND YOU ANYWAY.",
   },
-  takeaway: "You found the photograph once. Since then, it finds you.",
+  /** The room's quiet ledger: what software did while you watched. */
+  residue: ["SIGNED IN", "REPLIED", "ADDED TO CALENDAR"],
 };
 
 /** Scene 4 — one intent, six invisible systems. */
@@ -157,8 +158,8 @@ export const background = {
   questions: [
     { label: "TRUST", question: "How much should it do without asking?", example: "autofill" },
     { label: "CONTROL", question: "Who decided where you’re going?", example: "maps-live" },
-    { label: "CONSENT", question: "When did you agree to this — and to when?", example: "otp" },
-    { label: "TRANSPARENCY", question: "Should you see the work? Could it explain itself?", example: "syslog" },
+    { label: "CONSENT", question: "When did you agree to this?", example: "otp" },
+    { label: "TRANSPARENCY", question: "Should you have to see the work?", example: "syslog" },
     { label: "REVERSIBILITY", question: "Can you take it back?", example: "reply" },
   ] as const,
   takeaway: "The interfaces got quieter. The questions got louder.",

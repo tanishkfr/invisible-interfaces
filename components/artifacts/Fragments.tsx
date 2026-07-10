@@ -62,7 +62,7 @@ function Spotify() {
   return (
     <Shell>
       <span className="block text-ink-faint">Up next</span>
-      <span>Holocene — Bon Iver</span>
+      <span>Holocene · Bon Iver</span>
     </Shell>
   );
 }
