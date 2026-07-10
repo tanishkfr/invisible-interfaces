@@ -129,13 +129,17 @@ function BeatShell({
   holdToEnd?: boolean;
   children: React.ReactNode;
 }) {
+  // A short crossfade window: long enough to settle, short enough
+  // that a card is never lingering half-visible with its text too
+  // dim to read — a ghost box reads as an unexplained line, not a
+  // fading photograph.
   const opacity = useTransform(
     progress,
-    [a, a + 0.04, b - 0.04, b],
+    [a, a + 0.018, b - 0.018, b],
     [0, 1, 1, holdToEnd ? 1 : 0],
   );
   // Appear verb: opacity plus a settle of a few pixels — never a slide.
-  const y = useTransform(progress, [a, a + 0.05], [10, 0]);
+  const y = useTransform(progress, [a, a + 0.022], [10, 0]);
   return (
     <m.div style={{ opacity, y }} className="[grid-area:1/1]">
       {children}
