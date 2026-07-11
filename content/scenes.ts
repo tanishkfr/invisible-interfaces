@@ -72,10 +72,10 @@ export const simplification = {
   /** The attention ledger — the cost of the same task, per era.
    * Terminal-era values are replaced by the visitor's own when known. */
   ledger: [
-    "22 KEYSTROKES · 7 DECISIONS · ~90 SEC",
-    "6 CLICKS · 4 DECISIONS · ~20 SEC",
-    "1 TAP · 1 DECISION · ~5 SEC",
-    "5 KEYSTROKES · 1 DECISION · ~4 SEC",
+    "22 KEYSTROKES · 7 DECISIONS · ~90 SEC · TYPICAL",
+    "6 CLICKS · 4 DECISIONS · ~20 SEC · TYPICAL",
+    "1 TAP · 1 DECISION · ~5 SEC · TYPICAL",
+    "5 KEYSTROKES · 1 DECISION · ~4 SEC · TYPICAL",
     "0 INPUT · 0 DECISIONS · ATTENTION: YOURS AGAIN.",
   ],
   personalLedger: (n: string, s: string | null) =>
@@ -159,10 +159,56 @@ export const background = {
     { label: "TRUST", question: "How much should it do without asking?", example: "autofill" },
     { label: "CONTROL", question: "Who decided where you’re going?", example: "maps-live" },
     { label: "CONSENT", question: "When did you agree to this?", example: "otp" },
-    { label: "TRANSPARENCY", question: "Should you have to see the work?", example: "syslog" },
+    { label: "TRANSPARENCY", question: "Should you have to see the work?", example: "redacted" },
     { label: "REVERSIBILITY", question: "Can you take it back?", example: "reply" },
   ] as const,
   takeaway: "The interfaces got quieter. The questions got louder.",
+};
+
+/**
+ * The reveal — the essay reading your attention back to you. Every
+ * template here is filled with a real, measured value (see
+ * lib/attention.ts); nothing is invented. The branches are honest:
+ * whatever you did, there is a true line for it.
+ */
+export const reveal = {
+  opener: "Before you go —",
+  intro: "this is where your attention went.",
+
+  void: {
+    waited: "YOU WAITED OUT THE DARK. FEW DO.",
+    skipped: (s: string) => `YOU GAVE THE DARK ${s} SECONDS BEFORE YOU REACHED PAST IT.`,
+  },
+  terminal: {
+    solved: (n: number, s: number | null) =>
+      s
+        ? `THE MACHINE TOOK ${n} COMMAND${n === 1 ? "" : "S"} AND ${s} SECONDS OF YOUR WHOLE ATTENTION.`
+        : `THE MACHINE TOOK ${n} COMMAND${n === 1 ? "" : "S"} OF YOUR WHOLE ATTENTION.`,
+    abandoned: "YOU LEFT THE MACHINE BEFORE IT ANSWERED. IT WAITED ANYWAY.",
+    untouched: "YOU PASSED THE MACHINE WITHOUT TOUCHING IT.",
+  },
+  morph: {
+    many: (n: number) => `YOU SCROLLED BACK THROUGH THE YEARS ${n} TIMES. YOU WANTED TO BE SURE.`,
+    once: "YOU LOOKED BACK ONCE, TO BE SURE.",
+    none: "THEN EACH INTERFACE ASKED FOR LESS. YOU DID NOT LOOK BACK.",
+  },
+  hold: {
+    held: "YOU HELD THE HIDDEN WORK UP TO THE LIGHT.",
+    trusted: "YOU LET THE SIX SYSTEMS STAY HIDDEN. YOU TRUSTED THE ONE SENTENCE.",
+  },
+  // The falsifiable claim. The essay commits to reading you — and
+  // admits it when you proved it wrong.
+  navigation: {
+    framed: "There was a way to navigate when you arrived.",
+    never: (faded: string) => `YOU NEVER USED IT. IT LEFT AT ${faded}.`,
+    neverClose: "you are reading this without it.",
+    stopped: (n: number, last: string) =>
+      `YOU USED IT ${n === 1 ? "ONCE" : `${n} TIMES`}, LAST AT ${last} — THEN NEVER AGAIN.`,
+    caught: (last: string) =>
+      `YOU REACHED FOR IT AT ${last}. IT WAS ALREADY GONE. YOU WERE RIGHT TO STOP LOOKING.`,
+  },
+  ethicsFramed: "None of this left your browser.",
+  ethics: "no server saw it. the closing tab is the only delete.",
 };
 
 export const epilogue = {

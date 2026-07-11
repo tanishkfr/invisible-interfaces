@@ -11,7 +11,7 @@ import {
 } from "motion/react";
 import Fragment from "@/components/artifacts/Fragments";
 import type { FragmentKind } from "@/content/scenes";
-import { background, remembering, threshold } from "@/content/scenes";
+import { background, remembering } from "@/content/scenes";
 
 /**
  * Scene 5 — Designing the Background.
@@ -191,15 +191,17 @@ function MapsLive({ active }: { active: boolean }) {
 
 /** The artifacts return — small, dim, and finally legible as decisions. */
 function Example({ kind }: { kind: string }) {
-  if (kind === "syslog") {
-    // Framed as an exhibit — the work you were never shown, on a plinth.
+  if (kind === "redacted") {
+    // The outcome you were given, with the work withheld. The
+    // withholding is the question — you never had to see any of this.
     return (
-      <div className="rounded-[var(--r-3)] border border-line bg-surface px-4 py-3">
-        <div className="space-y-1.5 text-left font-mono text-[0.625rem] tracking-[0.1em] text-ink-faint">
-          {threshold.systems.slice(0, 3).map((s) => (
-            <div key={s}>{s}</div>
-          ))}
-        </div>
+      <div className="flex items-center gap-3 rounded-[var(--r-3)] border border-line bg-surface px-3.5 py-2.5 font-mono text-[0.6875rem] text-ink-dim">
+        Dinner booked.
+        <span className="tracking-[0.05em] text-ink-faint">
+          <span className="bg-ink-faint/20 text-transparent select-none">████</span>{" "}
+          6 systems{" "}
+          <span className="bg-ink-faint/20 text-transparent select-none">██████</span>
+        </span>
       </div>
     );
   }

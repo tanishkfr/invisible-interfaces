@@ -9,6 +9,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { sceneTitles } from "@/content/scenes";
+import { attention } from "@/lib/attention";
 
 interface HeaderProps {
   /** Whole-journey scroll progress (function-piped — see Scene 2). */
@@ -45,6 +46,7 @@ export default function Header({ progress }: HeaderProps) {
   useMotionValueEvent(menuO, "change", (v) => setMenuInert(v < 0.05));
 
   const goTo = (index: number) => {
+    attention.markMenuClick();
     document
       .querySelector(`[data-scene="${index}"]`)
       ?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });

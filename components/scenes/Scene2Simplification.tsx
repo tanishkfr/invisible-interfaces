@@ -11,6 +11,7 @@ import {
 } from "motion/react";
 import Photo from "@/components/artifacts/Photo";
 import { simplification } from "@/content/scenes";
+import { attention } from "@/lib/attention";
 
 /**
  * Scene 2 — The Great Simplification.
@@ -178,6 +179,23 @@ function Stage({ geo }: { geo: Geo }) {
       ? PLATEAUS.reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a))
       : v,
   );
+
+  // The instrument notices when you scroll *back* through the forty
+  // years — a deliberate return, not a twitch. Comparison is the one
+  // thing this scene invites and the terminal did not allow. Each
+  // descent of 0.08 below a local peak counts once; climbing to a new
+  // peak re-arms it.
+  const scrubState = useRef({ peak: 0, armed: true });
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const s = scrubState.current;
+    if (v > s.peak) {
+      s.peak = v;
+      s.armed = true;
+    } else if (s.armed && s.peak - v > 0.08) {
+      attention.addScrubBack();
+      s.armed = false;
+    }
+  });
 
   // Fit the stage into the viewport (transform only — no reflow).
   const [scale, setScale] = useState(1);

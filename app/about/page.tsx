@@ -67,6 +67,28 @@ export default function About() {
       </ul>
 
       <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
+        WHAT IT MEASURED
+      </h2>
+      <p className="mt-6 leading-[1.65] text-ink">
+        An argument about attention is empty without a subject, so the essay
+        takes the only one it can reach: you. As you read, it quietly recorded
+        how you spent your attention — how long you sat in the dark, what the
+        terminal cost you, whether you scrolled back through the years to be
+        sure, whether you held the hidden work up to the light, and the exact
+        moment the navigation left and whether you ever reached for it again.
+        At the end it reads that trace back to you, and commits to a claim it
+        is willing to be wrong about.
+      </p>
+      <p className="mt-5 leading-[1.65] text-ink">
+        None of it left your browser. There is no server, no analytics, no
+        account — the measurement lived in one tab, for one hour, and the
+        closing tab is the only delete. The essay does the thing it critiques,
+        measuring you invisibly, and then does the honorable thing with what it
+        learned. That restraint is the contribution: proof, on the one person
+        available, kept entirely theirs.
+      </p>
+
+      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
         READING ROOM
       </h2>
       <p className="mt-6 leading-[1.65] text-ink">

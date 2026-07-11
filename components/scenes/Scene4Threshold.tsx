@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m, useInView, useReducedMotion } from "motion/react";
 import { threshold } from "@/content/scenes";
+import { attention } from "@/lib/attention";
 
 type Phase = "waiting" | "working" | "settled";
 
@@ -41,14 +42,18 @@ export default function Scene4Threshold() {
   }, [phase, awake, reduced]);
 
   // Holding is the one gesture. Luminance-only — the Illuminate verb.
+  const grasp = () => {
+    setHeld(true);
+    attention.markHeld();
+  };
   const holdHandlers = {
-    onPointerDown: () => setHeld(true),
+    onPointerDown: grasp,
     onPointerUp: () => setHeld(false),
     onPointerLeave: () => setHeld(false),
     onKeyDown: (e: React.KeyboardEvent) => {
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
-        setHeld(true);
+        grasp();
       }
     },
     onKeyUp: () => setHeld(false),

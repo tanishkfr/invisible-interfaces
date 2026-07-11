@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LazyMotion, domAnimation, useScroll, useTransform } from "motion/react";
+import {
+  LazyMotion,
+  domAnimation,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "motion/react";
 import ChromeRail from "@/components/chrome/ChromeRail";
 import Header from "@/components/chrome/Header";
 import Scene0Forgotten from "@/components/scenes/Scene0Forgotten";
@@ -12,6 +18,7 @@ import Scene4Threshold from "@/components/scenes/Scene4Threshold";
 import Scene5Background from "@/components/scenes/Scene5Background";
 import Epilogue from "@/components/scenes/Epilogue";
 import { epilogue } from "@/content/scenes";
+import { attention } from "@/lib/attention";
 
 /**
  * The exhibition. One scroll, seven rooms.
@@ -24,6 +31,49 @@ export default function Experience() {
   // Function-based on purpose — see Scene 2: keeps the rail JS-driven.
   const journey = useTransform(scrollYProgress, (v) => v);
   const [activeScene, setActiveScene] = useState(0);
+
+  // The chrome decays across scenes 0–5, not the ending. The epilogue
+  // is deliberately tall (the reveal needs the scroll), which would
+  // otherwise push every decay threshold late — so we normalize the
+  // journey to reach 1.0 at the epilogue's start. Chrome decay stays
+  // calibrated to the scenes regardless of how long the ending runs.
+  const epilogueStart = useRef(0.8);
+  useEffect(() => {
+    const measure = () => {
+      const epi = mainRef.current?.querySelector<HTMLElement>('[data-scene="6"]');
+      const scrollable = document.body.scrollHeight - innerHeight;
+      if (epi && scrollable > 0) {
+        epilogueStart.current = Math.min(0.98, epi.offsetTop / scrollable);
+      }
+    };
+    measure();
+    addEventListener("resize", measure);
+    return () => removeEventListener("resize", measure);
+  }, []);
+  const chrome = useTransform(journey, (v) =>
+    Math.min(1, Math.max(0, v / epilogueStart.current)),
+  );
+
+  // The navigation reaches zero opacity at chrome 0.56 (see Header).
+  // The instrument marks the wall-clock of that crossing — the moment
+  // the way to navigate left — so the ending can say exactly when.
+  useMotionValueEvent(chrome, "change", (v) => {
+    if (v >= 0.56) attention.markMenuFaded();
+  });
+
+  // The first time attention moves, the instrument marks it — patience
+  // in the dark is the first thing the essay learns about you.
+  useEffect(() => {
+    const onFirstMove = () => attention.markFirstScroll();
+    addEventListener("wheel", onFirstMove, { once: true, passive: true });
+    addEventListener("touchmove", onFirstMove, { once: true, passive: true });
+    addEventListener("keydown", onFirstMove, { once: true });
+    return () => {
+      removeEventListener("wheel", onFirstMove);
+      removeEventListener("touchmove", onFirstMove);
+      removeEventListener("keydown", onFirstMove);
+    };
+  }, []);
 
   // The tab notices your attention leaving — and says what the
   // terminal says. Restored the moment you return.
@@ -67,8 +117,8 @@ export default function Experience() {
       <main ref={mainRef}>
         <h1 className="sr-only">Invisible Interfaces</h1>
 
-        <Header progress={journey} />
-        <ChromeRail progress={journey} activeScene={activeScene} />
+        <Header progress={chrome} />
+        <ChromeRail progress={chrome} activeScene={activeScene} />
 
         <Scene0Forgotten />
         <Scene1Terminal />
