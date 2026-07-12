@@ -2,134 +2,62 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About — Invisible Interfaces",
-  description:
-    "What this essay is, how it argues, and the writing it stands on.",
+  description: "The argument, interaction, sources, and limits of Invisible Interfaces.",
 };
 
 const READING_ROOM = [
   {
     work: "Mark Weiser — “The Computer for the 21st Century” (1991)",
-    note: "Weiser predicted computing that “weaves itself into the fabric of everyday life until it is indistinguishable from it.” This essay stages, in interaction, the argument he made in prose.",
+    note: "Computing receding into ordinary life establishes the historical horizon. This essay asks what that recession does to attention and accountability.",
   },
   {
     work: "Donald Norman — The Invisible Computer (1998)",
-    note: "Norman argued the computer should disappear into the task. The essay's middle scenes — software acting before it is asked — are his forecast, now ordinary.",
+    note: "Norman relocates value from the computer to the task. The exhibition makes that relocation experiential, then tests what must remain visible when work moves out of view.",
   },
   {
     work: "Golden Krishna — The Best Interface Is No Interface (2015)",
-    note: "Krishna made the case against screens for their own sake. Where his book argues by example, this essay tries to make the visitor feel the disappearance happen to them.",
+    note: "Krishna argues against screens as default solutions. This project adds a return condition: invisible work still owes the person a bounded account of action and restraint.",
   },
 ];
 
-const MECHANISMS = [
-  ["The chrome", "the header you arrive with decays in sub-threshold steps; by the end there is nothing left to navigate with — and nothing left to navigate."],
-  ["The accent", "one amber — the phosphor of the terminals that demanded everything — marks each moment the machine requires your attention. It appears less and less, then never."],
-  ["The motion", "early scenes move mechanically, stepped and instant; later scenes settle and breathe. Motion ages alongside the interfaces."],
-  ["The photograph", "one image threads every era: a filename, a window row, a tile, a search result, a prediction, a memory. Its fidelity improves as the effort to reach it falls."],
-  ["The memory", "the essay remembers how you solved — or abandoned — its terminal, and returns that cost to you two scenes later."],
-  ["The dinner", "one evening threads the whole essay — the toast in the opening field, the message, the calendar entry, the booking. The machine drafts the intent because it read the conversation; you watched it learn to."],
+const MOVEMENTS = [
+  ["Demand", "A terminal requires syntax, patience, and continuous attention to find one photograph."],
+  ["Reduction", "The same task moves through pointing, touching, search, and prediction; the visitor spends progressively less attention."],
+  ["Anticipation", "Software begins remembering context and acting before an explicit request."],
+  ["Entrustment", "The beach photograph returns as a task that refuses to run while the visitor watches."],
+  ["Return", "Absence produces the outcome, a receipt of completed work, explicit limits, and a reversible decision."],
 ];
 
 export default function About() {
   return (
-    <main className="mx-auto max-w-[38rem] px-6 py-24 font-serif font-light">
-      <a
-        href="/"
-        className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint transition-colors hover:text-ink-dim"
-      >
-        ← THE ESSAY
-      </a>
-
-      <h1 className="mt-14 text-[1.75rem] leading-snug text-ink">
-        About this essay
-      </h1>
-
+    <main className="mx-auto max-w-[40rem] px-6 py-24 font-serif font-light">
+      <a href="/" className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint transition-colors hover:text-ink-dim">← THE ESSAY</a>
+      <h1 className="mt-14 text-[1.75rem] leading-snug text-ink">About this investigation</h1>
       <p className="mt-8 leading-[1.7] text-ink">
-        <em>Invisible Interfaces</em> is a measured essay about attention leaving
-        the interface. It makes you operate an attention-hungry machine, then
-        spends less and less of you until the system can act through one sentence.
-        Its claim is not that interfaces disappeared. They disappeared from
-        attention, and that disappearance was designed, decision by decision.
+        <em>Invisible Interfaces</em> is a research-through-design exhibition about attention becoming absence. One task travels from explicit command to entrusted work. The last interaction is not a simulation of background computing: it advances only while this tab is hidden, then makes return—not supervision—the moment of accountability.
       </p>
 
-      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
-        HOW IT ARGUES
-      </h2>
-      <ul className="mt-6 space-y-4">
-        {MECHANISMS.map(([name, note]) => (
-          <li key={name} className="leading-[1.65] text-ink-dim">
-            <span className="text-ink">{name}.</span> {note}
-          </li>
-        ))}
-      </ul>
+      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">THE FIVE MOVEMENTS</h2>
+      <ol className="mt-6 space-y-5">
+        {MOVEMENTS.map(([name, note]) => <li key={name} className="leading-[1.65] text-ink-dim"><span className="text-ink">{name}.</span> {note}</li>)}
+      </ol>
 
-      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
-        WHAT IT MEASURED
-      </h2>
+      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">WHAT THE INTERACTION CONTRIBUTES</h2>
       <p className="mt-6 leading-[1.65] text-ink">
-        An argument about attention is empty without a subject, so the essay
-        takes the only one it can reach: you. As you read, it quietly recorded
-        how you spent your attention — how long you sat in the dark, what the
-        terminal cost you, whether you scrolled back through the years to be
-        sure, whether you held the hidden work up to the light, and the exact
-        moment the navigation left and whether you ever reached for it again.
-        At the end it reads that trace back to you, and commits to a claim it
-        is willing to be wrong about.
+        Most background interfaces represent absence as empty time or hide it behind a progress display. Here, absence is the input. Returning early pauses the task and reveals only the work earned while away. Returning after completion reveals the repaired copy and its authority boundary together: what changed, what remained untouched, what was not transmitted, and what the system refused to infer.
       </p>
       <p className="mt-5 leading-[1.65] text-ink">
-        None of it left your browser. There is no server, no analytics, no
-        account — the measurement lived in one tab, for one hour, and the
-        closing tab is the only delete. The essay does the thing it critiques,
-        measuring you invisibly, and then does the honorable thing with what it
-        learned. That restraint is the contribution: proof, on the one person
-        available, kept entirely theirs.
+        Visibility state and the task ledger remain local to this browser. There is no analytics endpoint, account, or remote agent. The browser stages authored work rather than operating on a real archive. That limit is deliberate: the artifact investigates the felt relationship between attention, delegation, and accountable return; it does not claim evidence about deployed autonomous systems or participants beyond the visitor experiencing it.
       </p>
 
-      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
-        READING ROOM
-      </h2>
-      <p className="mt-6 leading-[1.65] text-ink">
-        The argument is inherited; the staging and attention receipt are the contribution. It stands
-        on three works in particular:
-      </p>
+      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">READING ROOM</h2>
       <ul className="mt-6 space-y-5">
-        {READING_ROOM.map(({ work, note }) => (
-          <li key={work} className="leading-[1.65] text-ink-dim">
-            <span className="text-ink">{work}</span>
-            <br />
-            {note}
-          </li>
-        ))}
+        {READING_ROOM.map(({ work, note }) => <li key={work} className="leading-[1.65] text-ink-dim"><span className="text-ink">{work}</span><br />{note}</li>)}
       </ul>
 
-      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
-        A NOTE ON CHRONOLOGY
-      </h2>
+      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">COLOPHON</h2>
       <p className="mt-6 leading-[1.65] text-ink">
-        The middle scene orders its eras terminal → windows → touch → search
-        → prediction. As technology, search predates touch — desktop search
-        shipped in the 1990s, the multi-touch phone in 2007. The essay's
-        sequence follows each paradigm's turn as the <em>dominant</em> way a
-        person found a thing, which is an argument about attention, not a
-        timeline of releases. The era captions carry honest dates.
-      </p>
-
-      <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
-        COLOPHON
-      </h2>
-      <p className="mt-6 leading-[1.65] text-ink">
-        Designed and built by{" "}
-        <a
-          href="https://github.com/tanishkfr"
-          className="text-ink underline decoration-[rgba(232,230,227,0.25)] underline-offset-4 transition-colors hover:decoration-[rgba(232,230,227,0.6)]"
-        >
-          Tanishk Salagame
-        </a>
-        . Next.js, TypeScript, and Framer Motion; two typefaces — Newsreader
-        for the human voice, IBM Plex Mono for the machine's; one accent
-        color, spent down to zero. No analytics, no tracking: the essay
-        remembers you only in your own browser, and only what you did in its
-        terminal.
+        Designed and built by <a href="https://github.com/tanishkfr" className="text-ink underline decoration-[rgba(232,230,227,0.25)] underline-offset-4">Tanishk Salagame</a>. Next.js, TypeScript, Motion, Newsreader, and IBM Plex Mono. Source: <a href="https://github.com/tanishkfr/invisible-interfaces" className="text-ink underline decoration-[rgba(232,230,227,0.25)] underline-offset-4">GitHub</a>.
       </p>
     </main>
   );

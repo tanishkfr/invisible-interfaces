@@ -35,7 +35,7 @@ const STEP_MS = 900;
  * withdraws attention. The return is the reveal: outcome and receipt arrive
  * together, including what the system refused to infer or do.
  */
-export default function EntrustedTask() {
+export default function EntrustedTask({ onComplete }: { onComplete?: () => void }) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("waiting");
   const [completed, setCompleted] = useState(0);
@@ -45,6 +45,7 @@ export default function EntrustedTask() {
   const phaseRef = useRef<Phase>("waiting");
   const hiddenAt = useRef<number | null>(null);
   const awayTotal = useRef(0);
+  const completionNotified = useRef(false);
 
   function entrust() {
     phaseRef.current = "entrusted";
@@ -75,6 +76,10 @@ export default function EntrustedTask() {
       if (nextCompleted === work.length) {
         phaseRef.current = "complete";
         setPhase("complete");
+        if (!completionNotified.current) {
+          completionNotified.current = true;
+          onComplete?.();
+        }
       }
     };
 
@@ -83,7 +88,7 @@ export default function EntrustedTask() {
       document.removeEventListener("visibilitychange", onVisibility);
       document.title = "Invisible Interfaces";
     };
-  }, []);
+  }, [onComplete]);
 
   const secondsAway = Math.max(1, Math.round(awayMs / 1000));
 
@@ -117,7 +122,7 @@ export default function EntrustedTask() {
               onClick={entrust}
               className="mt-7 border border-accent px-5 py-3 font-mono text-[0.6875rem] tracking-[0.16em] text-accent transition-colors duration-500 hover:bg-accent hover:text-void"
             >
-              ENTRUST THIS TASK ↗
+              ENTRUST THIS TASK â†—
             </button>
           </m.div>
         )}
@@ -130,14 +135,14 @@ export default function EntrustedTask() {
           >
             <div>
               <p className="font-mono text-[0.625rem] tracking-[0.18em] text-accent">
-                ATTENTION DETECTED · WORK PAUSED
+                ATTENTION DETECTED Â· WORK PAUSED
               </p>
               <p className="mt-4 max-w-[24rem] font-serif text-xl font-light leading-relaxed text-ink">
                 Leave this tab. The background begins where your attention ends.
               </p>
               {returns > 0 && (
                 <p className="mt-5 font-mono text-[0.625rem] leading-relaxed tracking-[0.08em] text-ink-faint">
-                  RETURN {String(returns).padStart(2, "0")} · {completed}/{work.length} MOVEMENTS COMPLETE · {secondsAway}S ENTRUSTED
+                  RETURN {String(returns).padStart(2, "0")} Â· {completed}/{work.length} MOVEMENTS COMPLETE Â· {secondsAway}S ENTRUSTED
                 </p>
               )}
             </div>
@@ -155,15 +160,15 @@ export default function EntrustedTask() {
           >
             <div className="border-y border-line py-8">
               <div className="flex flex-wrap items-baseline justify-between gap-4">
-                <p className="font-mono text-[0.625rem] tracking-[0.18em] text-accent">RETURN RECEIPT · {secondsAway}S OUT OF VIEW</p>
-                <p className="font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint">NOT TRANSMITTED · THIS TAB ONLY</p>
+                <p className="font-mono text-[0.625rem] tracking-[0.18em] text-accent">RETURN RECEIPT Â· {secondsAway}S OUT OF VIEW</p>
+                <p className="font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint">NOT TRANSMITTED Â· THIS TAB ONLY</p>
               </div>
               <p className={`mt-6 max-w-[44rem] text-balance font-serif text-[clamp(1.8rem,4vw,3.4rem)] font-light leading-tight ${released ? "text-ink-dim line-through" : "text-ink"}`}>
                 The beach photograph is restored. The original remains untouched. A private copy is waiting.
               </p>
               {released && (
                 <m.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 font-mono text-[0.6875rem] tracking-[0.12em] text-accent">
-                  HOLD RELEASED · NOTHING BOOKED
+                  HOLD RELEASED Â· NOTHING BOOKED
                 </m.p>
               )}
             </div>
@@ -173,7 +178,7 @@ export default function EntrustedTask() {
               <aside className="border-l border-line pl-6">
                 <p className="font-mono text-[0.625rem] tracking-[0.16em] text-ink-faint">AUTHORITY BOUNDARY</p>
                 <p className="mt-4 font-serif text-lg font-light leading-relaxed text-ink-dim">
-                  The task could narrow, compare, and hold. It could not pay, invite, or convert “quiet” into a guess about who you are.
+                  The task could narrow, compare, and hold. It could not pay, invite, or convert â€œquietâ€ into a guess about who you are.
                 </p>
                 <button
                   type="button"
@@ -218,7 +223,7 @@ function WorkLedger({ completed, detailed = false }: { completed: number; detail
                 <p className="font-mono text-[0.5625rem] tracking-[0.12em] text-ink-faint">{done ? "COMPLETED WHILE ABSENT" : "WAITING"}</p>
               </div>
               <p className="mt-1 font-serif text-base font-light leading-relaxed text-ink">{item.action}</p>
-              {detailed && <p className="mt-1 font-mono text-[0.625rem] leading-relaxed tracking-[0.03em] text-ink-faint">LIMIT · {item.limit}</p>}
+              {detailed && <p className="mt-1 font-mono text-[0.625rem] leading-relaxed tracking-[0.03em] text-ink-faint">LIMIT Â· {item.limit}</p>}
             </div>
           </li>
         );
