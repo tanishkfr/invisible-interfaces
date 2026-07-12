@@ -21,6 +21,7 @@ export default function Experience() {
   const { scrollYProgress } = useScroll();
   const journey = useTransform(scrollYProgress, (value) => value);
   const [activeScene, setActiveScene] = useState(0);
+  const [journeyComplete, setJourneyComplete] = useState(false);
 
   useMotionValueEvent(journey, "change", (value) => {
     if (value >= 0.56) attention.markMenuFaded();
@@ -72,19 +73,21 @@ export default function Experience() {
         <Scene1Terminal />
         <Scene2Simplification />
         <Scene3Remembering />
-        <EntrustedTask />
+        <EntrustedTask onComplete={() => setJourneyComplete(true)} />
 
-        <div className="flex h-[65vh] flex-col items-center justify-center gap-5 bg-void">
-          <p className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-55">
-            THE TASK ENDS. THE BACKGROUND DOES NOT.
-          </p>
-          <a
-            href="/about"
-            className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-40 transition-opacity duration-500 hover:opacity-100 focus-visible:opacity-100"
-          >
-            ABOUT THIS ESSAY
-          </a>
-        </div>
+        {journeyComplete && (
+          <div className="flex h-[65vh] flex-col items-center justify-center gap-5 bg-void">
+            <p className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-55">
+              THE TASK ENDS. THE BACKGROUND DOES NOT.
+            </p>
+            <a
+              href="/about"
+              className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-40 transition-opacity duration-500 hover:opacity-100 focus-visible:opacity-100"
+            >
+              ABOUT THIS ESSAY
+            </a>
+          </div>
+        )}
       </main>
     </LazyMotion>
   );

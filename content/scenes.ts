@@ -17,7 +17,7 @@ export const sceneTitles = [
   "The Entrusted Task",
 ] as const;
 
-/** Scene 1 — the terminal. All machine dialogue lives here. */
+/** Scene 1 â€” the terminal. All machine dialogue lives here. */
 export const terminal = {
   task: "Find the photograph.",
   boot: ["READY."],
@@ -54,31 +54,31 @@ export const terminal = {
   takeaway: "It demanded your complete attention. It always did.",
 };
 
-/** Scene 2 — the morph. One task, five paradigms. */
+/** Scene 2 â€” the morph. One task, five paradigms. */
 export const simplification = {
-  /** Machine-voice captions naming the act of each era, dated honestly —
+  /** Machine-voice captions naming the act of each era, dated honestly â€”
    * search predates touch as technology; the sequence is the order in
    * which each became the dominant way of finding things. */
   captions: [
-    "TYPE WHERE IT IS · 1978",
-    "POINT AT IT · 1984",
-    "TOUCH IT · 2007",
-    "ASK FOR IT · SINCE 1998",
+    "TYPE WHERE IT IS Â· 1978",
+    "POINT AT IT Â· 1984",
+    "TOUCH IT Â· 2007",
+    "ASK FOR IT Â· SINCE 1998",
     "",
   ],
   guiTitle: "PHOTOS",
-  guiStatus: "3 items · 231K in disk · 168K available",
-  /** The attention ledger — the cost of the same task, per era.
+  guiStatus: "3 items Â· 231K in disk Â· 168K available",
+  /** The attention ledger â€” the cost of the same task, per era.
    * Terminal-era values are replaced by the visitor's own when known. */
   ledger: [
-    "22 KEYSTROKES · 7 DECISIONS · ~90 SEC · TYPICAL",
-    "6 CLICKS · 4 DECISIONS · ~20 SEC · TYPICAL",
-    "1 TAP · 1 DECISION · ~5 SEC · TYPICAL",
-    "5 KEYSTROKES · 1 DECISION · ~4 SEC · TYPICAL",
-    "0 INPUT · 0 DECISIONS · ATTENTION: YOURS AGAIN.",
+    "22 KEYSTROKES Â· 7 DECISIONS Â· ~90 SEC Â· TYPICAL",
+    "6 CLICKS Â· 4 DECISIONS Â· ~20 SEC Â· TYPICAL",
+    "1 TAP Â· 1 DECISION Â· ~5 SEC Â· TYPICAL",
+    "5 KEYSTROKES Â· 1 DECISION Â· ~4 SEC Â· TYPICAL",
+    "0 INPUT Â· 0 DECISIONS Â· ATTENTION: YOURS AGAIN.",
   ],
   personalLedger: (n: string, s: string | null) =>
-    `${n} COMMANDS · ${s ? `${s} SEC` : "~90 SEC"} — YOURS`,
+    `${n} COMMANDS Â· ${s ? `${s} SEC` : "~90 SEC"} â€” YOURS`,
   searchQuery: "beach",
   /** The machine's first sentence in the human voice. */
   predictionCaption: "From this day, three years ago.",
@@ -90,7 +90,7 @@ export const simplification = {
     "ninety seconds of typed commands to nothing at all.",
 };
 
-/** Scene 3 — software acting before being asked. */
+/** Scene 3 â€” software acting before being asked. */
 export const remembering = {
   opening: "Then it stopped waiting to be asked.",
   login: {
@@ -99,17 +99,17 @@ export const remembering = {
   },
   reply: {
     incoming: "Are we still on for dinner?",
-    // One evening threads the whole essay — the clocks must agree.
-    suggested: "Yes — see you at 7:30.",
+    // One evening threads the whole essay â€” the clocks must agree.
+    suggested: "Yes â€” see you at 7:30.",
     label: "SUGGESTED",
   },
   calendar: {
     title: "Dinner",
-    when: "Tomorrow · 7:30 PM",
+    when: "Tomorrow Â· 7:30 PM",
     source: "ADDED FROM YOUR CONVERSATION",
   },
   memory: {
-    caption: "A day at the shore — three years ago.",
+    caption: "A day at the shore â€” three years ago.",
     selfReference: (n: string) => `LAST TIME, THIS TOOK YOU ${n} COMMANDS.`,
     selfReferenceAbandoned: "YOU NEVER FOUND THE PHOTOGRAPH. IT FOUND YOU ANYWAY.",
   },
@@ -117,108 +117,7 @@ export const remembering = {
   residue: ["SIGNED IN", "REPLIED", "ADDED TO CALENDAR"],
 };
 
-/** Scene 4 — one intent, six invisible systems. */
-export const threshold = {
-  prompt: "Book dinner tomorrow",
-  accept: "ENTER",
-  systems: [
-    "CALENDAR: THURSDAY FREE AFTER 7PM",
-    "MAPS: 25 MINUTES AWAY",
-    "TRAFFIC: LIGHT AT 7PM",
-    "WEATHER: CLEAR EVENING",
-    "RESERVATION: TABLE FOR TWO, 7:30",
-    "REMINDER: SET FOR 7:05",
-  ],
-  outcome: "Dinner tomorrow, 7:30. You’ll need to leave by 7:05.",
-  /** The choreography stage: the systems hang above the sentence's
-   * baseline, never on it. Positions in % of the stage. */
-  nodes: [
-    { label: "CALENDAR", conclusion: "THU 7:30", x: 16, y: 12 },
-    { label: "MAPS", conclusion: "25 MIN", x: 80, y: 10 },
-    { label: "TRAFFIC", conclusion: "LIGHT", x: 87, y: 40 },
-    { label: "WEATHER", conclusion: "CLEAR", x: 11, y: 42 },
-    { label: "RESERVATION", conclusion: "TABLE FOR 2", x: 34, y: 60 },
-    { label: "REMINDER", conclusion: "LEAVE 7:05", x: 66, y: 62 },
-  ],
-  /** Which systems feed which — the threads. */
-  edges: [
-    ["CALENDAR", "RESERVATION"],
-    ["MAPS", "TRAFFIC"],
-    ["TRAFFIC", "REMINDER"],
-    ["WEATHER", "RESERVATION"],
-  ] as Array<[string, string]>,
-  hold: "HOLD TO SEE THE WORK",
-  takeaway: "All of it was interface. You saw one sentence.",
-};
-
-/** Scene 5 — the questions that remain when the interface is gone. */
-export const background = {
-  opening: "Invisible still means designed.",
-  questions: [
-    { label: "TRUST", question: "How much should it do without asking?", example: "autofill" },
-    { label: "CONTROL", question: "Who decided where you’re going?", example: "maps-live" },
-    { label: "CONSENT", question: "When did you agree to this?", example: "otp" },
-    { label: "TRANSPARENCY", question: "Should you have to see the work?", example: "redacted" },
-    { label: "REVERSIBILITY", question: "Can you take it back?", example: "reply" },
-  ] as const,
-  takeaway: "The interfaces got quieter. The questions got louder.",
-};
-
-/**
- * The reveal — the essay reading your attention back to you. Every
- * template here is filled with a real, measured value (see
- * lib/attention.ts); nothing is invented. The branches are honest:
- * whatever you did, there is a true line for it.
- */
-export const reveal = {
-  opener: "Before you go —",
-  intro: "this is where your attention went.",
-
-  void: {
-    waited: "YOU WAITED OUT THE DARK. FEW DO.",
-    skipped: (s: string) => `YOU GAVE THE DARK ${s} SECONDS BEFORE YOU REACHED PAST IT.`,
-  },
-  terminal: {
-    solved: (n: number, s: number | null) =>
-      s
-        ? `THE MACHINE TOOK ${n} COMMAND${n === 1 ? "" : "S"} AND ${s} SECONDS OF YOUR WHOLE ATTENTION.`
-        : `THE MACHINE TOOK ${n} COMMAND${n === 1 ? "" : "S"} OF YOUR WHOLE ATTENTION.`,
-    abandoned: "YOU LEFT THE MACHINE BEFORE IT ANSWERED. IT WAITED ANYWAY.",
-    untouched: "YOU PASSED THE MACHINE WITHOUT TOUCHING IT.",
-  },
-  morph: {
-    many: (n: number) => `YOU SCROLLED BACK THROUGH THE YEARS ${n} TIMES. YOU WANTED TO BE SURE.`,
-    once: "YOU LOOKED BACK ONCE, TO BE SURE.",
-    none: "THEN EACH INTERFACE ASKED FOR LESS. YOU DID NOT LOOK BACK.",
-  },
-  hold: {
-    held: "YOU HELD THE HIDDEN WORK UP TO THE LIGHT.",
-    trusted: "YOU LET THE SIX SYSTEMS STAY HIDDEN. YOU TRUSTED THE ONE SENTENCE.",
-  },
-  // The falsifiable claim. The essay commits to reading you — and
-  // admits it when you proved it wrong.
-  navigation: {
-    framed: "There was a way to navigate when you arrived.",
-    never: (faded: string) => `YOU NEVER USED IT. IT LEFT AT ${faded}.`,
-    neverClose: "you are reading this without it.",
-    stopped: (n: number, last: string) =>
-      `YOU USED IT ${n === 1 ? "ONCE" : `${n} TIMES`}, LAST AT ${last} — THEN NEVER AGAIN.`,
-    caught: (last: string) =>
-      `YOU REACHED FOR IT AT ${last}. IT WAS ALREADY GONE. YOU WERE RIGHT TO STOP LOOKING.`,
-  },
-  ethicsFramed: "None of this left your browser.",
-  ethics: "no server saw it. the closing tab is the only delete.",
-};
-
-export const epilogue = {
-  line: "Interfaces haven’t disappeared.",
-  line2: "They’ve disappeared from your attention.",
-  /** The machine's only address to the visitor's future. */
-  turn: "YOU’LL NOTICE ONE TONIGHT.",
-  aboutLink: "ABOUT THIS ESSAY",
-};
-
-/** Scene 0 ambient fragments — everyday invisible interfaces. */
+/** Scene 0 ambient fragments â€” everyday invisible interfaces. */
 export type FragmentKind =
   | "faceid"
   | "otp"
@@ -240,8 +139,8 @@ export interface FragmentSpec {
 }
 
 /**
- * Precomputed collision-free field placement (12×8 lattice, see
- * VISUAL_SYSTEM.md §3). Center cells are left empty — the measure
+ * Precomputed collision-free field placement (12Ã—8 lattice, see
+ * VISUAL_SYSTEM.md Â§3). Center cells are left empty â€” the measure
  * belongs to the human voice.
  */
 export const fragments: FragmentSpec[] = [
