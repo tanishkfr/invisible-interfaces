@@ -3,7 +3,7 @@
 import { m, useTransform, type MotionValue } from "motion/react";
 import { sceneTitles } from "@/content/scenes";
 
-const STOPS = sceneTitles.length + 1; // six scenes + epilogue
+const STOPS = sceneTitles.length; // the final stop is the entrusted task
 
 interface ChromeRailProps {
   progress: MotionValue<number>;

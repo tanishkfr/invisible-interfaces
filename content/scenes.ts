@@ -14,8 +14,7 @@ export const sceneTitles = [
   "Demanding Attention",
   "The Great Simplification",
   "When Software Started Remembering",
-  "The Invisible Threshold",
-  "Designing the Background",
+  "The Entrusted Task",
 ] as const;
 
 /** Scene 1 — the terminal. All machine dialogue lives here. */
