@@ -45,14 +45,11 @@ export default function About() {
       </h1>
 
       <p className="mt-8 leading-[1.7] text-ink">
-        <em>Invisible Interfaces</em> is an interactive essay about how
-        interaction design gave people their attention back. Its claim is not
-        that interfaces disappeared — it is that they disappeared from our
-        attention, and that this disappearance was designed, decision by
-        decision. The essay does not explain this so much as stage it: the
-        visitor operates a terminal, watches one task soften across forty
-        years of paradigms, and is finally handled by software that never
-        asks at all.
+        <em>Invisible Interfaces</em> is a measured essay about attention leaving
+        the interface. It makes you operate an attention-hungry machine, then
+        spends less and less of you until the system can act through one sentence.
+        Its claim is not that interfaces disappeared. They disappeared from
+        attention, and that disappearance was designed, decision by decision.
       </p>
 
       <h2 className="mt-16 font-mono text-[0.625rem] tracking-[0.22em] text-ink-faint">
@@ -92,7 +89,7 @@ export default function About() {
         READING ROOM
       </h2>
       <p className="mt-6 leading-[1.65] text-ink">
-        The argument is inherited; the staging is the contribution. It stands
+        The argument is inherited; the staging and attention receipt are the contribution. It stands
         on three works in particular:
       </p>
       <ul className="mt-6 space-y-5">

@@ -1,7 +1,6 @@
 # Invisible Interfaces
 
-An interactive essay about how interaction design gave people their attention
-back.
+A measured essay about attention leaving the interface.
 
 **Live:** https://invisible-interfaces.vercel.app <!-- update if your Vercel URL differs -->
 
