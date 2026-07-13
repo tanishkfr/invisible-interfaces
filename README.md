@@ -1,26 +1,40 @@
 # Invisible Interfaces
 
-**A measured essay about attention leaving the interface.**
+A measured interactive essay about attention leaving the interface—and what an invisible system owes us when we return.
 
-Invisible Interfaces is a research-through-design exhibition in which one task travels from explicit command to entrusted absence. Its final interaction will not run while the visitor watches: work advances only when the tab is hidden, and return reveals an outcome, a bounded receipt, and a reversible decision.
+One photograph travels through five relationships with computing:
 
-## Interaction
+1. attention is demanded;
+2. operation becomes pointing, touching, asking, and prediction;
+3. software begins acting before it is asked;
+4. the task is entrusted;
+5. absence returns as a tangible result, an authority boundary, and a reversible decision.
 
-**Attend → operate → simplify → anticipate → entrust → leave → return.**
+The signature interaction is causal. After the visitor entrusts the restoration, work advances only while the tab is hidden. Returning early pauses the remaining work. Returning after completion reveals an original/restored comparison, a bounded work receipt, the system’s limits, and the visitor’s own local attention receipt.
 
-The project uses the browser Visibility API only as local interaction material. No attention data is transmitted.
+## Release frames
+
+![The solved terminal](docs/screenshots/terminal.png)
+
+![The interface morph](docs/screenshots/morph.png)
+
+![The return receipt and restored comparison](docs/screenshots/return.png)
+
+## Privacy
+
+No analytics or remote agent is used. The attention ledger is stored only in session storage, returned to the visitor at the end, never transmitted, and deleted when the tab closes.
 
 ## Run
 
-```sh
-npm install
-npm run dev
-```
+    npm install
+    npm run dev
 
-Verification:
+Production verification:
 
-```sh
-npm run build
-```
+    npm run build
 
-See [CASESTUDY.md](CASESTUDY.md) for the design argument and [VISUAL_SYSTEM.md](VISUAL_SYSTEM.md) for the exhibition system.
+## Test
+
+The browser walkthroughs live in tests/e2e and cover the opening, terminal, morph, anticipation scene, entrusted absence, keyboard navigation, mobile layout, reduced motion, copy integrity, and the About/404 routes.
+
+See CASESTUDY.md for the design argument and VISUAL_SYSTEM.md for the current exhibition system.

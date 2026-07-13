@@ -1,85 +1,98 @@
-"""Keyboard-only walkthrough: menu, terminal, intent, hold, about door.
-Plus the attention details: tab-blur title and the 404 page."""
+"""Keyboard-only journey, comparison control, reversal, About, and 404."""
 import json
-
 from playwright.sync_api import sync_playwright
-
 from helpers import BASE_URL, collect_errors
 
 results = {}
-
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page(viewport={"width": 1280, "height": 800})
     errors = collect_errors(page)
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(4500)  # header fade-in gate
+    page.wait_for_timeout(3500)
 
-    # Tab reaches the scene menu first.
     page.keyboard.press("Tab")
     results["first_focus"] = page.evaluate(
-        "() => document.activeElement.getAttribute('aria-label') || document.activeElement.tagName"
+        "() => document.activeElement.textContent.trim()"
     )
 
-    # Six menu stops, then the terminal input.
-    for _ in range(6):
+    for _ in range(7):
         page.keyboard.press("Tab")
-    results["after_menu_focus"] = page.evaluate(
-        "() => document.activeElement.tagName + ':' + (document.activeElement.getAttribute('aria-label') || '')"
+    results["terminal_focus"] = page.evaluate(
+        "() => document.activeElement.getAttribute('aria-label')"
     )
 
-    # Solve the terminal by keyboard alone.
-    page.locator('section[data-scene="1"]').scroll_into_view_if_needed()
-    page.wait_for_timeout(2500)
-    for cmd, wait in [("list", 3500), ("open beach.pic", 6000)]:
-        page.keyboard.type(cmd)
-        page.keyboard.press("Enter")
+    terminal = page.locator('section[data-scene="1"]')
+    terminal.scroll_into_view_if_needed()
+    page.wait_for_timeout(2200)
+    inp = terminal.locator("input")
+    for command, wait in [("list", 2500), ("open beach.pic", 4500)]:
+        inp.fill(command)
+        inp.press("Enter")
         page.wait_for_timeout(wait)
-    results["solved_by_keyboard"] = "DISPLAYED" in page.locator('[role="log"]').inner_text()
+    results["solved"] = "DISPLAYED" in page.locator('[role="log"]').inner_text()
 
-    # Accept the intent with Enter; hold the stage with Space.
-    s4 = page.locator('section[data-scene="4"]')
-    s4.scroll_into_view_if_needed()
-    page.wait_for_timeout(2400)
-    s4.locator("button").first.focus()
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(4500)
-    stage = s4.locator('[role="button"]')
-    stage.focus()
-    page.keyboard.down(" ")
+    task = page.locator('section[data-scene="4"]')
+    task.scroll_into_view_if_needed()
     page.wait_for_timeout(900)
-    results["space_hold_opacity"] = stage.evaluate("el => getComputedStyle(el).opacity")
-    page.keyboard.up(" ")
+    entrust = page.get_by_role("button", name="ENTRUST THIS TASK")
+    entrust.focus()
+    page.keyboard.press("Enter")
 
-    # The about door, by keyboard.
-    link = page.get_by_text("ABOUT THIS ESSAY")
+    page.evaluate(
+        """() => {
+          Object.defineProperty(document, 'hidden', {
+            configurable: true, get: () => true
+          });
+          document.dispatchEvent(new Event('visibilitychange'));
+        }"""
+    )
+    page.wait_for_timeout(8300)
+    page.evaluate(
+        """() => {
+          Object.defineProperty(document, 'hidden', {
+            configurable: true, get: () => false
+          });
+          document.dispatchEvent(new Event('visibilitychange'));
+        }"""
+    )
+    page.wait_for_timeout(800)
+
+    slider = page.get_by_role(
+        "slider", name="Reveal restored image compared with the original scan"
+    )
+    slider.focus()
+    before = slider.input_value()
+    page.keyboard.press("ArrowRight")
+    after = slider.input_value()
+    results["slider_keyboard"] = int(after) > int(before)
+
+    discard = page.get_by_role("button", name="DISCARD THE RESTORED COPY")
+    discard.focus()
+    page.keyboard.press("Enter")
+    results["discarded"] = page.get_by_role(
+        "button", name="RESTORED COPY DISCARDED"
+    ).count()
+
+    link = page.get_by_text("ABOUT THIS INVESTIGATION", exact=True)
     link.focus()
     page.keyboard.press("Enter")
     page.wait_for_url("**/about", timeout=10000)
     results["about_reached"] = "/about" in page.url
 
-    # Tab-blur title: the machine notices attention leaving.
-    page.goto(BASE_URL)
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(1500)
-    results["title_blurred"] = page.evaluate(
-        """() => {
-          Object.defineProperty(document, 'hidden', { value: true, configurable: true });
-          document.dispatchEvent(new Event('visibilitychange'));
-          const away = document.title;
-          Object.defineProperty(document, 'hidden', { value: false, configurable: true });
-          document.dispatchEvent(new Event('visibilitychange'));
-          return [away, document.title];
-        }"""
-    )
-
-    # The page that isn't there speaks in the machine's voice.
-    page.goto(f"{BASE_URL}/definitely-not-a-page")
-    page.wait_for_timeout(1200)
+    page.goto(BASE_URL + "/definitely-not-a-page")
+    page.wait_for_timeout(900)
     results["notfound"] = page.get_by_text("?PAGE NOT FOUND").count()
-
     results["console_errors"] = [e for e in errors if "404" not in e][:4]
+
+    assert results["first_focus"] == "Skip to the essay"
+    assert results["terminal_focus"].startswith("Terminal input")
+    assert results["solved"]
+    assert results["slider_keyboard"]
+    assert results["discarded"] == 1
+    assert results["about_reached"]
+    assert results["notfound"] == 1
     browser.close()
 
 print(json.dumps(results, indent=1))

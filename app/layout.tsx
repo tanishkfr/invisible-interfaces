@@ -17,22 +17,42 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://invisible-interfaces.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Invisible Interfaces",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Invisible Interfaces",
+    template: "%s — Invisible Interfaces",
+  },
   description:
-    "An interactive essay on how interaction design gave people their attention back.",
+    "An interactive research-through-design exhibition about attention, delegation, and accountable return.",
+  authors: [{ name: "Tanishk Salagame", url: "https://github.com/tanishkfr" }],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Invisible Interfaces",
     description:
-      "An interactive essay on how interaction design gave people their attention back.",
+      "A task travels from demanded attention to entrusted absence—and returns with an accountable receipt.",
     type: "website",
+    url: "/",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Invisible Interfaces",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Invisible Interfaces",
     description:
-      "An interactive essay on how interaction design gave people their attention back.",
+      "A task travels from demanded attention to entrusted absence—and returns with an accountable receipt.",
+    images: ["/opengraph-image.png"],
   },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -44,7 +64,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${plexMono.variable}`}>
+    <html lang="en" className={newsreader.variable + " " + plexMono.variable}>
       <body>
         <noscript>
           <div

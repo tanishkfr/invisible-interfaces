@@ -17,7 +17,7 @@ export const sceneTitles = [
   "The Entrusted Task",
 ] as const;
 
-/** Scene 1 â€” the terminal. All machine dialogue lives here. */
+/** Scene 1 — the terminal. All machine dialogue lives here. */
 export const terminal = {
   task: "Find the photograph.",
   boot: ["READY."],
@@ -54,34 +54,34 @@ export const terminal = {
   takeaway: "It demanded your complete attention. It always did.",
 };
 
-/** Scene 2 â€” the morph. One task, five paradigms. */
+/** Scene 2 — the morph. One task, five relationships to the same task. */
 export const simplification = {
-  /** Machine-voice captions naming the act of each era, dated honestly â€”
+  /** Machine-voice captions naming the act of each era, dated honestly —
    * search predates touch as technology; the sequence is the order in
    * which each became the dominant way of finding things. */
   captions: [
-    "TYPE WHERE IT IS Â· 1978",
-    "POINT AT IT Â· 1984",
-    "TOUCH IT Â· 2007",
-    "ASK FOR IT Â· SINCE 1998",
+    "TYPE THE LOCATION",
+    "POINT TO THE FILE",
+    "TOUCH THE IMAGE",
+    "ASK THE SYSTEM",
     "",
   ],
   guiTitle: "PHOTOS",
-  guiStatus: "3 items Â· 231K in disk Â· 168K available",
-  /** The attention ledger â€” the cost of the same task, per era.
+  guiStatus: "3 items · 231K in disk · 168K available",
+  /** The attention ledger — the cost of the same task, per relationship.
    * Terminal-era values are replaced by the visitor's own when known. */
   ledger: [
-    "22 KEYSTROKES Â· 7 DECISIONS Â· ~90 SEC Â· TYPICAL",
-    "6 CLICKS Â· 4 DECISIONS Â· ~20 SEC Â· TYPICAL",
-    "1 TAP Â· 1 DECISION Â· ~5 SEC Â· TYPICAL",
-    "5 KEYSTROKES Â· 1 DECISION Â· ~4 SEC Â· TYPICAL",
-    "0 INPUT Â· 0 DECISIONS Â· ATTENTION: YOURS AGAIN.",
+    "22 KEYSTROKES · 7 DECISIONS · ~90 SEC · TYPICAL",
+    "6 CLICKS · 4 DECISIONS · ~20 SEC · TYPICAL",
+    "1 TAP · 1 DECISION · ~5 SEC · TYPICAL",
+    "5 KEYSTROKES · 1 DECISION · ~4 SEC · TYPICAL",
+    "0 INPUT · 0 DECISIONS · ATTENTION: AVAILABLE, NOT FREE.",
   ],
   personalLedger: (n: string, s: string | null) =>
-    `${n} COMMANDS Â· ${s ? `${s} SEC` : "~90 SEC"} â€” YOURS`,
+    `${n} COMMANDS · ${s ? `${s} SEC` : "~90 SEC"} — YOURS`,
   searchQuery: "beach",
   /** The machine's first sentence in the human voice. */
-  predictionCaption: "From this day, three years ago.",
+  predictionCaption: "On this day, three years ago.",
   srNarrative:
     "The same task, five ways. First you type where the photograph is. " +
     "Then you point at it. Then you touch it. Then you ask for it. " +
@@ -90,7 +90,7 @@ export const simplification = {
     "ninety seconds of typed commands to nothing at all.",
 };
 
-/** Scene 3 â€” software acting before being asked. */
+/** Scene 3 — software acting before being asked. */
 export const remembering = {
   opening: "Then it stopped waiting to be asked.",
   login: {
@@ -99,17 +99,17 @@ export const remembering = {
   },
   reply: {
     incoming: "Are we still on for dinner?",
-    // One evening threads the whole essay â€” the clocks must agree.
-    suggested: "Yes â€” see you at 7:30.",
+    // One evening threads the whole essay — the clocks must agree.
+    suggested: "Yes — see you at 7:30.",
     label: "SUGGESTED",
   },
   calendar: {
     title: "Dinner",
-    when: "Tomorrow Â· 7:30 PM",
+    when: "Tomorrow · 7:30 PM",
     source: "ADDED FROM YOUR CONVERSATION",
   },
   memory: {
-    caption: "A day at the shore â€” three years ago.",
+    caption: "A day at the shore — three years ago.",
     selfReference: (n: string) => `LAST TIME, THIS TOOK YOU ${n} COMMANDS.`,
     selfReferenceAbandoned: "YOU NEVER FOUND THE PHOTOGRAPH. IT FOUND YOU ANYWAY.",
   },
@@ -117,7 +117,7 @@ export const remembering = {
   residue: ["SIGNED IN", "REPLIED", "ADDED TO CALENDAR"],
 };
 
-/** Scene 0 ambient fragments â€” everyday invisible interfaces. */
+/** Scene 0 ambient fragments — everyday invisible interfaces. */
 export type FragmentKind =
   | "faceid"
   | "otp"
@@ -139,8 +139,8 @@ export interface FragmentSpec {
 }
 
 /**
- * Precomputed collision-free field placement (12Ã—8 lattice, see
- * VISUAL_SYSTEM.md Â§3). Center cells are left empty â€” the measure
+ * Precomputed collision-free field placement (12×8 lattice, see
+ * VISUAL_SYSTEM.md §3). Center cells are left empty — the measure
  * belongs to the human voice.
  */
 export const fragments: FragmentSpec[] = [

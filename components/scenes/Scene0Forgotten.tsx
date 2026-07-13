@@ -21,6 +21,17 @@ const STEP_MS = [2500, 4000, 1800, 3700];
 /** The machine yields to impatience: scroll fast-forwards each step. */
 const HURRIED_STEP_MS = 160;
 
+const accessibleExamples = [
+  "Face ID recognized you.",
+  "A one-time passcode arrived from Messages.",
+  "Maps rerouted around traffic.",
+  "Music continued with the next song.",
+  "A package moved out for delivery.",
+  "A calendar suggested when to leave.",
+  "AirPods connected automatically.",
+  "An email address filled itself.",
+];
+
 /**
  * Scene 0 — The Forgotten Interfaces.
  *
@@ -106,6 +117,10 @@ export default function Scene0Forgotten() {
 
   return (
     <section ref={ref} data-scene={0} aria-label="The Forgotten Interfaces" className="relative h-[220vh]">
+      <div className="sr-only">
+        <p>Everyday interfaces appeared without asking for attention:</p>
+        <ul>{accessibleExamples.map((example) => <li key={example}>{example}</li>)}</ul>
+      </div>
       <m.div
         style={{ background }}
         className="sticky top-0 flex h-svh items-center justify-center overflow-hidden"
@@ -131,10 +146,10 @@ export default function Scene0Forgotten() {
         >
           <AnimatePresence mode="wait">
             {phase === "line1" && (
-              <Statement key="line1" quick={hurried}>{opening.line1}</Statement>
+              <Statement key="line1" quick={hurried || !!reduced}>{opening.line1}</Statement>
             )}
             {(phase === "line2" || phase === "field") && (
-              <Statement key="line2" quick={hurried}>
+              <Statement key="line2" quick={hurried || !!reduced}>
                 {opening.line2}
                 {/* The one amber in this room: the machine, waiting. */}
                 <span
