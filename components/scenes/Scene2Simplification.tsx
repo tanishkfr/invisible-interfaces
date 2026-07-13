@@ -214,8 +214,8 @@ function Stage({ geo }: { geo: Geo }) {
     if (v <= 0.005 || readRef.current) return;
     readRef.current = true;
     try {
-      const n = localStorage.getItem("ii.commands");
-      if (n) setPersonal({ n, s: localStorage.getItem("ii.seconds") });
+      const n = sessionStorage.getItem("ii.commands");
+      if (n) setPersonal({ n, s: sessionStorage.getItem("ii.seconds") });
     } catch {}
   });
 
@@ -448,7 +448,7 @@ function Stage({ geo }: { geo: Geo }) {
           {/* The search era gets a floor: proof the machine looked. */}
           <m.div
             style={{ opacity: searchO, left: geo.searchMeta[0], top: geo.searchMeta[1], width: geo.searchMeta[2] }}
-            className="absolute text-center font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
+            className="absolute text-center font-mono text-[0.6875rem] tracking-[0.12em] text-ink-dim"
           >
             1 RESULT · 0.02 SEC
           </m.div>
@@ -478,7 +478,7 @@ function Ledger({ o, children }: { o: MotionValue<number>; children: React.React
   return (
     <m.p
       style={{ opacity: o }}
-      className="absolute top-0 left-0 w-full text-center font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint"
+      className="absolute top-0 left-0 w-full text-center font-mono text-[0.6875rem] tracking-[0.12em] text-ink-dim"
     >
       {children}
     </m.p>
@@ -489,7 +489,7 @@ function Caption({ o, children }: { o: MotionValue<number>; children: React.Reac
   return (
     <m.p
       style={{ opacity: o }}
-      className="absolute bottom-0 left-0 w-full text-center font-mono text-[0.6875rem] tracking-[0.14em] text-ink-faint"
+      className="absolute bottom-0 left-0 w-full text-center font-mono text-[0.75rem] tracking-[0.12em] text-ink-dim"
     >
       {children}
     </m.p>

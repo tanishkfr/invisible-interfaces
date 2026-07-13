@@ -1,26 +1,24 @@
-# E2E tests
+# End-to-end tests
 
-Python + Playwright scripts that drive the real experience: the terminal, the
-scroll-scrubbed morph, the pinned stages, responsive behavior, and the entrusted
-task. The entrusted-task test asserts that the ending and About doorway do not
-exist until real visibility-state absence completes the work.
+The Python and Playwright scripts drive the canonical five-scene experience:
 
-```bash
-pip install playwright
-playwright install chromium
+- witnessed and hurried opening;
+- terminal solve and abandonment;
+- simplification plateaus and copy integrity;
+- anticipation beats and memory callback;
+- entrusted early return, full return, fallback, comparison, discard, and ending gate;
+- keyboard navigation;
+- 375-pixel layout and reduced motion;
+- About and 404 routes.
 
-# against a local dev server (npm run dev):
-cd tests/e2e
-python test_opening_terminal.py
-python test_morph.py
-python test_pinned_scenes.py
-python test_entrusted_task.py
-python test_responsive.py
+Run against a local development server:
 
-# against a deployment:
-II_BASE_URL=https://your-deployment.vercel.app python test_entrusted_task.py
-```
+    cd tests/e2e
+    python test_opening_terminal.py
+    python test_morph.py
+    python test_pinned_scenes.py
+    python test_entrusted_task.py
+    python test_keyboard.py
+    python test_responsive.py
 
-The animation tests also run the WAAPI sweep where relevant. The count must
-remain zero; see the function-piped progress pattern in
-`components/scenes/Scene2Simplification.tsx`.
+Set II_BASE_URL to run the same suite against a deployment.

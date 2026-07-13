@@ -23,7 +23,7 @@ export default function ChromeRail({ progress, activeScene }: ChromeRailProps) {
   // header's menu dies (0.44–0.56), carries the residue of navigation
   // for a while, then decays to nothing itself. Two indicators never
   // speak at once.
-  const chrome = useTransform(progress, [0.44, 0.56, 0.72, 0.9], [0, 1, 0.14, 0]);
+  const chrome = useTransform(progress, [0.54, 0.6, 0.72, 0.9], [0, 1, 0.14, 0]);
 
   return (
     <m.div

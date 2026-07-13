@@ -61,7 +61,7 @@ with sync_playwright() as p:
     log = page.locator('[role="log"]').inner_text()
     results["receipt"] = [l for l in log.split("\n") if "THAT TOOK" in l]
     results["stored"] = page.evaluate(
-        "() => [localStorage.getItem('ii.commands'), localStorage.getItem('ii.seconds')]"
+        "() => [sessionStorage.getItem('ii.commands'), sessionStorage.getItem('ii.seconds')]"
     )
     results["waapi"] = page.evaluate(WAAPI_SWEEP)
     page.close()
@@ -76,7 +76,7 @@ with sync_playwright() as p:
     page.wait_for_timeout(2500)  # boot
     s2geo = sect(page, 2)
     scrub(page, s2geo, 0.1, settle=2500)  # scroll past without solving
-    results["abandoned_flag"] = page.evaluate("() => localStorage.getItem('ii.abandoned')")
+    results["abandoned_flag"] = page.evaluate("() => sessionStorage.getItem('ii.abandoned')")
     results["still_waiting"] = "STILL WAITING." in page.locator('[role="log"]').inner_text()
 
     results["console_errors"] = errors[:5]
@@ -84,3 +84,11 @@ with sync_playwright() as p:
     browser.close()
 
 print(json.dumps(results, indent=1))
+
+assert results["line1"] == "You probably used hundreds of interfaces today."
+assert results["fragments"] == 8
+assert results["hurried_fragments_by_5s"] >= 4
+assert results["receipt"]
+assert results["abandoned_flag"] == "1"
+assert results["still_waiting"]
+assert not results["console_errors"]

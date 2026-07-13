@@ -1,20 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { LazyMotion, domAnimation, useMotionValueEvent, useScroll, useTransform } from "motion/react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  LazyMotion,
+  domAnimation,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "motion/react";
 import ChromeRail from "@/components/chrome/ChromeRail";
 import Header from "@/components/chrome/Header";
 import Scene0Forgotten from "@/components/scenes/Scene0Forgotten";
-import Scene1Terminal from "@/components/scenes/Scene1Terminal";
-import Scene2Simplification from "@/components/scenes/Scene2Simplification";
-import Scene3Remembering from "@/components/scenes/Scene3Remembering";
-import EntrustedTask from "@/components/scenes/EntrustedTask";
 import { attention } from "@/lib/attention";
 
+const Scene1Terminal = dynamic(() => import("@/components/scenes/Scene1Terminal"));
+const Scene2Simplification = dynamic(
+  () => import("@/components/scenes/Scene2Simplification"),
+);
+const Scene3Remembering = dynamic(
+  () => import("@/components/scenes/Scene3Remembering"),
+);
+const EntrustedTask = dynamic(() => import("@/components/scenes/EntrustedTask"));
+
 /**
- * One task travels from demanded attention to entrusted absence. The historic
- * scenes are not a survey; they establish the attention relationship that the
- * final interaction reverses.
+ * One task travels from demanded attention to entrusted absence.
  */
 export default function Experience() {
   const mainRef = useRef<HTMLElement>(null);
@@ -22,6 +32,7 @@ export default function Experience() {
   const journey = useTransform(scrollYProgress, (value) => value);
   const [activeScene, setActiveScene] = useState(0);
   const [journeyComplete, setJourneyComplete] = useState(false);
+  const completeJourney = useCallback(() => setJourneyComplete(true), []);
 
   useMotionValueEvent(journey, "change", (value) => {
     if (value >= 0.56) attention.markMenuFaded();
@@ -40,20 +51,14 @@ export default function Experience() {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "%cREADY.\n%c> YOU FOUND THE OTHER TERMINAL. IT CANNOT SEE WHEN YOU LEAVE.",
-      "font-family:monospace;color:#E8A33D",
-      "font-family:monospace;color:#918E88",
-    );
-  }, []);
-
-  useEffect(() => {
     const sections = mainRef.current?.querySelectorAll<HTMLElement>("[data-scene]");
     if (!sections) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) setActiveScene(Number((entry.target as HTMLElement).dataset.scene));
+          if (entry.isIntersecting) {
+            setActiveScene(Number((entry.target as HTMLElement).dataset.scene));
+          }
         }
       },
       { rootMargin: "-50% 0px -50% 0px" },
@@ -64,7 +69,8 @@ export default function Experience() {
 
   return (
     <LazyMotion features={domAnimation} strict>
-      <main ref={mainRef}>
+      <a href="#essay" className="skip-link">Skip to the essay</a>
+      <main id="essay" ref={mainRef}>
         <h1 className="sr-only">Invisible Interfaces</h1>
         <Header progress={journey} />
         <ChromeRail progress={journey} activeScene={activeScene} />
@@ -73,18 +79,18 @@ export default function Experience() {
         <Scene1Terminal />
         <Scene2Simplification />
         <Scene3Remembering />
-        <EntrustedTask onComplete={() => setJourneyComplete(true)} />
+        <EntrustedTask onComplete={completeJourney} />
 
         {journeyComplete && (
-          <div className="flex h-[65vh] flex-col items-center justify-center gap-5 bg-void">
-            <p className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-55">
-              THE TASK ENDS. THE BACKGROUND DOES NOT.
+          <div className="flex h-[65vh] flex-col items-center justify-center gap-5 bg-void px-6 text-center">
+            <p className="font-mono text-[0.6875rem] tracking-[0.16em] text-ink-dim">
+              THE TASK ENDS. YOUR AUTHORITY DOES NOT.
             </p>
             <a
               href="/about"
-              className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint opacity-40 transition-opacity duration-500 hover:opacity-100 focus-visible:opacity-100"
+              className="font-mono text-[0.6875rem] tracking-[0.16em] text-ink-dim underline decoration-line underline-offset-4 transition-colors duration-500 hover:text-ink focus-visible:text-ink"
             >
-              ABOUT THIS ESSAY
+              ABOUT THIS INVESTIGATION
             </a>
           </div>
         )}

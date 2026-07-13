@@ -114,8 +114,8 @@ export default function Scene1Terminal() {
     s.warnedLeaving = true;
     print([[terminal.stillWaiting, "machine"]]);
     try {
-      if (!localStorage.getItem("ii.commands")) {
-        localStorage.setItem("ii.abandoned", "1");
+      if (!sessionStorage.getItem("ii.commands")) {
+        sessionStorage.setItem("ii.abandoned", "1");
       }
     } catch {}
   }, [inView, booted, done, print]);
@@ -214,16 +214,16 @@ export default function Scene1Terminal() {
       setBusy(false);
       if (solved) {
         setDone(true);
-        // The machine remembers across visits — that is the point.
+        // The machine remembers for this visit — that is the point.
         try {
-          localStorage.setItem("ii.commands", String(s.commands));
+          sessionStorage.setItem("ii.commands", String(s.commands));
           if (s.startedAt) {
-            localStorage.setItem(
+            sessionStorage.setItem(
               "ii.seconds",
               String(Math.max(1, Math.round((Date.now() - s.startedAt) / 1000))),
             );
           }
-          localStorage.removeItem("ii.abandoned");
+          sessionStorage.removeItem("ii.abandoned");
         } catch {}
       }
     }, reduced ? 60 : LATENCY);
@@ -243,7 +243,7 @@ export default function Scene1Terminal() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 1 }}
-        transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduced ? 0 : 1.8, ease: [0.22, 1, 0.36, 1] }}
         onAnimationComplete={boot}
         className="mb-10 text-balance font-serif text-[clamp(1.25rem,2.5vw,1.75rem)] font-light text-ink"
       >
@@ -255,18 +255,9 @@ export default function Scene1Terminal() {
         initial={{ opacity: 0 }}
         animate={{
           opacity: booted ? 1 : 0,
-          boxShadow:
-            booted && !touched && !done && !reduced
-              ? [
-                  "0 0 0px rgba(232,163,61,0)",
-                  "0 0 14px rgba(232,163,61,0.16)",
-                  "0 0 0px rgba(232,163,61,0)",
-                ]
-              : "0 0 0px rgba(232,163,61,0)",
         }}
         transition={{
-          opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
-          boxShadow: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
+          opacity: { duration: reduced ? 0 : 1.2, ease: [0.22, 1, 0.36, 1] },
         }}
         className="w-full max-w-2xl cursor-text border border-line bg-black p-5 focus-within:[outline:1px_solid_var(--accent)] focus-within:[outline-offset:4px] sm:p-7"
         style={{ borderRadius: "var(--r-0)" }}
@@ -286,7 +277,8 @@ export default function Scene1Terminal() {
           ))}
           {typing && (
             <div className={VOICE_CLASS[typing.voice]}>
-              <MachineText text={typing.text} instant={!!reduced} onDone={commitTyping} />
+              <span aria-hidden="true"><MachineText text={typing.text} instant={!!reduced} onDone={commitTyping} /></span>
+              <span className="sr-only">{typing.text}</span>
             </div>
           )}
 
@@ -305,7 +297,7 @@ export default function Scene1Terminal() {
             <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: reduced ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
               className="mt-2 text-ink-faint"
             >
               TYPE ANYTHING.
@@ -344,7 +336,7 @@ export default function Scene1Terminal() {
       <m.p
         initial={{ opacity: 0 }}
         animate={{ opacity: done ? 1 : 0 }}
-        transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 1.2 }}
+        transition={{ duration: reduced ? 0 : 1.8, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 1.2 }}
         aria-hidden={!done}
         className="mt-12 max-w-[34rem] text-balance text-center font-serif text-[clamp(1.1rem,2vw,1.35rem)] font-light italic text-ink-dim"
       >

@@ -168,6 +168,7 @@ const CARD =
 /* ————— Beat 1: the login that fills itself ————— */
 
 function AutofillBeat({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
   const stage = useStagedTimeline(active, 3, 900);
   return (
     <div className={CARD} role="group" aria-label="A sign-in form filling itself">
@@ -186,7 +187,7 @@ function AutofillBeat({ active }: { active: boolean }) {
         <m.span
           initial={{ opacity: 0 }}
           animate={{ opacity: stage >= 1 ? 1 : 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: reduced ? 0 : 0.15 }}
           className="rounded-[2px] bg-[rgba(232,163,61,0.08)] px-1"
         >
           {remembering.login.email}
@@ -197,7 +198,7 @@ function AutofillBeat({ active }: { active: boolean }) {
         <m.span
           initial={{ opacity: 0 }}
           animate={{ opacity: stage >= 2 ? 1 : 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: reduced ? 0 : 0.15 }}
           className="rounded-[2px] bg-[rgba(232,163,61,0.08)] px-1"
         >
           ••••••••••
@@ -206,7 +207,7 @@ function AutofillBeat({ active }: { active: boolean }) {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 3 ? 1 : 0 }}
-        transition={{ duration: 0.9 }}
+        transition={{ duration: reduced ? 0 : 0.9 }}
         className="mt-4 text-ink-dim"
       >
         {remembering.login.signedIn}
@@ -231,7 +232,7 @@ function ReplyBeat({ active }: { active: boolean }) {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 2 ? 1 : 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: reduced ? 0 : 0.6 }}
         className="mt-5"
       >
         <div className="text-[0.625rem] tracking-[0.14em] text-ink-faint">
@@ -252,13 +253,14 @@ function ReplyBeat({ active }: { active: boolean }) {
 /* ————— Beat 3: the calendar that heard you ————— */
 
 function CalendarBeat({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
   const stage = useStagedTimeline(active, 1, 900);
   return (
     // Slides in from the side — from the conversation it was taken from.
     <m.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: stage >= 1 ? 1 : 0, x: stage >= 1 ? 0 : -10 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      initial={reduced ? false : { opacity: 0, x: -8 }}
+      animate={{ opacity: stage >= 1 ? 1 : 0, x: stage >= 1 ? 0 : -8 }}
+      transition={{ duration: reduced ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
       className={CARD}
       role="group"
       aria-label="A calendar event created from a conversation"
@@ -279,6 +281,7 @@ function CalendarBeat({ active }: { active: boolean }) {
 /* ————— Beat 4: the memory — and the page remembering you ————— */
 
 function MemoryBeat({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
   const stage = useStagedTimeline(active, 2, 1600);
   // Read lazily — the visitor writes this memory in Scene 1, long
   // after this component has mounted. Solvers get their cost back;
@@ -287,9 +290,9 @@ function MemoryBeat({ active }: { active: boolean }) {
   useEffect(() => {
     if (stage < 1) return;
     try {
-      const commands = localStorage.getItem("ii.commands");
+      const commands = sessionStorage.getItem("ii.commands");
       if (commands) setMemoryLine(remembering.memory.selfReference(commands));
-      else if (localStorage.getItem("ii.abandoned"))
+      else if (sessionStorage.getItem("ii.abandoned"))
         setMemoryLine(remembering.memory.selfReferenceAbandoned);
     } catch {}
   }, [stage]);
@@ -300,7 +303,7 @@ function MemoryBeat({ active }: { active: boolean }) {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 1 ? 1 : 0 }}
-        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduced ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
         className="overflow-hidden rounded-[var(--r-3)] border border-line"
         role="group"
         aria-label="A photo memory appearing on its own"
@@ -317,7 +320,7 @@ function MemoryBeat({ active }: { active: boolean }) {
         <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: stage >= 2 ? 1 : 0 }}
-          transition={{ duration: 0.9 }}
+          transition={{ duration: reduced ? 0 : 0.9 }}
           className="mt-5 text-center font-mono text-[0.6875rem] tracking-[0.14em] text-ink-faint"
         >
           {memoryLine}
