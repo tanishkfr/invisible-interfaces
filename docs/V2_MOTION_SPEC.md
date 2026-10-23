@@ -1,9 +1,10 @@
-# V2 Phase 2 — motion specification
+# V2 — director's cut motion specification
 
 ## Ownership
 
 Next.js/React/TypeScript and the existing GSAP + ScrollTrigger renderer remain.
-There are no new runtime dependencies. One native sticky stage and one paused
+Three.js adds one optional photographic sheet; it does not render interface text.
+One native sticky stage and one paused
 timeline own animated transforms. ScrollTrigger maps native section progress to
 `timeline.time(progress * 140)`. No JavaScript pin or intercepted scrolling is used.
 All copy lives in `content/v2.ts`; photographic representations are isolated in
@@ -28,14 +29,15 @@ Native scroll → section progress → paused 140-unit timeline
 | 20–30 | Same glyphs assemble window perimeter; image grows into dither |
 | 29–36 | Window and pointer observation plateau |
 | 37–45 | Sideways camera arc; archive windows pass at different depth planes |
-| 43–56 | Window chrome withdraws; enclosure becomes a landscape touch surface |
+| 41–56 | Selected photograph lifts out of the archive plane; chrome withdraws; enclosure becomes a landscape touch surface |
 | 55–61 | Touch ring establishes proximity; colour representation arrives |
 | 61–77 | Photograph follows a controlled gesture; surface tilts; elastic release |
 | 77–81 | Gesture observation plateau |
-| 81–100 | Touch dressing leaves; frame opens; context gathers; query completes through a stepped clip reveal |
+| 81–100 | Touch plane folds away; photograph bows/unfurls during an orbit; index unfolds from depth; context gathers and query completes |
 | 100–112 | Anticipation observation composition with connected memory and provenance |
-| 113–131 | Context converges into negative Z; enclosure and masthead withdraw; photograph grows |
-| 132–140 | Closing thought arrives; photograph and stillness |
+| 113–128 | Context recedes into negative Z; transparent enclosure passes the viewer; masthead withdraws; photograph approaches closely |
+| 128–134 | Photograph settles from the close approach to the final editorial composition |
+| 134–140 | Closing thought and optional return-to-context link arrive; stillness |
 
 Chapter state boundaries are 27, 55, 86 and 118. Navigation targets are 11.5,
 32, 79, 106 and 140. Reduced motion samples exactly those representative states.
@@ -46,8 +48,8 @@ Chapter state boundaries are 27, 55, 86 and 118. Navigation targets are 11.5,
 | --- | --- | --- | --- | --- |
 | A | Exact instructions | Image data and glyph nodes | Stepped spread, approach, perimeter assembly, scale | Window / reconstructs command field |
 | B | Spatial archive | Photograph and enclosure | Shared X/Y/Z rotation, lateral travel, passing planes, surface scaling | Touch surface / reconstructs archive |
-| Touch → expectation | Tactile image | Same photograph | Gesture release, frame opens, query reveal, context settles from depth | Memory field / folds back into touch |
-| C | Context around image | Full-strength photograph | Negative-Z convergence, enclosure contraction, masthead withdrawal | Quiet image / context returns to exact arrangement |
+| Touch → expectation | Tactile enclosure | Same photograph | Floor fold, curved sheet, counter-rotation, unfolding index, context settles from depth | Memory field / sheet and touch plane reconstruct |
+| C | Context around image | Full-strength photograph | Negative-Z context, forward frame passage, close approach and retreat, masthead withdrawal | Quiet image / context returns to exact arrangement |
 
 Opacity supports the material changes; spatial movement supplies the handoffs.
 Camera easing uses `power2`/`power3.inOut`; mechanical separation uses `steps(8)`;
@@ -80,8 +82,29 @@ width/height/top/left/margin/font size. Limited radius, colour and clip interpol
 remain where they visibly change the interface material.
 
 CSS 3D gives the required planar camera arc without duplicating a renderer or
-interface surface. Three.js and Flip would add complexity without a demonstrated
-missing effect. Next's production First Load JS estimate is 154 kB gzip for `/v2`,
-below the existing 160 kB target; images, CSS and fonts are measured separately.
+interface text. Three.js supplies the non-planar photographic transformation that
+CSS 3D cannot express as one continuous surface. One 64×32-segment plane, one
+texture and one shader live inside the existing photograph's CSS camera frame.
+Uniforms follow the same paused timeline: gesture ripple 61–72; bend 81–100.
+The renderer draws only when a deformation is active, with no independent rAF
+loop. Texture upload, shader compilation and one hidden warm-up draw occur before
+visible use. A ResizeObserver updates the local drawing buffer without per-scroll
+layout reads. Context loss reveals the DOM photograph immediately. Resize/media
+cleanup disposes texture, geometry, material, renderer, observers and listeners;
+pending imports/compilation are guarded against disposal. Reduced motion skips
+initialization entirely. The small sheet uses a fixed 2× drawing buffer so the
+outer CSS camera does not soften its texture on 1× displays.
 
-See [verification](V2_PHASE2_VERIFICATION.md) for actual evidence and limits.
+Do not add permanent will-change hints to the photograph/world. Rendered
+Chromium comparisons showed these magnifying a cached smaller raster; removing
+them restored detail at the largest scale. The source is now native 1536×1024
+with a lossless WebP export. See the director's cut report for measured combined
+JavaScript and image cost, rather than treating the entry-chunk estimate as the
+entire enhanced visit.
+
+Navigation is a native top-right chapter disclosure, not a bottom timeline. The
+final optional return-to-context link uses the existing chapter jump path and
+restores visible keyboard focus to Chapters. No new mandatory journey is added.
+
+See [current verification](V2_DIRECTORS_CUT.md) for evidence and limits. The
+[Phase 2 verification](V2_PHASE2_VERIFICATION.md) remains historical.

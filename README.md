@@ -10,6 +10,7 @@ No push, merge, deployment or homepage replacement is part of this phase.
 
 ## Experience and documentation
 
+- [Director's cut: reference study, changes and acceptance](docs/V2_DIRECTORS_CUT.md)
 - [V2 case study](docs/V2_CASESTUDY.md)
 - [Phase 3 critique and corrections](docs/V2_PHASE3_CRITIQUE.md)
 - [Final acceptance and outstanding release gates](docs/V2_PHASE3_ACCEPTANCE.md)
@@ -19,10 +20,15 @@ No push, merge, deployment or homepage replacement is part of this phase.
 - [Portfolio copy and media handoff](docs/V2_PORTFOLIO_HANDOFF.md)
 - [Genuine visitor evaluation guide and capture template](docs/V2_VISITOR_TESTING.md)
 
-Final showcase and representative desktop/mobile frames are in
+The current before/after films and selected desktop/mobile frames are in
+`docs/v2-directors-cut-evidence/`. Phase 3 evidence remains in
 `docs/v2-phase3-evidence/`. Full browser captures and raw recordings are generated
 in `output/playwright/phase3/` (ignored). Phase 1/2 reports and media remain
 historical evidence rather than current release claims.
+
+The director's cut report is the current creative/engineering checkpoint. Earlier
+phase acceptance and portfolio handoff files describe their previous checkpoint.
+Current full captures are in `output/playwright/directors-cut/` (ignored).
 
 ## Run and build
 
@@ -34,7 +40,9 @@ npm run build
 npx tsc --noEmit
 ```
 
-The project uses Next.js/React/TypeScript, GSAP/ScrollTrigger and CSS 3D for v2.
+The project uses Next.js/React/TypeScript, GSAP/ScrollTrigger and CSS 3D for v2,
+with one optional Three.js photographic sheet. The bottom timeline is replaced
+by a native Chapters disclosure. The ending can bring context back on request.
 V1 retains Motion. Security overrides for PostCSS and sharp are intentional;
 see the final acceptance report before changing them.
 
@@ -44,10 +52,11 @@ Use Python Playwright with installed browser engines against a running export:
 
 ```powershell
 $env:II_BASE_URL='http://localhost:3002'
-$env:II_OUTPUT_DIR='output/playwright/phase3/final'
+$env:II_OUTPUT_DIR='output/playwright/directors-cut/chromium'
 $env:II_RECORD_VIDEO='0'
 python tests/e2e/test_v2_cinematic.py
 python tests/e2e/inspect_v2_layout.py
+python tests/e2e/test_v2_surface.py
 ```
 
 `II_BROWSER=firefox` or `webkit` chooses another engine.

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CinematicExperience from "@/components/v2/CinematicExperience";
+import artifact from "@/content/v2-artifact.json";
 import "./v2.css";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     description: "A cinematic, scroll-driven exploration of how human-computer interaction evolved. One photograph. Five relationships.",
     type: "website",
     url: "/v2",
-    images: [{ url: "/v2/shore.webp", width: 1400, height: 933, alt: "The red-boat photograph that connects the five acts of Invisible Interfaces" }],
+    images: [{ url: "/v2/shore.webp", width: artifact.web_dimensions[0], height: artifact.web_dimensions[1], alt: "The red-boat photograph that connects the five acts of Invisible Interfaces" }],
   },
   twitter: {
     card: "summary_large_image",

@@ -43,7 +43,7 @@ spacing:
 components:
   chapter-link:
     textColor: "{colors.navigation-muted}"
-    padding: "20px 12px 12px 0"
+    padding: "16px 0"
   chapter-link-current:
     textColor: "{colors.ink}"
   about-link:
@@ -61,7 +61,7 @@ components:
 
 This document records the implemented `/v2` route. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a five-act local release candidate, with an editorial title, an authored mechanical world, and a semantic reading room.
 
-One photograph remains recognizable as its representation changes from terminal data to a spatial archive, a touch surface, contextual memory, and a final image without surrounding controls. Near-black space, warm machine light, and two typographic voices connect the acts. Native scrolling advances the exhibition; chapter links jump directly to authored resting states.
+One photograph remains recognizable as its representation changes from terminal data to a spatial archive, a touch surface, contextual memory, and a final image without surrounding controls. Near-black space, warm machine light, and two typographic voices connect the acts. Native scrolling advances the exhibition; a compact native Chapters disclosure offers direct access to resting states. The bottom timeline has been removed at the owner's request.
 
 **Key Characteristics:**
 
@@ -121,13 +121,13 @@ Additional dark surfaces and grey strokes describe individual machine artifacts.
 Phase 3 fit refinement: the sticky viewport follows actual viewport height,
 without a forced 650px phone minimum. Phone heights up to 740px fit the camera
 at 0.9; up to 620px use 0.75 and tighter opening/final spacing. The scroll cue
-occupies its own strip above the chapter rail. Tablet context entrances move
+occupies its own lower-left strip. Tablet context entrances move
 inward, and their archive index retains a deliberate side inset. These local
 fits are not new reusable typography or spacing tokens.
 
-The route uses a sticky, viewport-height exhibition inside a long native-scroll section. The desktop header and chapter rail share 40px side insets. On phones they compress to 20px, while the title and statements use 25px side insets. The recurring spacing steps above match the existing shared rhythm; they are not a mandate to normalize every scene coordinate.
+The route uses a sticky, viewport-height exhibition inside a long native-scroll section. The desktop header and chapter disclosure share 40px side insets. On phones they compress to 20px, while the title and statements use 25px side insets. The recurring spacing steps above match the existing shared rhythm; they are not a mandate to normalize every scene coordinate.
 
-The opening title occupies the left side and the terminal the right on wide screens. Phones stack the title above the mechanical world. A five-column chapter rail remains at the bottom. Narrow layouts show each chapter's index and verb while hiding its longer name. The rail retains a minimum link height of 64px.
+The opening title occupies the left side and the terminal the right on wide screens. Phones stack the title above the mechanical world. A top-right Chapters disclosure opens five stacked chapter links plus About. It retains indices, names and verbs on phones; the menu fits within a 20px inset and each link has at least a 48px height. The closed control has a 44px hit area. Escape closes the menu and restores focus. The bottom of the exhibition is clear.
 
 Responsive behavior is explicit: compact layouts end at 700px; tablet adjustments cover 701–1100px. Desktop heights up to 820px reduce the camera scale and statement sizes. Phones up to 740px high apply a further compact composition, including revised context placement and smaller closing copy. These are authored route layouts, not reusable scene geometry.
 
@@ -155,14 +155,14 @@ The terminal and early archive use rectangular shells and thin strokes. The shel
 
 ### Chapter navigation
 
-A persistent five-part machine rail. Each link pairs a numbered index with a chapter name and verb; a thin progress line spans the rail. Inactive links use muted navigation ink. Hover and the current chapter use warm ink, with the current index in amber. The color transition lasts 180ms. Keyboard focus inherits the shared two-pixel amber outline with a three-pixel offset. Links update the hash and jump to the associated resting state.
+A native details/summary disclosure replaces the former bottom rail and progress line. Its panel contains five chapter links and About. Inactive links use muted navigation ink. Hover and the current chapter use warm ink, with the current index in amber. The color transition lasts 180ms. Summary and links have visible amber keyboard focus. Links update the hash, jump immediately to the associated resting state, close the panel and return focus to the summary. The control stays available when the masthead withdraws.
 
 ### Header and reading links
 
 The v2 About link now reaches its own reading room via a native anchor. The
 preserved v1 About page remains separate and unchanged.
 
-The wordmark, About link, and reading-room links remain native anchors. About and reading links become amber on hover. Reading links carry a visible underline with a five-pixel offset. The header withdraws near the final act; the chapter rail remains available.
+The wordmark, About link, and reading-room links remain native anchors. About lives inside Chapters. Reading links become amber on hover and carry a visible underline with a five-pixel offset. The masthead withdraws near the final act; Chapters remains available. The ending's optional Bring the context back anchor returns to Anticipation and exposes the authored context again. It is hidden and unfocusable until the final composition arrives.
 
 ### Skip link
 
@@ -170,7 +170,13 @@ A fixed machine-text link appears on focus. It uses the shared black ground, war
 
 ### Persistent photograph
 
-Terminal ASCII, dithered image, and full-color image derive from one photographic source. The dither representation uses pixelated rendering. The photograph is cropped with `object-fit: cover` inside its transforming container; the camera layer is hidden from the accessibility tree because the reading room supplies the semantic story.
+Terminal ASCII, dithered image, full-color image and WebGL texture derive from one photographic source. The current source is a detail-refined generated version of the original, retained at its native 1536×1024 resolution and exported losslessly. The dither representation alone uses pixelated rendering. The photograph is cropped with `object-fit: cover`; the camera layer is hidden from the accessibility tree because the reading room supplies the semantic story. Avoid permanent will-change hints on the scaled photograph/world: actual Chromium comparisons showed those caching a smaller raster and softening the image during enlargement.
+
+### Director's cut spatial motion
+
+The image pulls forward from the archive. Later the touch enclosure folds into a receding floor while a Three.js sheet curves and unfurls the same photograph. A small diagonal ripple follows the gesture; no independent idle animation runs. The shader changes material shape rather than moving the depicted sea or adding decoration. It returns to a flat image before context becomes readable. The last transparent frame passes the viewer; the photograph approaches closely, then settles into the quiet ending before the final text arrives.
+
+The supplied Two Horizons recording informed the use of recognizable scale anchors, differing depth velocities and approach/retreat. Its cosmic imagery, particles, palette changes and telemetry were deliberately not imported. The interface's own history supplies the spatial environment. Three.js is an optional, separately loaded enhancement; reduced motion and unavailable/lost WebGL retain the complete CSS/DOM exhibition.
 
 ### Machine artifacts and context
 

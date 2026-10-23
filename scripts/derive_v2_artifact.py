@@ -9,13 +9,12 @@ from pathlib import Path
 from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
-source = ROOT / "assets/v2/shore-original.png"
+source = ROOT / "assets/v2/shore-directors-cut.png"
 destination = ROOT / "public/v2"
 destination.mkdir(parents=True, exist_ok=True)
 image = Image.open(source).convert("RGB")
 web = image.copy()
-web.thumbnail((1400, 1000), Image.Resampling.LANCZOS)
-web.save(destination / "shore.webp", quality=86, method=6)
+web.save(destination / "shore.webp", lossless=True, method=6)
 small = ImageOps.grayscale(image.resize((240, 160), Image.Resampling.LANCZOS))
 small.convert("1", dither=Image.Dither.FLOYDSTEINBERG).save(destination / "shore-dither.png", optimize=True)
 chars = "@%#*+=-:. "
@@ -26,7 +25,7 @@ metadata = {
     "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
     "source_dimensions": list(image.size),
     "web_dimensions": list(web.size),
-    "provenance": "Original generated photographic scene, created for Invisible Interfaces v2 using the built-in OpenAI image generation tool on 2026-10-23. Fictional scene; not an archive or a historical photograph.",
+    "provenance": "Generated photographic scene, detail-refined from the original v2 source with the built-in OpenAI image generation tool on 2026-10-23. Fictional scene; generated detail, not recovered historical information. Original retained in assets/v2/shore-original.png.",
 }
 (ROOT / "content/v2-artifact.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
 print(json.dumps({"source": str(source), "source_sha256": metadata["source_sha256"], "files": {path.name: path.stat().st_size for path in destination.iterdir()}}, indent=2))

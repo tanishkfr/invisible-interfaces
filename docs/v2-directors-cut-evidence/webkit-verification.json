@@ -1,0 +1,80 @@
+{
+  "base_url": "http://127.0.0.1:3002",
+  "engine": "webkit",
+  "viewports": {
+    "1440x900": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "1366x768": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "1280x800": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "932x908": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "768x1024": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "390x844": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "375x844": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "375x667": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "320x667": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "320x650": {
+      "no_overflow": true,
+      "states": 41
+    },
+    "320x568": {
+      "no_overflow": true,
+      "states": 41
+    }
+  },
+  "limitations": [
+    "Physical phones and trackpads were not tested.",
+    "rAF cadence and trace metrics do not prove display-presented smoothness.",
+    "Windows WebKit native Tab policy skipped links; skip was explicitly focused, then activated with Enter. Native link tab order remains unverified."
+  ],
+  "browser": "26.5",
+  "deterministic_states": 41,
+  "persistent_dom_anchor": true,
+  "repeated_fast_scrub": true,
+  "gesture_context_and_absence": true,
+  "wheel_and_small_delta_input": true,
+  "refresh_in_transition": true,
+  "direct_hash_entry": true,
+  "resize_rebuild": true,
+  "keyboard_chapters": true,
+  "accountability_return": true,
+  "reduced_motion_and_cleanup": true,
+  "native_scroll_release": true,
+  "skip_replay_and_restoration_after_chapter_jump": true,
+  "scroll_profile": {
+    "samples": 590,
+    "median_ms": 16,
+    "p95_ms": 30,
+    "max_ms": 32,
+    "over_33ms": 0,
+    "estimated_missed_vsyncs": 59,
+    "long_tasks": [],
+    "layout_shift_score": 0
+  },
+  "page_errors": []
+}
