@@ -1,0 +1,26 @@
+[
+  {
+    "test": "test_opening_terminal",
+    "exit_code": 0
+  },
+  {
+    "test": "test_morph",
+    "exit_code": 0
+  },
+  {
+    "test": "test_pinned_scenes",
+    "exit_code": 0
+  },
+  {
+    "test": "test_entrusted_task",
+    "exit_code": 0
+  },
+  {
+    "test": "test_keyboard",
+    "exit_code": 0
+  },
+  {
+    "test": "test_responsive",
+    "exit_code": 1
+  }
+]

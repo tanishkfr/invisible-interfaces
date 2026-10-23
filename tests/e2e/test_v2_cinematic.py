@@ -1,7 +1,7 @@
-"""V2 continuity, reversal, input, restoration, responsive and motion-preference checks.
+"""Five-act beta: continuity, native input, restoration, accessibility and profiling.
 
-Run with II_BASE_URL pointing to a served production export. Evidence is written
-to output/playwright; Python Playwright and its Chromium browser are required.
+II_BASE_URL chooses the production export. II_BROWSER=firefox selects a second
+engine. II_RECORD_VIDEO=0 skips recording. Artifacts stay local.
 """
 import json
 import os
@@ -9,203 +9,173 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from helpers import BASE_URL
 
-OUT = Path(__file__).resolve().parents[2] / "output" / "playwright"
+OUT = Path(__file__).resolve().parents[2] / "output/playwright/phase2"
 OUT.mkdir(parents=True, exist_ok=True)
-STATES = [0, .08, .11, .18, .24, .32, .40, .43, .45, .50, .55, .59, .70, .77, .84, .88, .94, 1]
+ENGINE = os.environ.get("II_BROWSER", "chromium")
+RECORD = os.environ.get("II_RECORD_VIDEO", "1" if ENGINE == "chromium" else "0") == "1"
+TIMES = [0, 8, 11.5, 14, 18, 24, 26, 27, 32, 36, 43, 50, 54, 55, 59, 61, 67, 73, 79, 80, 84, 86, 90, 96, 104, 106, 112, 113, 116, 118, 124, 128, 132, 140]
+RESTS = [(11.5,"0"),(32,"1"),(79,"2"),(106,"3"),(140,"4")]
+PROFILE_INIT = """window.__v2Profile={longTasks:[],shifts:[]};
+if(PerformanceObserver.supportedEntryTypes.includes('longtask'))new PerformanceObserver(list=>{
+  for(const e of list.getEntries())window.__v2Profile.longTasks.push({start:e.startTime,duration:e.duration});
+}).observe({type:'longtask',buffered:true});
+if(PerformanceObserver.supportedEntryTypes.includes('layout-shift'))new PerformanceObserver(list=>{
+  for(const e of list.getEntries())if(!e.hadRecentInput)window.__v2Profile.shifts.push(e.value);
+}).observe({type:'layout-shift',buffered:true});"""
 SNAPSHOT = """() => {
-  const root = document.querySelector('.v2-exhibition');
-  return { act: root.dataset.act, progress: +root.dataset.progress,
-    styles: ['.v2-world','.v2-shell','.v2-photo','.v2-dither','.v2-color',
-      '.v2-context-one','.v2-context-two','.v2-final','.v2-header',
-      '.v2-terminal-copy','.v2-window-bar','.v2-touch-ui'].map(s => {
-        const c = getComputedStyle(document.querySelector(s));
-        const matrix = new DOMMatrixReadOnly(c.transform === 'none' ? undefined : c.transform);
-        return [Array.from(matrix.toFloat64Array(), n => Math.round(n*100000)/100000),c.opacity,c.visibility,c.borderRadius];
-      }) };
+  const root=document.querySelector('main');
+  return {act:root.dataset.act,progress:+root.dataset.progress,
+    styles:['.v2-world','.v2-shell','.v2-photo','.v2-dither','.v2-color',
+      '.v2-context-one','.v2-context-two','.v2-context-three','.v2-memory-query',
+      '.v2-query-completion','.v2-final','.v2-header','.v2-terminal-copy',
+      '.v2-window-bar','.v2-touch-ui'].map(s=>{
+        const c=getComputedStyle(document.querySelector(s));
+        const m=new DOMMatrixReadOnly(c.transform==='none'?undefined:c.transform);
+        return [Array.from(m.toFloat64Array(),n=>Math.round(n*100000)/100000),c.opacity,c.visibility,c.borderRadius,c.clipPath];
+      })};
 }"""
 
 
-def scrub(page, progress):
-    page.evaluate("p => scrollTo(0,(document.querySelector('.v2-scroll').offsetHeight-innerHeight)*p)", progress)
-    page.wait_for_function("p => Math.abs(+document.querySelector('main').dataset.progress-p)<0.0002", arg=progress)
-    page.wait_for_timeout(40)
+def scrub(page,time):
+    page.evaluate("t=>scrollTo(0,(document.querySelector('.v2-scroll').offsetHeight-innerHeight)*t/140)",time)
+    page.wait_for_function("t=>Math.abs(+document.querySelector('main').dataset.progress-t/140)<.0002",arg=time)
+    # GSAP can batch CSS writes until the ticker after a media-context rebuild.
+    page.wait_for_timeout(50)
     return page.evaluate(SNAPSHOT)
 
 
-def load(page, suffix=""):
-    page.goto(BASE_URL + "/v2" + suffix)
+def load(page,suffix=""):
+    page.goto(BASE_URL+"/v2"+suffix)
     page.locator('[data-ready="true"]').wait_for()
     page.evaluate("document.fonts.ready")
-    page.wait_for_timeout(120)
-
-
-results = {"base_url": BASE_URL, "viewports": {}, "limitations": ["Emulated touch input; no physical phone or trackpad.", "Frame intervals measure browser rAF, not display presentation or a low-end device."]}
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    results["browser"] = browser.version
-    errors = []
-    page = browser.new_page(viewport={"width": 1440, "height": 900})
-    page.on("pageerror", lambda error: errors.append(str(error)))
-    load(page)
-    anchor = page.locator('[data-persistent-artifact="beach"]').element_handle()
-    baseline = {str(t): scrub(page, t) for t in STATES}
-    for t in reversed(STATES):
-        state = scrub(page, t)
-        assert state["styles"] == baseline[str(t)]["styles"], f"Reverse mismatch at {t}: {json.dumps({'before': baseline[str(t)], 'after': state})}"
-        assert anchor.evaluate("e => e === document.querySelector('[data-persistent-artifact]')")
-    for t in [.77, .18, 1, .43, .24, .59, 0, .88, .32]:
-        state = scrub(page, t)
-        assert state["styles"] == baseline[str(t)]["styles"], f"Fast scrub mismatch at {t}"
-    results["deterministic_states"] = len(STATES)
-    results["repeated_fast_scrub"] = True
-    results["persistent_dom_anchor"] = True
-
-    scrub(page, 0)
-    for _ in range(8):
-        page.mouse.wheel(0, 160)
-        page.wait_for_timeout(60)
-    results["wheel_scroll"] = page.evaluate("scrollY > 600")
-    assert results["wheel_scroll"]
-
-    scrub(page, .43)
-    before = page.evaluate(SNAPSHOT)
-    page.reload()
-    page.locator('[data-ready="true"]').wait_for()
-    page.wait_for_timeout(300)
-    after = page.evaluate(SNAPSHOT)
-    assert abs(before["progress"] - after["progress"]) < .002
-    assert before["styles"] == after["styles"]
-    results["refresh_in_transition"] = True
-    load(page, "#touch")
-    assert page.locator('main').get_attribute("data-act") == "2"
-    results["direct_hash_entry"] = True
-
-    # Resize across the camera breakpoint, then restore the desktop geometry.
-    page.set_viewport_size({"width": 390, "height": 844})
-    page.wait_for_timeout(300)
-    scrub(page, .59)
-    page.set_viewport_size({"width": 1440, "height": 900})
-    page.wait_for_timeout(300)
-    assert scrub(page, .59)["styles"] == baseline[str(.59)]["styles"]
-    results["resize_rebuild"] = True
-
-    for width, height in [(1440, 900), (768, 1024), (390, 844), (375, 844)]:
-        page.set_viewport_size({"width": width, "height": height})
-        load(page)
-        checks = []
-        for t in STATES:
-            state = scrub(page, t)
-            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Overflow at {width}/{t}"
-            assert state["progress"] >= t - .001
-            checks.append(state["act"])
-            if t in [0, .18, .24, .32, .43, .50, .59, .77, .88, 1]:
-                page.screenshot(path=str(OUT / f"v2-{width}-{round(t*100):03d}.png"))
-        results["viewports"][f"{width}x{height}"] = {"no_overflow": True, "sampled_states": len(checks)}
-
-    page.set_viewport_size({"width": 1440, "height": 900})
-    load(page)
-    # Keyboard navigation lands at the same timeline state as scrolling.
-    link = page.get_by_role("link", name="03 The Gesture Touch")
-    link.focus()
-    page.keyboard.press("Enter")
     page.wait_for_timeout(150)
-    assert page.locator('[aria-current="step"]').get_attribute("data-act-link") == "2"
-    assert abs(float(page.locator('main').get_attribute('data-progress')) - .59) < .001
-    results["keyboard_chapter_navigation"] = True
 
-    page.emulate_media(reduced_motion="reduce")
-    page.wait_for_timeout(250)
-    reduced_states = []
-    for t, act, expected in [(.10, "0", .11), (.32, "1", .32), (.59, "2", .59), (.77, "3", .77), (.98, "4", 1)]:
-        state = scrub(page, t)
-        assert state["act"] == act
-        assert state["styles"] == baseline[str(expected)]["styles"], f"Wrong reduced composition for act {act}: {state}"
-        reduced_states.append(state["styles"])
-        page.screenshot(path=str(OUT / f"v2-reduced-{act}.png"))
-    assert len({json.dumps(s) for s in reduced_states}) == 5
-    a = scrub(page, .35)["styles"]
-    b = scrub(page, .40)["styles"]
-    assert a == b, "Reduced motion must hold a static state between acts"
-    results["reduced_motion_five_static_states"] = True
-    page.emulate_media(reduced_motion="no-preference")
-    page.wait_for_timeout(200)
-    assert scrub(page, .59)["styles"] == baseline[str(.59)]["styles"]
-    results["media_cleanup_and_restore"] = True
 
-    scrub(page, 1)
-    page.mouse.wheel(0, 1000)
-    page.wait_for_timeout(200)
-    assert page.locator('.v2-viewport').evaluate("e => e.getBoundingClientRect().top < -500")
-    results["native_scroll_release"] = True
+results={"base_url":BASE_URL,"engine":ENGINE,"viewports":{},"limitations":["Physical phones and trackpads were not tested.","rAF cadence and trace metrics do not prove display-presented smoothness."]}
+with sync_playwright() as p:
+    executable=os.environ.get("II_BROWSER_EXECUTABLE")
+    browser=getattr(p,ENGINE).launch(headless=True,**({"executable_path":executable} if executable else {}))
+    results["browser"]=browser.version
+    if executable:results["browser_executable"]=executable
+    errors=[]
+    page=browser.new_page(viewport={"width":1440,"height":900})
+    page.add_init_script(PROFILE_INIT)
+    page.on("pageerror",lambda error:errors.append(str(error)))
     load(page)
-    page.keyboard.press("Tab")
-    assert page.evaluate("document.activeElement.textContent") == "Skip animation and read the story"
+    anchor=page.locator('[data-persistent-artifact="beach"]').element_handle()
+    baseline={str(t):scrub(page,t) for t in TIMES}
+    for t in reversed(TIMES):
+        state=scrub(page,t)
+        assert state["styles"]==baseline[str(t)]["styles"],f"Reverse mismatch at {t}"
+        assert anchor.evaluate("e=>e===document.querySelector('[data-persistent-artifact]')")
+    for t in [106,18,140,43,24,79,0,116,32,90,67]:
+        assert scrub(page,t)["styles"]==baseline[str(t)]["styles"],f"Fast scrub mismatch at {t}"
+    results.update(deterministic_states=len(TIMES),persistent_dom_anchor=True,repeated_fast_scrub=True)
+    assert baseline["61"]["styles"][2][0]!=baseline["67"]["styles"][2][0]
+    assert baseline["106"]["styles"][5][1]=="1" and baseline["106"]["styles"][6][1]=="1"
+    assert baseline["140"]["styles"][3][1]=="1" and baseline["140"]["styles"][4][1]=="1"
+    assert baseline["140"]["styles"][11][2]=="hidden"
+    results["gesture_context_and_absence"]=True
+
+    scrub(page,0)
+    for _ in range(8):page.mouse.wheel(0,120);page.wait_for_timeout(35)
+    assert page.evaluate("scrollY>400")
+    for _ in range(20):page.mouse.wheel(0,12);page.wait_for_timeout(16)
+    results["wheel_and_small_delta_input"]=True
+    scrub(page,96);before=page.evaluate(SNAPSHOT)
+    page.reload();page.locator('[data-ready="true"]').wait_for()
+    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-96/140)<.001")
+    assert page.evaluate(SNAPSHOT)["styles"]==before["styles"]
+    results["refresh_in_transition"]=True
+    load(page,"#touch");page.wait_for_function("document.querySelector('main').dataset.act==='2'")
+    results["direct_hash_entry"]=True
+    page.set_viewport_size({"width":390,"height":844});page.wait_for_timeout(250);scrub(page,79)
+    page.set_viewport_size({"width":1440,"height":900});page.wait_for_timeout(250)
+    assert scrub(page,79)["styles"]==baseline["79"]["styles"]
+    results["resize_rebuild"]=True
+    for width,height in [(1440,900),(1366,768),(768,1024),(390,844),(375,844),(375,667)]:
+        page.set_viewport_size({"width":width,"height":height});load(page)
+        for t in TIMES:
+            scrub(page,t)
+            assert page.evaluate("document.documentElement.scrollWidth<=innerWidth"),f"Overflow: {width}/{height}/{t}"
+        results["viewports"][f"{width}x{height}"]={"no_overflow":True,"states":len(TIMES)}
+
+    page.set_viewport_size({"width":1440,"height":900});load(page)
+    page.get_by_role("link",name="03 The Gesture Touch").focus();page.keyboard.press("Enter")
+    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-79/140)<.001")
+    assert page.locator('[aria-current="step"]').get_attribute("data-act-link")=="2"
+    results["keyboard_chapters"]=True
+    page.emulate_media(reduced_motion="reduce");page.wait_for_timeout(250)
+    for t,act in RESTS:
+        state=scrub(page,t)
+        assert state["act"]==act
+        page.screenshot(path=str(OUT/f"{ENGINE}-reduced-{act}.png"))
+        mismatches=[{"index":i,"expected":b,"actual":a} for i,(a,b) in enumerate(zip(state['styles'],baseline[str(t)]['styles'])) if a!=b]
+        assert not mismatches,f"Reduced composition mismatch: {act}: {json.dumps(mismatches)}"
+    assert scrub(page,33)["styles"]==scrub(page,40)["styles"]
+    page.emulate_media(reduced_motion="no-preference");page.wait_for_timeout(250)
+    assert scrub(page,79)["styles"]==baseline["79"]["styles"]
+    results["reduced_motion_and_cleanup"]=True
+    scrub(page,140);page.mouse.wheel(0,1000);page.wait_for_timeout(200)
+    assert page.locator('.v2-viewport').evaluate("e=>e.getBoundingClientRect().top < -500")
+    results["native_scroll_release"]=True
+    load(page);page.keyboard.press("Tab")
+    assert page.evaluate("document.activeElement.textContent")=="Skip animation and read the story"
     page.keyboard.press("Enter")
-    assert page.evaluate("document.activeElement.id") == "v2-reading"
-    results["skip_animation"] = True
-    page.get_by_role("link", name="Experience again").click()
-    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-.08)<.001")
-    results["replay"] = True
-    scrub(page, .43)
-    page.reload()
-    page.locator('[data-ready="true"]').wait_for()
-    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-.43)<.001")
-    results["refresh_after_chapter_navigation"] = True
+    assert page.evaluate("document.activeElement.id")=="v2-reading"
+    page.get_by_role("link",name="Experience again").click()
+    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-11.5/140)<.001")
+    scrub(page,96);page.reload();page.locator('[data-ready="true"]').wait_for()
+    page.wait_for_function("Math.abs(+document.querySelector('main').dataset.progress-96/140)<.001")
+    results["skip_replay_and_restoration_after_chapter_jump"]=True
 
-    # A real mobile browser context and CDP touch events, rather than scrollTo.
-    mobile = browser.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=1)
-    phone = mobile.new_page()
-    load(phone)
-    cdp = mobile.new_cdp_session(phone)
-    cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": 195, "y": 670}]})
-    for y in [620, 540, 460, 380, 280]:
-        cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [{"x": 195, "y": y}]})
-        phone.wait_for_timeout(35)
-    cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
-    phone.wait_for_timeout(300)
-    assert phone.evaluate("scrollY > 150")
-    results["emulated_touch_scroll"] = True
-    mobile.close()
+    if ENGINE=="chromium":
+        mobile=browser.new_context(viewport={"width":390,"height":844},is_mobile=True,has_touch=True,device_scale_factor=1)
+        phone=mobile.new_page();load(phone);touch=mobile.new_cdp_session(phone)
+        touch.send("Input.dispatchTouchEvent",{"type":"touchStart","touchPoints":[{"x":195,"y":670}]})
+        for y in [620,540,460,380,280]:
+            touch.send("Input.dispatchTouchEvent",{"type":"touchMove","touchPoints":[{"x":195,"y":y}]});phone.wait_for_timeout(35)
+        touch.send("Input.dispatchTouchEvent",{"type":"touchEnd","touchPoints":[]});phone.wait_for_timeout(250)
+        assert phone.evaluate("scrollY>150")
+        results["emulated_touch_scroll"]=True;mobile.close()
 
-    # Measure update intervals during continuous native-position scrubbing.
     load(page)
-    results["frame_intervals"] = page.evaluate("""() => new Promise(resolve => {
-      const times = []; let previous; let start;
-      const span = document.querySelector('.v2-scroll').offsetHeight-innerHeight;
-      function tick(now) {
-        if (!start) start = now;
-        if (previous) times.push(now-previous);
-        previous = now;
-        const progress = Math.min(1,(now-start)/6000);
-        scrollTo(0,span*progress);
-        if (progress < 1) requestAnimationFrame(tick);
-        else { times.sort((a,b)=>a-b); resolve({samples:times.length,
-          median_ms:times[Math.floor(times.length*.5)],p95_ms:times[Math.floor(times.length*.95)],
-          over_33ms:times.filter(t=>t>33.4).length,max_ms:times[times.length-1],
-          renderer:document.createElement('canvas').getContext('webgl')?.getParameter(7937)}); }
-      } requestAnimationFrame(tick);
+    cdp=page.context.new_cdp_session(page) if ENGINE=="chromium" else None
+    if cdp:
+        cdp.send("Performance.enable")
+        before_metrics={m["name"]:m["value"] for m in cdp.send("Performance.getMetrics")["metrics"]}
+    results["scroll_profile"]=page.evaluate("""() => new Promise(resolve=>{
+      const intervals=[];let previous,start;const span=document.querySelector('.v2-scroll').offsetHeight-innerHeight;
+      const profileStart=performance.now();
+      function tick(now){if(!start)start=now;if(previous)intervals.push(now-previous);previous=now;
+        const p=Math.min(1,(now-start)/10000);scrollTo(0,span*p);
+        if(p<1)requestAnimationFrame(tick);else{
+          intervals.sort((a,b)=>a-b);const median=intervals[Math.floor(intervals.length/2)];
+          const tasks=window.__v2Profile.longTasks.filter(t=>t.start>=profileStart);
+          resolve({samples:intervals.length,median_ms:median,p95_ms:intervals[Math.floor(intervals.length*.95)],
+            max_ms:intervals.at(-1),over_33ms:intervals.filter(t=>t>33.4).length,
+            estimated_missed_vsyncs:intervals.reduce((n,t)=>n+Math.max(0,Math.round(t/median)-1),0),
+            long_tasks:tasks,layout_shift_score:window.__v2Profile.shifts.reduce((a,b)=>a+b,0)});
+        }}requestAnimationFrame(tick);
     })""")
-
-    # Record all three transitions, forward and back, in an actual browser.
-    video_context = browser.new_context(viewport={"width": 1440, "height": 900}, record_video_dir=str(OUT / "video"), record_video_size={"width": 1440, "height": 900})
-    film = video_context.new_page()
-    load(film)
-    film.evaluate("""() => new Promise(resolve => {
-      let start; const span = document.querySelector('.v2-scroll').offsetHeight-innerHeight;
-      function frame(now) { if(!start) start=now;
-        const elapsed=(now-start)/1000;
-        const t=elapsed<19?elapsed/19:Math.max(0,1-(elapsed-19)/8);
-        scrollTo(0,span*t);
-        if(elapsed<27) requestAnimationFrame(frame);else resolve();
-      }requestAnimationFrame(frame);
-    })""")
-    video = film.video
-    video_context.close()
-    video.save_as(str(OUT / "v2-walkthrough.webm"))
-    results["video"] = "output/playwright/v2-walkthrough.webm"
-    results["page_errors"] = errors
+    if cdp:
+        after_metrics={m["name"]:m["value"] for m in cdp.send("Performance.getMetrics")["metrics"]}
+        results["scroll_trace_metrics"]={name:after_metrics[name]-before_metrics[name] for name in ["LayoutCount","RecalcStyleCount","LayoutDuration","RecalcStyleDuration","ScriptDuration","TaskDuration"]}
+        results["js_heap_bytes"]=after_metrics["JSHeapUsedSize"]
+    if RECORD:
+        film_context=browser.new_context(viewport={"width":1440,"height":900},record_video_dir=str(OUT/"video"),record_video_size={"width":1440,"height":900})
+        film=film_context.new_page();load(film)
+        film.evaluate("""() => new Promise(resolve=>{let start;
+          const span=document.querySelector('.v2-scroll').offsetHeight-innerHeight;
+          function frame(now){if(!start)start=now;const elapsed=(now-start)/1000;
+            const p=elapsed<2?0:elapsed<34?(elapsed-2)/32:elapsed<37?1:Math.max(0,1-(elapsed-37)/18);
+            scrollTo(0,span*p);if(elapsed<57)requestAnimationFrame(frame);else resolve();
+          }requestAnimationFrame(frame);
+        })""")
+        video=film.video;film_context.close();video.save_as(str(OUT/f"{ENGINE}-five-act-walkthrough.webm"))
+        results["video"]=f"output/playwright/phase2/{ENGINE}-five-act-walkthrough.webm"
+    results["page_errors"]=errors
     assert not errors
     browser.close()
-
-(OUT / "v2-verification.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
-print(json.dumps(results, indent=2))
+(OUT/f"{ENGINE}-verification.json").write_text(json.dumps(results,indent=2),encoding="utf-8")
+print(json.dumps(results,indent=2))

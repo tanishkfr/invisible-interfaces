@@ -3,14 +3,13 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Photo from "@/components/artifacts/Photo";
-import { acts, v2Copy } from "@/content/v2";
+import PhotoArtifact from "@/components/v2/PhotoArtifact";
+import { ACT_BOUNDARIES, EXHIBITION_DURATION, acts, v2Copy } from "@/content/v2";
 
 gsap.registerPlugin(ScrollTrigger);
 
 // The glyphs are image data becoming window geometry, never ambient particles.
 const GLYPHS = [".", ":", "+", "*", "#", "=", "~", "/"];
-const STATE_TIMES = [11, 32, 59, 77, 100];
 
 export default function CinematicExperience() {
   const root = useRef<HTMLElement>(null);
@@ -20,6 +19,15 @@ export default function CinematicExperience() {
     if (!el) return;
     const media = gsap.matchMedia();
     let disposed = false;
+    let refreshFrame = 0;
+    // Firefox can apply the reduced-motion height after matchMedia rebuilds.
+    // Refresh from the measured section resize, once its new layout exists.
+    const section = el.querySelector(".v2-scroll");
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+    if (section) observer.observe(section);
     media.add({ compact: "(max-width: 700px)", tablet: "(min-width: 701px) and (max-width: 1100px)", reduce: "(prefers-reduced-motion: reduce)", wide: "(min-width: 1101px)" }, (context) => {
       const compact = Boolean(context.conditions?.compact);
       const tablet = Boolean(context.conditions?.tablet);
@@ -32,19 +40,26 @@ export default function CinematicExperience() {
       const shellW = compact ? 310 : 740;
       const shellH = compact ? 292 : 430;
       const photoW = compact ? 258 : 430;
-      const photoH = photoW * 0.675;
-      const touchScaleX = compact ? 0.88 : 0.47;
-      const touchScaleY = compact ? 1.4 : 1.25;
+      const photoH = photoW * 2 / 3;
+      const touchScaleX = compact ? 0.98 : 0.68;
+      const touchScaleY = compact ? 1.12 : 1;
       gsap.set(select(".v2-shell"), { width: shellW, height: shellH, xPercent: -50, yPercent: -50, scaleX: 1, scaleY: 1, borderRadius: 0, backgroundColor: "#0e0e0e", borderColor: "#49443a", opacity: 1 });
       gsap.set(select(".v2-photo"), { width: photoW, height: photoH, xPercent: -50, yPercent: -50, x: compact ? 0 : 110, y: compact ? 30 : 12, scale: 0.28, rotationZ: 0, borderRadius: 0 });
       gsap.set(select(".v2-world"), { x: compact || tablet ? 0 : 245, y: compact ? 100 : tablet ? 160 : 35, scale: compact ? 0.94 : 0.82, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0 });
-      gsap.set(select(".v2-terminal-copy, .v2-intro"), { opacity: 1, x: 0, y: 0 });
+      gsap.set(select(".v2-terminal-copy, .v2-terminal-art, .v2-intro"), { opacity: 1, x: 0, y: 0 });
       gsap.set(select(".v2-header, .v2-side-note"), { autoAlpha: 1 });
       gsap.set(select(".v2-context"), { x: 0, y: 0, z: 40, scale: 1 });
+      gsap.set(select(".v2-context-one"), { x: compact ? 24 : -100, y: -25, z: -180 });
+      gsap.set(select(".v2-context-two"), { x: compact ? -24 : 120, y: 30, z: -260 });
       gsap.set(select(".v2-orbits"), { scale: 1 });
+      gsap.set(select(".v2-memory-query, .v2-memory-index"), { opacity: 0, x: 0, y: 0 });
+      gsap.set(select(".v2-touch-ui"), { x: 0, y: 0, z: 6 });
+      gsap.set(select(".v2-query-completion"), { clipPath: "inset(0 100% 0 0)" });
+      gsap.set(select(".v2-gesture-trace"), { opacity: 0, strokeDashoffset: 360 });
+      gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15 });
       gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final, .v2-orbits"), { opacity: 0 });
       gsap.set(select(".v2-satellite"), { opacity: 0, transformPerspective: 1200 });
-      gsap.set(select(".v2-glyph"), { xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+      gsap.set(select(".v2-glyph"), { xPercent: -50, yPercent: -50, scale: 1, opacity: 0 });
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
@@ -54,6 +69,8 @@ export default function CinematicExperience() {
         .to(select(".v2-world"), { x: 0, y: 20, scale: 1, duration: 8, ease: "power2.inOut" }, 3)
         .to(select(".v2-thought-0"), { opacity: 1, duration: 2 }, 8)
         .to(select(".v2-terminal-copy"), { opacity: 0, y: -20, duration: 5 }, 12)
+        .to(select(".v2-terminal-art"), { opacity: 0, duration: 3 }, 12)
+        .to(select(".v2-glyph"), { opacity: 1, duration: 2 }, 13)
         .to(select(".v2-shell"), { opacity: 0, duration: 4 }, 13)
         .to(select(".v2-thought-0"), { opacity: 0, duration: 2 }, 14)
         .to(select(".v2-world"), { z: compact ? 60 : 180, rotationX: -5, duration: 6, ease: "power2.inOut" }, 14);
@@ -87,46 +104,64 @@ export default function CinematicExperience() {
         .fromTo(select(".v2-satellite-one"), { x: compact ? -100 : -360, y: -90, z: -300 }, { x: compact ? -220 : -540, y: -20, z: 140, duration: 12, ease: "power1.inOut" }, 37)
         .fromTo(select(".v2-satellite-two"), { x: compact ? 100 : 350, y: 100, z: -220 }, { x: compact ? 240 : 580, y: 30, z: 220, duration: 12, ease: "power1.inOut" }, 38)
         .to(select(".v2-files, .v2-window-bar, .v2-pointer"), { opacity: 0, duration: 4 }, 43)
-        .to(select(".v2-shell"), { scaleX: touchScaleX, scaleY: touchScaleY, borderRadius: compact ? 24 : 38, backgroundColor: "#111113", borderColor: "#5e5a53", duration: 9, ease: "power3.inOut" }, 45)
-        .to(select(".v2-photo"), { x: 0, y: compact ? 0 : -12, scale: compact ? 0.94 : 0.71, borderRadius: 7, duration: 9, ease: "power3.inOut" }, 45)
+        .to(select(".v2-shell"), { scaleX: touchScaleX, scaleY: touchScaleY, borderRadius: 14, backgroundColor: "#111113", borderColor: "#5e5a53", duration: 9, ease: "power3.inOut" }, 45)
+        .to(select(".v2-photo"), { x: 0, y: compact ? 0 : -8, scale: compact ? 0.96 : 0.94, borderRadius: 6, duration: 9, ease: "power3.inOut" }, 45)
         .to(select(".v2-world"), { rotationY: 0, rotationX: 0, rotationZ: 0, x: 0, y: compact ? 24 : 35, z: 0, duration: 10, ease: "power3.inOut" }, 46)
         .to(select(".v2-satellite"), { opacity: 0, duration: 3 }, 49)
         .to(select(".v2-color"), { opacity: 1, duration: 6 }, 48)
         .to(select(".v2-touch-ui"), { opacity: 1, duration: 3 }, 53)
         .fromTo(select(".v2-touch-ring"), { scale: 0.8, opacity: 0 }, { scale: 1.35, opacity: 0.8, duration: 2, ease: "power2.out" }, 55)
         .to(select(".v2-touch-ring"), { scale: 1.7, opacity: 0, duration: 2 }, 57)
-        .to(select(".v2-photo"), { y: compact ? -16 : -28, rotationZ: -2, duration: 2, ease: "power2.out" }, 56)
-        .to(select(".v2-photo"), { y: compact ? 0 : -12, rotationZ: 0, duration: 3, ease: "back.out(1.3)" }, 58)
         .to(select(".v2-thought-2"), { opacity: 1, duration: 2 }, 57);
 
-      // Temporary connective study: touch opens out into an anticipatory field.
-      timeline.to(select(".v2-thought-2"), { opacity: 0, duration: 2 }, 65)
-        .to(select(".v2-touch-ui"), { opacity: 0, duration: 3 }, 66)
-        .to(select(".v2-shell"), { scaleX: compact ? 0.98 : 0.75, scaleY: compact ? 0.91 : 0.81, opacity: 0.4, duration: 7, ease: "power2.inOut" }, 66)
-        .to(select(".v2-photo"), { scale: compact ? 0.87 : 0.88, y: 0, duration: 7, ease: "power2.inOut" }, 66)
-        .to(select(".v2-context"), { opacity: 1, duration: 4, stagger: 1 }, 69)
-        .to(select(".v2-orbits"), { opacity: 1, duration: 4 }, 69)
-        .to(select(".v2-thought-3"), { opacity: 1, duration: 2 }, 74);
+      // III. A controlled gesture carries the image; the surface follows it.
+      timeline.to(select(".v2-photo"), { x: compact ? 15 : 48, y: 10, rotationZ: 3, scale: compact ? 1.01 : 1.02, duration: 6, ease: "power2.inOut" }, 61)
+        .to(select(".v2-world"), { rotationZ: -1.5, rotationY: compact ? -3 : -7, duration: 6, ease: "power2.inOut" }, 61)
+        .to(select(".v2-gesture-trace"), { opacity: 0.7, strokeDashoffset: 0, duration: 6 }, 61)
+        .to(select(".v2-shell"), { scaleX: compact ? 1.04 : 0.76, scaleY: compact ? 1.16 : 1.06, duration: 6, ease: "power2.inOut" }, 61)
+        .to(select(".v2-photo"), { x: compact ? -8 : -25, y: -2, rotationZ: -1.5, scale: compact ? 0.98 : 0.96, duration: 5, ease: "power2.inOut" }, 67)
+        .to(select(".v2-photo"), { x: 0, y: 0, rotationZ: 0, scale: compact ? 0.96 : 1, duration: 5, ease: "back.out(1.15)" }, 72)
+        .to(select(".v2-world"), { rotationZ: 0, rotationY: 0, duration: 6, ease: "power2.inOut" }, 70)
+        .to(select(".v2-gesture-trace"), { opacity: 0, duration: 3 }, 73);
+
+      // IV. The tactile frame opens into a context field, not notification cards.
+      timeline.to(select(".v2-thought-2"), { opacity: 0, duration: 2 }, 80)
+        .to(select(".v2-touch-ui"), { opacity: 0, y: 8, duration: 4 }, 81)
+        .to(select(".v2-shell"), { scaleX: compact ? 1 : 0.96, scaleY: compact ? 0.88 : 0.91, opacity: 0.2, borderRadius: 4, duration: 9, ease: "power3.inOut" }, 81)
+        .to(select(".v2-world"), { x: compact ? 0 : tablet ? -20 : -55, z: compact ? 20 : tablet ? 30 : 60, rotationY: compact || tablet ? 4 : 8, duration: 8, ease: "power2.inOut" }, 82)
+        .to(select(".v2-photo"), { scale: compact ? 0.96 : tablet ? 0.9 : 1.08, y: compact ? 10 : 38, duration: 8, ease: "power2.inOut" }, 82)
+        .to(select(".v2-memory-index"), { opacity: 1, duration: 3 }, 85)
+        .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 86)
+        .to(select(".v2-memory-query"), { opacity: 1, duration: 3 }, 87)
+        .to(select(".v2-orbits"), { opacity: 0.65, duration: 4 }, 88)
+        .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 7, ease: "steps(14)" }, 90)
+        .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 91)
+        .to(select(".v2-photo-focus"), { opacity: 0.8, scale: 1, duration: 5, ease: "power2.inOut" }, 93)
+        .to(select(".v2-world"), { x: 0, z: 0, rotationY: 0, duration: 9, ease: "power2.inOut" }, 95)
+        .to(select(".v2-context-three"), { opacity: 1, duration: 4 }, 98)
+        .to(select(".v2-thought-3"), { opacity: 1, duration: 3 }, 100);
 
       // C. Controls withdraw along converging depth paths. The image stays.
-      timeline.to(select(".v2-thought-3"), { opacity: 0, duration: 2 }, 81)
-        .to(select(".v2-context-one"), { x: compact ? 35 : 170, y: 40, z: -650, scale: 0.45, duration: 10, ease: "power2.inOut" }, 81)
-        .to(select(".v2-context-two"), { x: compact ? -35 : -170, y: -35, z: -900, scale: 0.4, duration: 10, ease: "power2.inOut" }, 82)
-        .to(select(".v2-context-three"), { y: -60, z: -1100, scale: 0.4, duration: 10, ease: "power2.inOut" }, 83)
-        .to(select(".v2-context"), { opacity: 0, duration: 5, stagger: 0.6 }, 86)
-        .to(select(".v2-shell"), { scaleX: compact ? 0.7 : 0.55, scaleY: 0.55, opacity: 0, duration: 8, ease: "power2.inOut" }, 83)
-        .to(select(".v2-orbits"), { scale: 0.65, opacity: 0, duration: 9 }, 83)
-        .to(select(".v2-photo"), { scale: compact ? 0.96 : 0.98, y: compact ? -10 : -15, duration: 10, ease: "power2.inOut" }, 84)
-        .to(select(".v2-header, .v2-side-note"), { autoAlpha: 0, duration: 6 }, 88)
-        .to(select(".v2-final"), { opacity: 1, duration: 4 }, 94)
-        .to(select(".v2-progress-fill"), { scaleX: 1, duration: 100 }, 0);
+      timeline.to(select(".v2-thought-3"), { opacity: 0, duration: 2 }, 113)
+        .to(select(".v2-context-one"), { x: compact ? 35 : 240, y: 40, z: -650, scale: 0.45, duration: 12, ease: "power2.inOut" }, 113)
+        .to(select(".v2-context-two"), { x: compact ? -35 : -240, y: -35, z: -900, scale: 0.4, duration: 12, ease: "power2.inOut" }, 114)
+        .to(select(".v2-context-three"), { y: -60, z: -1100, scale: 0.4, duration: 12, ease: "power2.inOut" }, 115)
+        .to(select(".v2-memory-query"), { y: 35, opacity: 0, duration: 7 }, 113)
+        .to(select(".v2-context, .v2-memory-index"), { opacity: 0, duration: 5, stagger: 0.4 }, 119)
+        .to(select(".v2-shell"), { scaleX: compact ? 0.7 : 0.55, scaleY: 0.55, opacity: 0, duration: 10, ease: "power2.inOut" }, 115)
+        .to(select(".v2-orbits, .v2-photo-focus"), { scale: 0.75, opacity: 0, duration: 10 }, 115)
+        .to(select(".v2-photo"), { scale: compact ? 1.12 : 1.32, y: compact ? -70 : -85, borderRadius: 1, duration: 13, ease: "power2.inOut" }, 118)
+        .to(select(".v2-header, .v2-side-note"), { autoAlpha: 0, duration: 7 }, 120)
+        .to(select(".v2-final"), { opacity: 1, duration: 5 }, 132)
+        .to(select(".v2-progress-fill"), { scaleX: 1, duration: EXHIBITION_DURATION }, 0);
 
       const links = Array.from(el.querySelectorAll<HTMLAnchorElement>("[data-act-link]"));
       let active = -1;
       const render = (progress: number) => {
-        const time = progress * 100;
-        const index = time < 26 ? 0 : time < 51 ? 1 : time < 70 ? 2 : time < 91 ? 3 : 4;
-        timeline.time(reduced ? STATE_TIMES[index] : time, false);
+        const time = progress * EXHIBITION_DURATION;
+        const boundary = ACT_BOUNDARIES.findIndex((at) => time < at);
+        const index = boundary < 0 ? 4 : boundary;
+        timeline.time(reduced ? acts[index].rest : time, false);
         el.dataset.act = String(index);
         el.dataset.progress = progress.toFixed(4);
         if (index !== active) {
@@ -182,7 +217,7 @@ export default function CinematicExperience() {
     }, el);
     // Fonts can change layout after restoration; refresh without changing scroll.
     document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
-    return () => { disposed = true; media.revert(); };
+    return () => { disposed = true; observer.disconnect(); cancelAnimationFrame(refreshFrame); media.revert(); };
   }, []);
 
   return (
@@ -209,6 +244,7 @@ export default function CinematicExperience() {
           <div className="v2-camera" aria-hidden="true">
             <div className="v2-world">
               <div className="v2-shell" />
+              <PhotoArtifact era="terminal" />
               <div className="v2-terminal-copy">
                 <p className="v2-terminal-heading">{v2Copy.terminal.heading} <span>{v2Copy.terminal.location}</span></p>
                 <p>{v2Copy.terminal.ready}</p><p><span>&gt;</span> {v2Copy.terminal.list}</p>
@@ -219,19 +255,26 @@ export default function CinematicExperience() {
               <div className="v2-window-bar"><span className="v2-close" /><span>{v2Copy.gui.title}</span><span>− &nbsp; □</span></div>
               <div className="v2-files"><span>{v2Copy.gui.archive}</span>{v2Copy.gui.files.map((name, i) => <p className={i === 2 ? "v2-file-selected" : undefined} key={name}>{i === 2 ? "▧" : "▤"} {name}</p>)}<small>{v2Copy.gui.count}<br />{v2Copy.gui.selected}</small></div>
               <div className="v2-photo" data-persistent-artifact="beach">
-                <div className="v2-dither"><Photo era="dither" /></div>
-                <div className="v2-color"><Photo era="full" /></div>
+                <div className="v2-dither"><PhotoArtifact era="dither" /></div>
+                <div className="v2-color"><PhotoArtifact era="full" /></div>
+                <svg className="v2-photo-focus" viewBox="0 0 430 287" preserveAspectRatio="none"><path d="M1 23V1H23M407 1H429V23M429 264V286H407M23 286H1V264" /></svg>
               </div>
               <div className="v2-data-field">{Array.from({ length: 40 }, (_, i) => <span className="v2-glyph" key={i}><span className="v2-glyph-letter">{GLYPHS[(i * 3 + Math.floor(i / 8)) % GLYPHS.length]}</span><i className="v2-glyph-piece" /></span>)}</div>
               <svg className="v2-pointer" width="24" height="30" viewBox="0 0 24 30"><path d="M2 2v23l6-6 5 10 4-2-5-10h9Z" fill="#e8e6e3" stroke="#111" strokeWidth="1.5" /></svg>
               <div className="v2-satellite v2-satellite-one"><div>{v2Copy.terminal.files[1]} <span>− □</span></div><p>{v2Copy.gui.note}<br />{v2Copy.gui.letter}</p><i /><i /><i /></div>
               <div className="v2-satellite v2-satellite-two"><div>{v2Copy.gui.archive} <span>− □</span></div>{[2, 0, 1].map((i) => <p key={i}>{i === 2 ? "▧" : "▤"} {v2Copy.terminal.files[i]}</p>)}</div>
-              <div className="v2-touch-ui"><span className="v2-phone-speaker" /><p className="v2-touch-heading">‹ <span>{v2Copy.touch.title}</span> ···</p><p className="v2-touch-caption">{v2Copy.touch.caption}<small>{v2Copy.touch.detail}</small></p><div className="v2-touch-actions">♡ <span>↗</span> ▱</div><i className="v2-home-indicator" /></div>
+              <div className="v2-touch-ui">
+                <p className="v2-touch-heading"><span>{v2Copy.touch.title}</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"><path d="M9 3v12M3 9h12" /></svg></p>
+                <p className="v2-touch-caption">{v2Copy.touch.caption}<small>{v2Copy.touch.detail}</small></p>
+              </div>
               <div className="v2-touch-ring" />
-              <svg className="v2-orbits" viewBox="0 0 1000 600"><path d="M100 155H280L400 265M900 350H700L600 300M500 460V370" /><circle cx="100" cy="155" r="3" /><circle cx="900" cy="350" r="3" /><circle cx="500" cy="460" r="3" /></svg>
+              <svg className="v2-gesture-trace" viewBox="0 0 600 400"><path d="M130 260C180 285 300 285 350 240S410 140 470 160" /></svg>
+              <div className="v2-memory-index"><span>{v2Copy.memory.index}</span><div>{v2Copy.memory.sequence.map((word) => <span key={word}>{word}</span>)}</div></div>
+              <p className="v2-memory-query"><span>{v2Copy.memory.query}</span><span className="v2-query-completion">{v2Copy.memory.completion}</span></p>
+              <svg className="v2-orbits" viewBox="0 0 1100 600" preserveAspectRatio="none"><path d="M40 250H250L320 300M1060 390H850L780 330M550 540V470" /><circle cx="40" cy="250" r="2" /><circle cx="1060" cy="390" r="2" /><circle cx="550" cy="540" r="2" /></svg>
               <div className="v2-context v2-context-one"><span>{v2Copy.contexts[0].label}</span><p>{v2Copy.contexts[0].title}</p><small>{v2Copy.contexts[0].detail}</small></div>
               <div className="v2-context v2-context-two"><span>{v2Copy.contexts[1].label}</span><p>{v2Copy.contexts[1].title}</p><small>{v2Copy.contexts[1].detail}</small></div>
-              <div className="v2-context v2-context-three"><span>{v2Copy.contexts[2].label}</span><p>{v2Copy.contexts[2].title} <span>↗</span></p></div>
+              <div className="v2-context v2-context-three"><p>{v2Copy.contexts[2].title}</p><small>{v2Copy.contexts[2].detail}</small></div>
             </div>
           </div>
 

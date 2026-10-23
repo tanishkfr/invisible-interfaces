@@ -3,8 +3,8 @@ import CinematicExperience from "@/components/v2/CinematicExperience";
 import "./v2.css";
 
 export const metadata: Metadata = {
-  title: "Cinematic study",
-  description: "One photograph. Five relationships with computing. A cinematic study in human attention.",
+  title: "The exhibition",
+  description: "One photograph. Five relationships with computing. A continuous cinematic exhibition about human attention.",
   alternates: { canonical: "/v2" },
   robots: { index: false, follow: false },
 };

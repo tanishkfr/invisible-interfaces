@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T12:46:22Z",
+  "title": "Design System: Invisible Interfaces V2",
+  "extensions": {
+    "colorMeta": {
+      "canvas": { "role": "neutral", "displayName": "Canvas" },
+      "surface": { "role": "neutral", "displayName": "Surface" },
+      "ink": { "role": "neutral", "displayName": "Warm ink" },
+      "accent": { "role": "primary", "displayName": "Amber attention" },
+      "line": { "role": "neutral", "displayName": "Boundary line" },
+      "supporting-copy": { "role": "neutral", "displayName": "Supporting copy" },
+      "reading-copy": { "role": "neutral", "displayName": "Reading copy" },
+      "navigation-muted": { "role": "neutral", "displayName": "Navigation muted" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Opening title", "purpose": "Two-line editorial introduction, with an italic second line and explicit responsive overrides." },
+      "headline": { "displayName": "Act statement", "purpose": "Human statements above the shared mechanical world." },
+      "body": { "displayName": "Reading prose", "purpose": "Semantic explanation in the document-flow reading room." },
+      "label": { "displayName": "Machine identification", "purpose": "Exhibition identification and chapter context." }
+    },
+    "motion": [
+      { "name": "chapter-color", "value": "color 180ms", "purpose": "Chapter link hover and current-state transition." },
+      { "name": "skip-settle", "value": "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "The shared skip link settles into view on focus; reduced motion removes the transition." },
+      { "name": "scroll-timeline", "value": "GSAP defaults: ease none; authored power2.inOut and power3.inOut transforms", "purpose": "Native scroll controls the shared world. Reduced motion selects discrete authored act rests." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "max-width: 700px" },
+      { "name": "tablet", "value": "min-width: 701px and max-width: 1100px" },
+      { "name": "short-desktop", "value": "min-width: 701px and max-height: 820px" },
+      { "name": "short-phone", "value": "max-width: 700px and max-height: 740px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Chapter link",
+      "kind": "nav",
+      "refersTo": "chapter-link",
+      "description": "Native chapter access with a scene index, chapter name, verb, and current-state accent.",
+      "html": "<a class=\"ds-chapter\" href=\"#instruct\" aria-current=\"step\"><span>01</span><span>The Command</span><em>Instruct</em></a>",
+      "css": ".ds-chapter { display: grid; grid-template-columns: 24px auto; padding: 20px 12px 12px 0; min-height: 64px; font-family: var(--font-plex-mono, 'IBM Plex Mono'), monospace; font-size: 11px; font-weight: 400; color: #97938b; text-decoration: none; transition: color 180ms; } .ds-chapter > span:first-child { font-size: 9px; padding-top: 1px; } .ds-chapter em { grid-column: 2; font-style: normal; margin-top: 7px; font-size: 10px; color: #97938b; } .ds-chapter[aria-current], .ds-chapter:hover { color: var(--ink, #e8e6e3); } .ds-chapter[aria-current] > span:first-child { color: var(--accent, #e8a33d); } .ds-chapter:focus-visible { outline: 2px solid var(--accent, #e8a33d); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-chapter { transition: none; } }"
+    },
+    {
+      "name": "About link",
+      "kind": "nav",
+      "refersTo": "about-link",
+      "description": "A restrained header anchor with an amber hover and shared focus treatment.",
+      "html": "<a class=\"ds-about\" href=\"/about\">About ↗</a>",
+      "css": ".ds-about { display: inline-block; font-family: var(--font-plex-mono, 'IBM Plex Mono'), monospace; font-size: 12px; font-weight: 400; letter-spacing: .1em; color: var(--ink, #e8e6e3); padding: 12px 0 12px 12px; text-decoration: none; } .ds-about:hover { color: var(--accent, #e8a33d); } .ds-about:focus-visible { outline: 2px solid var(--accent, #e8a33d); outline-offset: 3px; }"
+    },
+    {
+      "name": "Reading link",
+      "kind": "nav",
+      "description": "Underlined document-flow replay and original-exhibition links.",
+      "html": "<a class=\"ds-reading-link\" href=\"#instruct\">Experience again ↑</a>",
+      "css": ".ds-reading-link { display: inline-block; padding: 12px 0; color: var(--ink, #e8e6e3); font-family: var(--font-newsreader, 'Newsreader'), Georgia, serif; font-size: 18px; text-decoration: underline; text-underline-offset: 5px; text-decoration-color: #5c5850; } .ds-reading-link:hover { color: var(--accent, #e8a33d); } .ds-reading-link:focus-visible { outline: 2px solid var(--accent, #e8a33d); outline-offset: 3px; }"
+    },
+    {
+      "name": "Act statement",
+      "kind": "custom",
+      "description": "A numbered act identifier above a light editorial statement; scene identification is native to this exhibition.",
+      "html": "<div class=\"ds-act\"><p class=\"ds-index\">01 / THE COMMAND</p><p class=\"ds-statement\">First, we learned its language.</p></div>",
+      "css": ".ds-act { text-align: center; color: var(--ink, #e8e6e3); } .ds-index { margin: 0; font-family: var(--font-plex-mono, 'IBM Plex Mono'), monospace; font-size: 11px; font-weight: 400; letter-spacing: .1em; color: #aaa69e; } .ds-statement { margin: 18px 0 0; font-family: var(--font-newsreader, 'Newsreader'), Georgia, serif; font-size: clamp(32px, 3.5vw, 58px); font-weight: 300; line-height: 1.1; letter-spacing: -.035em; }"
+    },
+    {
+      "name": "Context text",
+      "kind": "custom",
+      "description": "Machine evidence and a human-readable memory, without a surrounding notification card.",
+      "html": "<div class=\"ds-context\"><span>THE CONTEXT</span><p>At the shore.</p><small>A place, held in memory</small></div>",
+      "css": ".ds-context { width: 225px; font-family: var(--font-plex-mono, 'IBM Plex Mono'), monospace; color: var(--ink, #e8e6e3); } .ds-context > span { color: #aaa69e; font-size: 11px; letter-spacing: .08em; } .ds-context p { margin: 10px 0 0; font-family: var(--font-newsreader, 'Newsreader'), Georgia, serif; font-size: 32px; font-weight: 300; line-height: 1.1; } .ds-context small { display: block; margin-top: 8px; font-size: 11px; color: #aaa69e; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "One photograph / five relationships",
+    "overview": "This document records the implemented `/v2` route. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a completed five-act beta, with an editorial title, an authored mechanical world, and a semantic reading room.\n\nOne photograph remains recognizable as its representation changes from terminal data to a spatial archive, a touch surface, contextual memory, and a final image without surrounding controls. Near-black space, warm machine light, and two typographic voices connect the acts. Native scrolling advances the exhibition; chapter links jump directly to authored resting states.",
+    "keyCharacteristics": [
+      "A persistent photographic subject across three fidelity representations.",
+      "Newsreader for human statements; IBM Plex Mono for machine evidence and navigation.",
+      "A pinned composition with deliberate CSS 3D travel and receding chrome.",
+      "A separate reading room containing the story and disclosure of authored behavior."
+    ],
+    "rules": [
+      { "name": "The Attention Rule", "body": "Preserve amber as the established machine and focus signal; do not introduce a competing accent family.", "section": "colors" },
+      { "name": "The Two Voices Rule", "body": "Human statements and outcomes use Newsreader; commands, chapter identification, archive evidence, and controls use IBM Plex Mono.", "section": "typography" },
+      { "name": "The Shared World Rule", "body": "Keep the photograph and its transforming frame in the same spatial continuity; depth expresses a change in operation rather than a new page or disconnected spectacle.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do preserve the dark/amber palette and the two established typographic voices.",
+      "Do keep the same photographic subject recognizable across fidelity changes and transformations.",
+      "Do preserve scene indices, chapter identification, native anchor access, and visible keyboard focus.",
+      "Do retain the semantic reading room and disclosure of generated imagery and authored behavior.",
+      "Do use the compact and reduced-motion layouts when extending the route."
+    ],
+    "donts": [
+      "Don't replace the pinned cinematic composition with a generic card grid.",
+      "Don't turn the terminal's machine glyphs into unrelated decorative particles.",
+      "Don't treat per-scene coordinates, camera poses, or terminal illustration text sizes as global reusable tokens.",
+      "Don't invent live inference, background tasks, or interactive controls for the authored demonstrations."
+    ]
+  }
+}

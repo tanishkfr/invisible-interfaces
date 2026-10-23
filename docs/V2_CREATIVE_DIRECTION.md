@@ -1,74 +1,62 @@
-# Invisible Interfaces v2 — creative direction
+# Invisible Interfaces v2 — complete five-act beta
 
-Phase 1 is an isolated cinematic study at `/v2`. The original exhibition at `/`
-and its causal entrusted-task interaction remain intact. This preview contains
-three finished transition studies, not a completed five-act v2 exhibition.
+The isolated exhibition at `/v2` is a continuous, native-scroll film. The original
+exhibition at `/` retains its causal entrusted-task interaction. This route asks
+for no secondary task: watching and scrolling completes the whole narrative.
 
 ## Governing concept
 
-**One photograph. Less visible effort.** The frame changes its relationship to a
-person while the memory remains recognizable. The emotional progression is
-precision → recognition → proximity → relief → reflection. The ending preserves
-the original project's question of responsibility rather than celebrating
-automation without qualification.
+**One photograph. Less visible operation.** The evolution of interaction is told
+through the disappearance of its visible frame. These are overlapping human
+relationships with computing, not a chronology of technological replacement.
 
-| Act | Human relationship | Visual material | Motion |
-| --- | --- | --- | --- |
-| The Command | Instruct | Amber glyphs; a literal file path | Stepped separation |
-| The Window | Point | Image data becomes window geometry | Precise assembly; geometric settlement |
-| The Gesture | Touch | The same window narrows around the image | Camera arc; continuous surface; restrained elastic return |
-| The Anticipation | Expect | Local memory, context, and provenance layers | Context gathers around the photograph |
-| The Absence | Be | Photograph and one editorial thought | Layers converge into depth; controls withdraw; stillness |
+| Act | Relationship | Composition and motion |
+| --- | --- | --- |
+| Command | Instruct | Amber instructions and an ASCII rendering; stepped image data assembles window geometry |
+| Window | Point | A spatial archive; the camera arcs sideways around the selected photograph |
+| Gesture | Touch | A landscape touch surface; image displacement, rotation and restrained elastic release |
+| Anticipation | Expect | The frame opens into an unboxed context field; a query completes and connections gather around the same memory |
+| Absence | Be | Context converges into depth; chrome withdraws; the photograph and a quiet statement remain |
 
-These are overlapping interaction relationships, not a replacement chronology.
-The anticipatory environment and touch-to-anticipation bridge establish enough
-context for sequence C; full anticipation interaction belongs to Phase 2.
+## Visual continuity
 
-## Continuity and hierarchy
+One persistent `data-persistent-artifact="beach"` DOM node spans the journey.
+The new red-boat photographic scene has three representations, all derived from
+one source: ASCII, one-bit dither, and full colour. The boat, shoreline and distant
+headland provide recognition through changes in fidelity and perspective.
+See [asset provenance](V2_ASSET_PROVENANCE.md).
 
-- One persistent `data-persistent-artifact="beach"` DOM element spans the entire
-  timeline. Its dither and full-color interiors reuse v1's beach composition.
-- Newsreader carries human thoughts. IBM Plex Mono carries instructions and
-  interface evidence. Existing font loading and global tokens are unchanged.
-- Warm amber denotes requested attention: command marks, the caret, the initial
-  scroll instruction, and the active navigation index. It is not a lighting effect.
-- Interfaces use opaque surfaces, thin borders, and era-indexed corners. No bloom,
-  blur, decorative shadow, floating background particles, or video background.
-- Large negative spaces separate transformation from observation. Captions are
-  removed during the camera passages so they do not compete with moving geometry.
+Newsreader carries human thoughts; IBM Plex Mono carries instructions and
+interface evidence. The dark/amber identity, thin borders and deliberately sparse
+editorial copy remain. No background video, atmospheric particles, bloom or
+unrelated card system was added. Warm amber marks attention rather than lighting.
 
-## Three signature studies
+The strongest Phase 1 material survives: command marks physically form the
+window perimeter, the selected photograph anchors the spatial camera arc, and
+context withdraws along converging depth paths while the photograph stays.
 
-**A — The pixel becomes a window (12–32%).** The terminal shell recedes while
-forty command marks spread into a structured field. The same marks travel to
-the future window perimeter and stretch into horizontal and vertical segments.
-The selected image expands at the same time; window dressing settles only after
-the geometry is legible. Reversing reconstructs the marks and terminal.
+## Pacing and composition
 
-**B — The world rotates around the interface (37–62%).** A shared world turns
-left and travels laterally as archive windows pass through different depth
-planes. The selected photograph remains in the same frame of reference. The
-main window narrows into a touch surface as the world returns to face the
-visitor. A brief touch ring and a small, reversible image displacement make the
-change of input tangible.
+The timeline spans 140 authored units, independent of elapsed time. Desktop uses
+16 viewport heights, mobile 14.5, and reduced motion 6. Native scrolling directly
+sets the timeline: no snap, momentum emulator, interception or catch-up scrub.
+The major spatial passages alternate with composed observation states.
 
-**C — The vanishing point (81–100%).** Three meaningful context layers contract
-on converging depth paths. The enclosing surface contracts and disappears.
-The photograph remains full strength and settles slightly larger. The masthead
-also disappears. The final thought asks what remains owed when operation leaves
-attention. The usable chapter navigation stays available.
+Gesture now has a distinct drag/release passage before anticipation. The latter
+uses a clipped query completion, contextual labels and corner focus geometry,
+rather than notification cards or an AI chat. It is explicitly an authored
+demonstration: no inference, sharing, or background work is occurring.
 
-## Pacing
+The final statement is “The interface leaves. The memory stays.” The supporting
+line retains the accountability question: “Out of attention does not mean out of
+responsibility.” The stage then releases into a semantic reading room, replay
+and a doorway to v1; there is no mandatory post-climax task.
 
-The desktop stage spans 14 viewport heights (13 of actual scrub travel); mobile
-uses 12.5. Native scrolling controls time directly, with no smoothing catch-up or
-snap. Window and touch plateaus deliberately hold long enough to inspect.
-The final composition has a quiet arrival before the stage releases into a
-short reading room with the narrative, disclosure, replay, and v1 doorway.
+Portrait compositions relocate context below the photograph, reduce camera
+travel and simplify auxiliary annotation on short phones. Tablet geometry is
+separately fitted. This is a recomposition of the world rather than a miniature
+desktop canvas.
 
-The reading room also supplies a semantic equivalent and a keyboard skip path.
-Reduced motion presents five static representative compositions on a shorter
-six-viewport path, without camera travel.
-
-See [the motion specification](V2_MOTION_SPEC.md) for actual timelines and
-[verification](V2_VERIFICATION.md) for evidence and limitations.
+See [motion specification](V2_MOTION_SPEC.md), [route design system](v2/DESIGN.md)
+and [Phase 2 verification](V2_PHASE2_VERIFICATION.md). The original
+[Phase 1 report](V2_VERIFICATION.md) remains a historical record.

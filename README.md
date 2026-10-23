@@ -39,22 +39,28 @@ The browser walkthroughs live in tests/e2e and cover the opening, terminal, morp
 
 See CASESTUDY.md for the design argument and VISUAL_SYSTEM.md for the current exhibition system.
 
-## V2 cinematic study
+## V2 five-act beta
 
-The isolated Phase 1 preview lives at `/v2`. Three scroll-controlled studies carry
-the same photograph from command marks into a window, around a spatial desktop
-into a touch surface, and out of an anticipatory interface into stillness.
+The complete Phase 2 beta lives at `/v2`. One generated red-boat photograph
+travels from exact commands into a spatial archive, a tactile surface, an
+anticipatory memory field, and a quiet finale. Native scrolling controls the
+whole film in either direction. No secondary task blocks the exhibition.
 The original exhibition remains at `/`.
 
 See [creative direction](docs/V2_CREATIVE_DIRECTION.md),
 [motion specification](docs/V2_MOTION_SPEC.md), and
-[verification and limitations](docs/V2_VERIFICATION.md). Selected browser evidence
-is retained in `docs/v2-evidence/`; full captures and the recording are generated
-in `output/playwright/`.
+[Phase 2 verification](docs/V2_PHASE2_VERIFICATION.md),
+[asset provenance](docs/V2_ASSET_PROVENANCE.md), and
+[route design system](docs/v2/DESIGN.md). Phase 1 documentation and evidence remain
+historical. New selected evidence is in `docs/v2-phase2-evidence/`; full captures
+and the real-browser recording are in `output/playwright/phase2/`.
 
 Run the focused browser suite against a local server with Python Playwright:
 
     python tests/e2e/test_v2_cinematic.py
 
-Set `II_BASE_URL` when using a different port. The study has not been pushed or
-deployed. Full acceptance remains partial; see the verification report.
+Set `II_BASE_URL` when using a different port; `II_BROWSER=firefox` selects the
+second engine and `II_BROWSER_EXECUTABLE` can select an installed build.
+`II_RECORD_VIDEO=0` skips recording. Run `tests/e2e/inspect_v2_layout.py` for the
+responsive overlap captures. The beta is local only; Phase 3 visitor testing,
+physical-device review and release approval remain separate.
