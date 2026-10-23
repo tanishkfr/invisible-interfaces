@@ -41,7 +41,7 @@
 .v2-photo img, .v2-photo svg { display: block; width: 100%; height: 100%; }
 .v2-photo img { object-fit: cover; }
 .v2-artifact-dither { image-rendering: pixelated; }
-.v2-photo-focus { position: absolute; inset: 0; fill: none; stroke: #e8e6e3; stroke-width: 1.5; pointer-events: none; }
+.v2-photo-focus { position: absolute; inset: 0; fill: none; stroke: #e8a33d; stroke-width: 1.5; pointer-events: none; }
 .v2-window-bar { position: absolute; width: 738px; left: -369px; top: -214px; height: 34px; border-bottom: 1px solid #524f47; display: flex; justify-content: space-between; align-items: center; padding: 0 14px; font-family: var(--font-plex-mono), monospace; font-size: 11px; letter-spacing: .13em; background: #22221f; transform: translateZ(3px); }
 .v2-close { width: 11px; height: 11px; border: 1px solid #969187; }
 .v2-files { position: absolute; left: -343px; top: -143px; width: 175px; font-family: var(--font-plex-mono), monospace; font-size: 12px; transform: translateZ(3px); }

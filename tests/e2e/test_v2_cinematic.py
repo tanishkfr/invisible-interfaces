@@ -28,7 +28,7 @@ SNAPSHOT = """() => {
     styles:['.v2-world','.v2-shell','.v2-photo','.v2-dither','.v2-color',
       '.v2-context-one','.v2-context-two','.v2-context-three','.v2-memory-query',
       '.v2-query-completion','.v2-final','.v2-header','.v2-terminal-copy',
-      '.v2-window-bar','.v2-touch-ui'].map(s=>{
+      '.v2-window-bar','.v2-touch-ui','.v2-photo-focus'].map(s=>{
         const c=getComputedStyle(document.querySelector(s));
         const m=new DOMMatrixReadOnly(c.transform==='none'?undefined:c.transform);
         // The interiors inherit the tested photo radius. WebKit can cache that
@@ -83,6 +83,11 @@ with sync_playwright() as p:
     assert baseline['102']['styles'][4][2]=='visible'
     assert '100%' in baseline['102']['styles'][9][4]
     results['photograph_settles_before_query_completion']=True
+    # The photograph identifies its subject before the authored query appears.
+    assert float(baseline['99']['styles'][-1][1]) > .7
+    assert baseline['99']['styles'][8][1] == '0'
+    assert baseline['99']['styles'][2][0][0] > baseline['106']['styles'][2][0][0]
+    results['subject_recognition_precedes_query']=True
 
     scrub(page,0)
     for _ in range(8):page.mouse.wheel(0,120);page.wait_for_timeout(35)

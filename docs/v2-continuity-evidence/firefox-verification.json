@@ -1,0 +1,82 @@
+{
+  "base_url": "http://127.0.0.1:3002",
+  "engine": "firefox",
+  "viewports": {
+    "1440x900": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "1366x768": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "1280x800": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "932x908": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "768x1024": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "390x844": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "375x844": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "375x667": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "320x667": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "320x650": {
+      "no_overflow": true,
+      "states": 47
+    },
+    "320x568": {
+      "no_overflow": true,
+      "states": 47
+    }
+  },
+  "limitations": [
+    "Physical phones and trackpads were not tested.",
+    "rAF cadence and trace metrics do not prove display-presented smoothness."
+  ],
+  "browser": "157.0",
+  "browser_executable": "C:/Users/User/AppData/Local/ms-playwright/firefox-1555/firefox/firefox.exe",
+  "deterministic_states": 47,
+  "persistent_dom_anchor": true,
+  "repeated_fast_scrub": true,
+  "gesture_context_and_absence": true,
+  "photograph_settles_before_query_completion": true,
+  "subject_recognition_precedes_query": true,
+  "wheel_and_small_delta_input": true,
+  "refresh_in_transition": true,
+  "direct_hash_entry": true,
+  "resize_rebuild": true,
+  "keyboard_chapters": true,
+  "accountability_return": true,
+  "reduced_motion_and_cleanup": true,
+  "native_scroll_release": true,
+  "skip_replay_and_restoration_after_chapter_jump": true,
+  "scroll_profile": {
+    "samples": 1082,
+    "median_ms": 6.079999999999927,
+    "p95_ms": 19.800000000000182,
+    "max_ms": 60.76000000000022,
+    "over_33ms": 18,
+    "estimated_missed_vsyncs": 566,
+    "long_tasks": [],
+    "layout_shift_score": 0
+  },
+  "page_errors": []
+}

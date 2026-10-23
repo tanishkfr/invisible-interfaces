@@ -11,7 +11,7 @@ from helpers import BASE_URL
 
 OUT = Path(__file__).resolve().parents[2] / os.environ.get("II_OUTPUT_DIR", "output/playwright/phase2") / "layout"
 OUT.mkdir(parents=True, exist_ok=True)
-TIMES = [0, 11.5, 18, 24, 26, 32, 43, 48, 50, 53, 59, 61, 64, 67, 70, 73, 76, 79, 84, 87, 88, 90, 93, 94, 96, 98, 99, 102, 104, 106, 116, 120, 124, 128, 140]
+TIMES = [0, 11.5, 18, 24, 26, 32, 43, 48, 50, 53, 59, 61, 64, 67, 70, 73, 76, 79, 84, 87, 88, 90, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 116, 120, 124, 128, 140]
 VIEWPORTS = [(1440,900),(1366,768),(1280,800),(932,908),(768,1024),(390,844),(375,844),(375,667),(320,667),(320,650),(320,568)]
 BOUNDS = """() => {
   const selectors=['.v2-header','.v2-chapters','.v2-navigation','.v2-intro','.v2-thought-0',
@@ -60,7 +60,7 @@ with sync_playwright() as p:
             page.wait_for_function("t=>Math.abs(+document.querySelector('main').dataset.progress-t/140)<.0002",arg=time)
             page.wait_for_timeout(40)
             page.screenshot(path=str(OUT/f"{width}x{height}-{time:05.1f}.png"))
-            if time not in [0,11.5,32,48,53,59,61,64,67,70,73,76,79,87,88,90,93,94,96,98,99,102,104,106,128,140]:continue
+            if time not in [0,11.5,32,48,53,59,61,64,67,70,73,76,79,87,88,90,93,94,95,96,97,98,99,100,101,102,103,104,105,106,128,140]:continue
             bounds=[b for b in page.evaluate(BOUNDS) if b['opacity']>.8 and b['width']>0 and b['height']>0]
             for i,a in enumerate(bounds):
                 if a['selector']=='.v2-shell' and time not in [0,11.5,32,59,67,72,79]:continue

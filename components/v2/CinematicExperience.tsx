@@ -52,11 +52,11 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-context"), { x: 0, y: 0, z: 40, scale: 1 });
       gsap.set(select(".v2-context-one"), { x: compact ? 24 : tablet ? -35 : -100, y: -25, z: -180 });
       gsap.set(select(".v2-context-two"), { x: compact ? -24 : 120, y: 30, z: -260 });
-      gsap.set(select(".v2-memory-query"), { opacity: 0, x: 0, y: compact ? 20 : 40 });
-      gsap.set(select(".v2-memory-index"), { opacity: 0, x: 0, y: 30, z: -180, rotationX: 55 });
+      gsap.set(select(".v2-memory-query"), { opacity: 0, x: 0, y: 0 });
+      gsap.set(select(".v2-memory-index"), { opacity: 0, x: 0, y: -40, z: -180, rotationX: 55 });
       gsap.set(select(".v2-touch-ui"), { x: 0, y: 0, z: 6 });
       gsap.set(select(".v2-query-completion"), { clipPath: "inset(0 100% 0 0)" });
-      gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15 });
+      gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15, transformOrigin: "50% 50%" });
       gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final"), { opacity: 0 });
       gsap.set(select(".v2-final"), { autoAlpha: 0 });
       gsap.set(select(".v2-satellite"), { opacity: 0, transformPerspective: 1200 });
@@ -82,7 +82,7 @@ export default function CinematicExperience() {
         .to(form, { bend: -0.18, ripple: 0, duration: 5, ease: "power2.inOut" }, 87)
         .to(form, { bend: 0, duration: 6, ease: "power2.out" }, 92)
         .to(form, { recall: compact ? 0.45 : tablet ? 0.9 : 1, duration: 6, ease: "power2.inOut" }, 88)
-        .to(form, { recall: 0, duration: 7, ease: "power3.inOut" }, 94);
+        .to(form, { recall: 0, duration: 6, ease: "power2.inOut" }, 94);
       // A. Move into the terminal; its image data builds the window perimeter.
       timeline.to(select(".v2-intro"), { opacity: 0, x: compact ? 0 : -70, y: -24, duration: 5 }, 2)
         .to(select(".v2-scroll-cue"), { opacity: 0, duration: 2 }, 7)
@@ -151,8 +151,8 @@ export default function CinematicExperience() {
         .to(select(".v2-shell"), { scaleX: compact ? 1.03 : tablet ? 0.8 : 0.92, scaleY: compact ? 1.19 : 1.1, duration: 4, ease: "power2.out" }, 75)
         .to(select(".v2-thought-2"), { opacity: 1, duration: 3 }, 76);
 
-      // IV. Release the image. Its old touch plane folds into the archive floor,
-      // while the camera and the counter-rotating photograph describe an orbit.
+      // IV. The result takes the initiative: open toward the viewer, recognize
+      // the boat, then let the existing context catch up with the photograph.
       timeline.to(select(".v2-thought-2"), { opacity: 0, duration: 2 }, 80)
         .to(select(".v2-touch-ui"), { opacity: 0, y: 8, duration: 4 }, 81)
         .to(select(".v2-shell"), { scaleX: compact ? 1 : 1.05, scaleY: 0.16, z: compact ? -90 : -220, rotationX: 70, rotationY: -10, opacity: 0.5, borderRadius: 4, backgroundColor: "rgba(17,17,19,0)", duration: 7, ease: "power2.inOut" }, 81)
@@ -161,14 +161,18 @@ export default function CinematicExperience() {
         .to(select(".v2-shell"), { scaleX: compact ? 1 : 0.96, scaleY: compact ? 0.88 : 0.91, z: -60, rotationX: 0, rotationY: 0, opacity: 0.12, duration: 12, ease: "power2.inOut" }, 88)
         .to(select(".v2-world"), { x: compact || tablet ? 0 : -65, z: compact ? 0 : tablet ? -20 : -50, rotationX: compact ? -3 : -8, rotationY: compact ? 8 : tablet ? 14 : 28, rotationZ: 2, duration: 6, ease: "power2.inOut" }, 88)
         .to(select(".v2-photo"), { x: compact ? 0 : tablet ? -10 : 45, y: compact ? 10 : 0, z: compact ? 10 : tablet ? 35 : 160, rotationY: compact ? -8 : -18, rotationZ: compact ? 1 : 3, scale: compact ? 1.15 : tablet ? 1.3 : 2, duration: 6, ease: "power2.inOut" }, 88)
-        .to(select(".v2-world"), { x: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, duration: 8, ease: "power3.inOut" }, 94)
-        .to(select(".v2-photo"), { x: 0, y: compact ? 10 : 38, z: 4, rotationY: 0, rotationZ: 0, scale: compact ? 0.96 : tablet ? 0.9 : 1.08, duration: 8, ease: "power3.inOut" }, 94)
-        .to(select(".v2-memory-index"), { opacity: 1, y: 0, z: 0, rotationX: 0, duration: 4, ease: "power2.inOut" }, 97)
-        .to(select(".v2-memory-query"), { opacity: 1, y: 0, duration: 3, ease: "power2.inOut" }, 99)
+        .to(select(".v2-world"), { x: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, duration: 7, ease: "power2.inOut" }, 94)
+        .to(select(".v2-photo"), { x: 0, y: compact ? 14 : tablet ? 38 : 85, z: compact ? 8 : 35, rotationY: 0, rotationZ: 0, scale: compact ? 1.04 : tablet ? 0.98 : 1.48, duration: 6, ease: "power2.inOut" }, 94)
+        .to(select(".v2-photo"), { y: compact ? 10 : 38, z: 4, scale: compact ? 0.96 : tablet ? 0.9 : 1.08, duration: 6, ease: "power2.inOut" }, 100)
+        .to(select(".v2-memory-index"), { opacity: 1, y: compact ? 0 : -35, z: 0, rotationX: 0, duration: 6, ease: "power2.inOut" }, 95)
+        .to(select(".v2-memory-index"), { y: 0, duration: 1, ease: "power2.inOut" }, 101)
+        .to(select(".v2-memory-query"), { opacity: 1, duration: 2, ease: "power2.inOut" }, 100)
         .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 3, ease: "steps(14)" }, 102)
-        .to(select(".v2-photo-focus"), { opacity: 0.8, scale: 1, duration: 4, ease: "power2.inOut" }, 101)
-        .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.inOut" }, 101)
-        .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.inOut" }, 101)
+        // The original brackets find the recognizable subject before any query.
+        .to(select(".v2-photo-focus"), { opacity: 0.85, xPercent: -24, yPercent: 26, scaleX: 0.46, scaleY: 0.4, duration: 3, ease: "power2.out" }, 97)
+        .to(select(".v2-photo-focus"), { xPercent: 0, yPercent: 0, scaleX: 1, scaleY: 1, opacity: 0.8, duration: 6, ease: "power2.inOut" }, 100)
+        .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 5, ease: "power2.out" }, 100)
+        .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.out" }, 101)
         .to(select(".v2-context-three"), { opacity: 1, duration: 2 }, 103)
         .to(select(".v2-thought-3"), { opacity: 1, duration: 3 }, 102);
 
@@ -314,7 +318,7 @@ export default function CinematicExperience() {
                 <div className="v2-dither"><PhotoArtifact era="dither" /></div>
                 <div className="v2-color"><PhotoArtifact era="full" /></div>
                 <canvas className="v2-photo-surface" aria-hidden="true" />
-                <svg className="v2-photo-focus" viewBox="0 0 430 287" preserveAspectRatio="none"><path d="M1 23V1H23M407 1H429V23M429 264V286H407M23 286H1V264" /></svg>
+                <svg className="v2-photo-focus" viewBox="0 0 430 287" preserveAspectRatio="none"><path vectorEffect="non-scaling-stroke" d="M1 23V1H23M407 1H429V23M429 264V286H407M23 286H1V264" /></svg>
               </div>
               <div className="v2-data-field">{Array.from({ length: 40 }, (_, i) => <span className="v2-glyph" key={i}><span className="v2-glyph-letter">{GLYPHS[(i * 3 + Math.floor(i / 8)) % GLYPHS.length]}</span><i className="v2-glyph-piece" /></span>)}</div>
               <svg className="v2-pointer" width="24" height="30" viewBox="0 0 24 30"><path d="M2 2v23l6-6 5 10 4-2-5-10h9Z" fill="#e8e6e3" stroke="#111" strokeWidth="1.5" /></svg>

@@ -1,0 +1,120 @@
+{
+  "test_opening_terminal": {
+    "line1": "You probably used hundreds of interfaces today.",
+    "line2_cursor": 1,
+    "fragments": 8,
+    "header_wordmark": "1",
+    "hurried_fragments_by_5s": 8,
+    "receipt": [
+      "DISPLAYED. THAT TOOK 2 COMMANDS AND 4 SECONDS."
+    ],
+    "stored": [
+      "2",
+      "4"
+    ],
+    "waapi": 0,
+    "abandoned_flag": "1",
+    "still_waiting": true,
+    "console_errors": []
+  },
+  "test_pinned_scenes": {
+    "header_at_scene1": {
+      "wordmark": "1",
+      "menu": "1"
+    },
+    "menu_scrolled_to_scene3": true,
+    "windows": {
+      "beat0": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "beat1": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "beat2": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "beat3": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "memory": 1,
+    "header_at_entrustment": {
+      "wordmark": "0",
+      "menu": "0"
+    },
+    "console_errors": []
+  },
+  "test_keyboard": {
+    "first_focus": "Skip to the essay",
+    "terminal_focus": "Terminal input. Type a command and press Enter.",
+    "solved": true,
+    "slider_keyboard": true,
+    "discarded": 1,
+    "about_reached": true,
+    "notfound": 1,
+    "console_errors": []
+  },
+  "test_morph": {
+    "plateaus": {
+      "terminal": [
+        "The same task, five ways. First you type where the photograph is. Then you point at it. Then you touch it. Then you ask for it. Finally, the photograph simply appears before you ask. Each paradigm asks a little less of you: the cost falls from ninety seconds of typed commands to nothing at all.",
+        "8 COMMANDS \u00b7 94 SEC \u2014 YOURS",
+        "TYPE THE LOCATION"
+      ],
+      "gui": [
+        "The same task, five ways. First you type where the photograph is. Then you point at it. Then you touch it. Then you ask for it. Finally, the photograph simply appears before you ask. Each paradigm asks a little less of you: the cost falls from ninety seconds of typed commands to nothing at all.",
+        "6 CLICKS \u00b7 4 DECISIONS \u00b7 ~20 SEC \u00b7 TYPICAL",
+        "POINT TO THE FILE"
+      ],
+      "touch": [
+        "The same task, five ways. First you type where the photograph is. Then you point at it. Then you touch it. Then you ask for it. Finally, the photograph simply appears before you ask. Each paradigm asks a little less of you: the cost falls from ninety seconds of typed commands to nothing at all.",
+        "1 TAP \u00b7 1 DECISION \u00b7 ~5 SEC \u00b7 TYPICAL",
+        "TOUCH THE IMAGE"
+      ],
+      "search": [
+        "The same task, five ways. First you type where the photograph is. Then you point at it. Then you touch it. Then you ask for it. Finally, the photograph simply appears before you ask. Each paradigm asks a little less of you: the cost falls from ninety seconds of typed commands to nothing at all.",
+        "5 KEYSTROKES \u00b7 1 DECISION \u00b7 ~4 SEC \u00b7 TYPICAL",
+        "ASK THE SYSTEM"
+      ],
+      "prediction": [
+        "The same task, five ways. First you type where the photograph is. Then you point at it. Then you touch it. Then you ask for it. Finally, the photograph simply appears before you ask. Each paradigm asks a little less of you: the cost falls from ninety seconds of typed commands to nothing at all.",
+        "0 INPUT \u00b7 0 DECISIONS \u00b7 ATTENTION: AVAILABLE, NOT FREE.",
+        "On this day, three years ago."
+      ]
+    },
+    "personal": true,
+    "prediction": true,
+    "indexed_photo": 2,
+    "mojibake": false,
+    "waapi": 0,
+    "console_errors": []
+  },
+  "test_entrusted_task": {
+    "ending_before": 0,
+    "early_return": 1,
+    "not_complete_early": 0,
+    "restored": 1,
+    "comparison": 1,
+    "return_receipt": 1,
+    "work_receipt": 1,
+    "authority": 1,
+    "attention_receipt": 1,
+    "about_after": 1,
+    "discarded": 1,
+    "mojibake": false,
+    "console_errors": [],
+    "fallback_labeled": 1
+  }
+}

@@ -34,9 +34,10 @@ Native scroll → section progress → paused 140-unit timeline
 | 61–79 | Close photographic approach; opposing banks and material bend; caption yields; image and enclosure settle at larger scale |
 | 79–81 | Gesture observation plateau |
 | 81–94 | Touch plane folds away; photograph bows, then forms a connected concertina through a camera orbit |
-| 94–102 | Photograph approaches and opens; index and query arrive after recall; material becomes flat by 101 |
-| 102–105 | Query completion and contextual meaning resolve after the photograph has returned |
-| 100–112 | Anticipation observation composition with connected memory and provenance |
+| 94–100 | Photograph opens toward the viewer and lowers into a clear reading lane; material becomes flat by 100, retaining its close scale |
+| 97–100 | Existing amber focus corners identify the boat before the query appears |
+| 100–106 | Photograph gently settles; focus opens to the whole memory; existing context gathers from depth, followed by query completion at 102–105 |
+| 106–112 | Anticipation observation composition with connected memory and provenance |
 | 113–128 | Context recedes into negative Z; transparent enclosure passes the viewer; masthead withdraws; photograph approaches closely |
 | 128–134 | Photograph settles from the close approach to the final editorial composition |
 | 134–140 | Closing thought and optional return-to-context link arrive; stillness |
@@ -50,7 +51,7 @@ Chapter state boundaries are 27, 55, 86 and 118. Navigation targets are 11.5,
 | --- | --- | --- | --- | --- |
 | A | Exact instructions | Image data and glyph nodes | Stepped spread, approach, perimeter assembly, scale | Window / reconstructs command field |
 | B | Spatial archive | Photograph and enclosure | Shared X/Y/Z rotation, lateral travel, passing planes, surface scaling | Touch surface / reconstructs archive |
-| Touch → expectation | Tactile enclosure | Same photograph | Floor fold, curved sheet, counter-rotation, unfolding index, context settles from depth | Memory field / sheet and touch plane reconstruct |
+| Touch → expectation | Tactile enclosure | Same photograph | Floor fold, curved sheet, counter-rotation, close unfolding, boat recognition, context catches up | Memory field / recognition and sheet reconstruct |
 | C | Context around image | Full-strength photograph | Negative-Z context, forward frame passage, close approach and retreat, masthead withdrawal | Quiet image / context returns to exact arrangement |
 
 Opacity supports the material changes; spatial movement supplies the handoffs.
@@ -90,7 +91,7 @@ CSS 3D cannot express as one continuous surface. Eight connected strips with
 photograph's CSS camera frame. Shared edge positions keep the image continuous;
 separate edge vertices permit creases. Triangle count remains 4,096; vertices
 increase from 2,145 to 2,376. Uniforms follow the same paused timeline: tactile
-bend/ripple 61–79; bow 81–98; connected recall folds 88–101.
+bend/ripple 61–79; bow 81–98; connected recall folds 88–100.
 The renderer draws only when a deformation is active, with no independent rAF
 loop. Texture upload, shader compilation and one hidden warm-up draw occur before
 visible use. A ResizeObserver updates the local drawing buffer without per-scroll
@@ -111,6 +112,7 @@ Navigation is a native top-right chapter disclosure, not a bottom timeline. The
 final optional return-to-context link uses the existing chapter jump path and
 restores visible keyboard focus to Chapters. No new mandatory journey is added.
 
-See [current verification](V2_CINEMATIC_REFINEMENT.md) for evidence and limits.
+See [current verification](V2_ANTICIPATION_CONTINUITY.md) for evidence and limits.
+The [cinematic refinement](V2_CINEMATIC_REFINEMENT.md) records the preceding pass.
 The [director's cut](V2_DIRECTORS_CUT.md) and [Phase 2 verification](V2_PHASE2_VERIFICATION.md)
 remain historical checkpoints.

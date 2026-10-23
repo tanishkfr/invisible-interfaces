@@ -181,10 +181,14 @@ The supplied Two Horizons recording informed the use of recognizable scale ancho
 The cinematic refinement brings Gesture closer: the photograph bends and banks
 with the camera while its caption yields, then settles at a larger scale. During
 Anticipation the same continuous sheet forms eight connected creases, approaches
-through an orbit, and opens before the query completes. Context appears after
-the image has returned. There are no gaps, duplicate photographs or new panels.
+through an orbit, and opens toward the viewer. Its existing focus corners find
+the red boat before the query appears. The close image lowers and settles while
+context catches up; the focus expands from the subject to the whole memory.
+Amber here identifies machine attention. The desktop close scale is retained
+longer; phones and tablets use smaller travel to protect surrounding text.
+There are no gaps, duplicate photographs or new panels.
 The early data field has stronger foreground/background separation. The archive
-arc and final composition remain unchanged. See [refinement acceptance](../V2_CINEMATIC_REFINEMENT.md).
+arc, Gesture camera and final composition remain unchanged. See [continuity acceptance](../V2_ANTICIPATION_CONTINUITY.md).
 
 ### Machine artifacts and context
 

@@ -10,7 +10,8 @@ No push, merge, deployment or homepage replacement is part of this phase.
 
 ## Experience and documentation
 
-- [Cinematic refinement: current acceptance and matched motion comparisons](docs/V2_CINEMATIC_REFINEMENT.md)
+- [Anticipation continuity: current acceptance and matched motion comparisons](docs/V2_ANTICIPATION_CONTINUITY.md)
+- [Cinematic refinement: preceding checkpoint](docs/V2_CINEMATIC_REFINEMENT.md)
 - [Director's cut: reference study, changes and acceptance](docs/V2_DIRECTORS_CUT.md)
 - [V2 case study](docs/V2_CASESTUDY.md)
 - [Phase 3 critique and corrections](docs/V2_PHASE3_CRITIQUE.md)
@@ -21,16 +22,11 @@ No push, merge, deployment or homepage replacement is part of this phase.
 - [Portfolio copy and media handoff](docs/V2_PORTFOLIO_HANDOFF.md)
 - [Genuine visitor evaluation guide and capture template](docs/V2_VISITOR_TESTING.md)
 
-Current before/after films and selected desktop/mobile frames are in
-`docs/v2-refinement-evidence/`. Director's cut and Phase 3 evidence remain in
-`docs/v2-directors-cut-evidence/` and `docs/v2-phase3-evidence/`. Earlier phase
-reports and media are historical evidence rather than current release claims.
-
-The cinematic refinement report is the current creative/engineering checkpoint.
-Earlier phase acceptance, director's cut and portfolio handoff files describe
-their previous checkpoints. Current full captures are in
-`output/playwright/refinement/` (ignored), with selected films and frames in
-`docs/v2-refinement-evidence/`.
+Current matched before/after films, desktop/mobile frames and verification are in
+`docs/v2-continuity-evidence/`. The Anticipation continuity report is the current
+creative/engineering checkpoint. Earlier phase reports and media remain historical
+checkpoints. Full captures and trial comparisons are in
+`output/playwright/continuity/` (ignored).
 
 ## Run and build
 
@@ -54,7 +50,7 @@ Use Python Playwright with installed browser engines against a running export:
 
 ```powershell
 $env:II_BASE_URL='http://localhost:3002'
-$env:II_OUTPUT_DIR='output/playwright/refinement/chromium'
+$env:II_OUTPUT_DIR='output/playwright/continuity'
 $env:II_RECORD_VIDEO='0'
 python tests/e2e/test_v2_cinematic.py
 python tests/e2e/inspect_v2_layout.py
