@@ -45,19 +45,18 @@ export default function CinematicExperience() {
       const touchScaleY = compact ? 1.12 : 1;
       gsap.set(select(".v2-shell"), { width: shellW, height: shellH, xPercent: -50, yPercent: -50, scaleX: 1, scaleY: 1, borderRadius: 0, backgroundColor: "#0e0e0e", borderColor: "#49443a", opacity: 1 });
       gsap.set(select(".v2-photo"), { width: photoW, height: photoH, xPercent: -50, yPercent: -50, x: compact ? 0 : 110, y: compact ? 30 : 12, scale: 0.28, rotationZ: 0, borderRadius: 0 });
-      gsap.set(select(".v2-world"), { x: compact || tablet ? 0 : 245, y: compact ? 100 : tablet ? 160 : 35, scale: compact ? 0.94 : 0.82, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0 });
+      gsap.set(select(".v2-world"), { x: compact || tablet ? 0 : 245, y: compact ? (window.innerHeight <= 620 ? 82 : window.innerHeight <= 740 ? 90 : 100) : tablet ? 165 : 35, scale: compact ? 0.94 : tablet ? 0.74 : 0.82, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0 });
       gsap.set(select(".v2-terminal-copy, .v2-terminal-art, .v2-intro"), { opacity: 1, x: 0, y: 0 });
       gsap.set(select(".v2-header, .v2-side-note"), { autoAlpha: 1 });
       gsap.set(select(".v2-context"), { x: 0, y: 0, z: 40, scale: 1 });
-      gsap.set(select(".v2-context-one"), { x: compact ? 24 : -100, y: -25, z: -180 });
+      gsap.set(select(".v2-context-one"), { x: compact ? 24 : tablet ? -35 : -100, y: -25, z: -180 });
       gsap.set(select(".v2-context-two"), { x: compact ? -24 : 120, y: 30, z: -260 });
-      gsap.set(select(".v2-orbits"), { scale: 1 });
       gsap.set(select(".v2-memory-query, .v2-memory-index"), { opacity: 0, x: 0, y: 0 });
       gsap.set(select(".v2-touch-ui"), { x: 0, y: 0, z: 6 });
       gsap.set(select(".v2-query-completion"), { clipPath: "inset(0 100% 0 0)" });
       gsap.set(select(".v2-gesture-trace"), { opacity: 0, strokeDashoffset: 360 });
       gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15 });
-      gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final, .v2-orbits"), { opacity: 0 });
+      gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final"), { opacity: 0 });
       gsap.set(select(".v2-satellite"), { opacity: 0, transformPerspective: 1200 });
       gsap.set(select(".v2-glyph"), { xPercent: -50, yPercent: -50, scale: 1, opacity: 0 });
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
@@ -133,7 +132,6 @@ export default function CinematicExperience() {
         .to(select(".v2-memory-index"), { opacity: 1, duration: 3 }, 85)
         .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 86)
         .to(select(".v2-memory-query"), { opacity: 1, duration: 3 }, 87)
-        .to(select(".v2-orbits"), { opacity: 0.65, duration: 4 }, 88)
         .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 7, ease: "steps(14)" }, 90)
         .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 91)
         .to(select(".v2-photo-focus"), { opacity: 0.8, scale: 1, duration: 5, ease: "power2.inOut" }, 93)
@@ -149,7 +147,7 @@ export default function CinematicExperience() {
         .to(select(".v2-memory-query"), { y: 35, opacity: 0, duration: 7 }, 113)
         .to(select(".v2-context, .v2-memory-index"), { opacity: 0, duration: 5, stagger: 0.4 }, 119)
         .to(select(".v2-shell"), { scaleX: compact ? 0.7 : 0.55, scaleY: 0.55, opacity: 0, duration: 10, ease: "power2.inOut" }, 115)
-        .to(select(".v2-orbits, .v2-photo-focus"), { scale: 0.75, opacity: 0, duration: 10 }, 115)
+        .to(select(".v2-photo-focus"), { scale: 0.75, opacity: 0, duration: 10 }, 115)
         .to(select(".v2-photo"), { scale: compact ? 1.12 : 1.32, y: compact ? -70 : -85, borderRadius: 1, duration: 13, ease: "power2.inOut" }, 118)
         .to(select(".v2-header, .v2-side-note"), { autoAlpha: 0, duration: 7 }, 120)
         .to(select(".v2-final"), { opacity: 1, duration: 5 }, 132)
@@ -228,7 +226,7 @@ export default function CinematicExperience() {
           <header className="v2-header">
             <a className="v2-wordmark" href="/v2">{v2Copy.wordmark}<span aria-hidden>↘</span></a>
             <span className="v2-edition">{v2Copy.edition} <span>/ 02</span></span>
-            <a href="/about" className="v2-about">{v2Copy.about}</a>
+            <a href="#v2-reading" className="v2-about">{v2Copy.about}</a>
           </header>
 
           <div className="v2-intro">
@@ -271,7 +269,6 @@ export default function CinematicExperience() {
               <svg className="v2-gesture-trace" viewBox="0 0 600 400"><path d="M130 260C180 285 300 285 350 240S410 140 470 160" /></svg>
               <div className="v2-memory-index"><span>{v2Copy.memory.index}</span><div>{v2Copy.memory.sequence.map((word) => <span key={word}>{word}</span>)}</div></div>
               <p className="v2-memory-query"><span>{v2Copy.memory.query}</span><span className="v2-query-completion">{v2Copy.memory.completion}</span></p>
-              <svg className="v2-orbits" viewBox="0 0 1100 600" preserveAspectRatio="none"><path d="M40 250H250L320 300M1060 390H850L780 330M550 540V470" /><circle cx="40" cy="250" r="2" /><circle cx="1060" cy="390" r="2" /><circle cx="550" cy="540" r="2" /></svg>
               <div className="v2-context v2-context-one"><span>{v2Copy.contexts[0].label}</span><p>{v2Copy.contexts[0].title}</p><small>{v2Copy.contexts[0].detail}</small></div>
               <div className="v2-context v2-context-two"><span>{v2Copy.contexts[1].label}</span><p>{v2Copy.contexts[1].title}</p><small>{v2Copy.contexts[1].detail}</small></div>
               <div className="v2-context v2-context-three"><p>{v2Copy.contexts[2].title}</p><small>{v2Copy.contexts[2].detail}</small></div>

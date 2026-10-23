@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: "The exhibition",
   description: "One photograph. Five relationships with computing. A continuous cinematic exhibition about human attention.",
   alternates: { canonical: "/v2" },
+  openGraph: {
+    title: "Invisible Interfaces — The exhibition",
+    description: "A cinematic, scroll-driven exploration of how human-computer interaction evolved. One photograph. Five relationships.",
+    type: "website",
+    url: "/v2",
+    images: [{ url: "/v2/shore.webp", width: 1400, height: 933, alt: "The red-boat photograph that connects the five acts of Invisible Interfaces" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Invisible Interfaces — The exhibition",
+    description: "One photograph. Five relationships with computing. A cinematic exhibition controlled by scrolling.",
+    images: ["/v2/shore.webp"],
+  },
   robots: { index: false, follow: false },
 };
 

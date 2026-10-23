@@ -9,17 +9,25 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from helpers import BASE_URL
 
-OUT = Path(__file__).resolve().parents[2] / "output/playwright/phase2/layout"
+OUT = Path(__file__).resolve().parents[2] / os.environ.get("II_OUTPUT_DIR", "output/playwright/phase2") / "layout"
 OUT.mkdir(parents=True, exist_ok=True)
-TIMES = [0, 11.5, 26, 32, 43, 50, 59, 67, 79, 84, 90, 96, 106, 116, 124, 140]
-VIEWPORTS = [(1440,900),(1366,768),(768,1024),(390,844),(375,844),(375,667)]
+TIMES = [0, 11.5, 26, 32, 43, 50, 59, 67, 72, 79, 84, 90, 93, 96, 106, 116, 124, 140]
+VIEWPORTS = [(1440,900),(1366,768),(1280,800),(932,908),(768,1024),(390,844),(375,844),(375,667),(320,667),(320,650),(320,568)]
 BOUNDS = """() => {
   const selectors=['.v2-header','.v2-navigation','.v2-intro','.v2-thought-0',
     '.v2-thought-1','.v2-thought-2','.v2-thought-3','.v2-final','.v2-photo',
     '.v2-touch-heading','.v2-touch-caption','.v2-memory-index','.v2-memory-query',
-    '.v2-context-one','.v2-context-two','.v2-context-three'];
+    '.v2-context-one','.v2-context-two','.v2-context-three','.v2-shell','.v2-scroll-cue'];
   return selectors.map(selector=>{
-    const e=document.querySelector(selector),r=e.getBoundingClientRect();
+    const e=document.querySelector(selector);
+    let r=e.getBoundingClientRect();
+    // Inspect the actual touch title/caption ink, not the empty full-width
+    // flex box that deliberately surrounds a tilted moving photograph.
+    if(selector==='.v2-touch-heading'||selector==='.v2-touch-caption'){
+      const range=document.createRange();
+      range.selectNodeContents(selector==='.v2-touch-heading'?e.querySelector('span'):e.firstChild);
+      r=range.getBoundingClientRect();
+    }
     let opacity=1,n=e;while(n && n!==document.querySelector('main')){
       const c=getComputedStyle(n);opacity*=+c.opacity;
       if(c.display==='none'||c.visibility==='hidden')opacity=0;n=n.parentElement;
@@ -50,12 +58,16 @@ with sync_playwright() as p:
             page.wait_for_function("t=>Math.abs(+document.querySelector('main').dataset.progress-t/140)<.0002",arg=time)
             page.wait_for_timeout(40)
             page.screenshot(path=str(OUT/f"{width}x{height}-{time:05.1f}.png"))
-            if time not in [0,11.5,32,79,106,140]:continue
+            if time not in [0,11.5,32,59,67,72,79,90,93,96,106,140]:continue
             bounds=[b for b in page.evaluate(BOUNDS) if b['opacity']>.8 and b['width']>0 and b['height']>0]
             for i,a in enumerate(bounds):
+                if a['selector']=='.v2-shell' and time not in [0,11.5,32,59,67,72,79]:continue
                 if a['x'] < -2 or a['right'] > width+2 or a['y'] < -2 or a['bottom']>height+2:
                     flags.append({"time":time,"kind":"clipped","selector":a['selector'],"bounds":a})
                 for b in bounds[i+1:]:
+                    if '.v2-shell' in [a['selector'],b['selector']]:
+                        other=b if a['selector']=='.v2-shell' else a
+                        if other['selector'] not in ['.v2-intro','.v2-header','.v2-navigation','.v2-scroll-cue'] and not other['selector'].startswith('.v2-thought'):continue
                     if intersect(a,b):flags.append({"time":time,"kind":"overlap","a":a['selector'],"b":b['selector']})
         report[f"{width}x{height}"]=flags
         page.close()

@@ -1,0 +1,47 @@
+{
+  "definition": "Unique layout plus v2 route JavaScript chunks; gzip per file; excludes images, CSS, fonts and prefetches.",
+  "files": [
+    {
+      "path": "static/chunks/webpack-8c6e4cf20c311de7.js",
+      "raw": 3585,
+      "gzip": 1854
+    },
+    {
+      "path": "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "raw": 173019,
+      "gzip": 54358
+    },
+    {
+      "path": "static/chunks/255-2005b055456c798b.js",
+      "raw": 174363,
+      "gzip": 46792
+    },
+    {
+      "path": "static/chunks/main-app-e7add8873b4fcee2.js",
+      "raw": 557,
+      "gzip": 226
+    },
+    {
+      "path": "static/chunks/app/layout-3d9ac3b808690f12.js",
+      "raw": 599,
+      "gzip": 329
+    },
+    {
+      "path": "static/chunks/c15bf2b0-52e8419f34af26ab.js",
+      "raw": 51544,
+      "gzip": 19783
+    },
+    {
+      "path": "static/chunks/674-11ce4e20ffeb7102.js",
+      "raw": 62273,
+      "gzip": 24891
+    },
+    {
+      "path": "static/chunks/app/v2/page-4d0d86ef01b39c89.js",
+      "raw": 21746,
+      "gzip": 6937
+    }
+  ],
+  "gzip_bytes": 155170,
+  "budget_bytes": 160000
+}

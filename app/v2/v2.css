@@ -59,8 +59,6 @@
 .v2-touch-caption small { color: #aaa69e; font-family: var(--font-plex-mono), monospace; font-size: 10px; letter-spacing: .02em; }
 .v2-touch-ring { position: absolute; left: 37px; top: 34px; width: 42px; height: 42px; border: 1px solid #e8e6e3; border-radius: 50%; opacity: 0; transform: translateZ(14px); }
 .v2-gesture-trace { position: absolute; left: -300px; top: -200px; width: 600px; height: 400px; fill: none; stroke: #b4afa4; stroke-width: 1; stroke-dasharray: 360; opacity: 0; transform: translateZ(2px); }
-.v2-orbits { position: absolute; width: 1100px; height: 600px; left: -550px; top: -280px; fill: none; stroke: #605b50; stroke-width: 1; }
-.v2-orbits circle { fill: #aaa69e; }
 .v2-context { position: absolute; width: 225px; font-family: var(--font-plex-mono), monospace; transform: translateZ(40px); }
 .v2-context > span { color: #aaa69e; font-size: 11px; letter-spacing: .08em; }
 .v2-context p { margin-top: 10px; font-family: var(--font-newsreader), serif; font-size: 32px; font-weight: 300; line-height: 1.1; }
@@ -114,24 +112,23 @@
   .v2-context-three { top: 190px; }
 }
 @media (min-width: 701px) and (max-width: 1100px) {
-  .v2-intro { left: 6%; top: 18%; }
+  .v2-intro { left: 6%; top: 16%; }
   .v2-intro h1 { font-size: 100px; }
   .v2-intro .v2-description { font-size: 18px; }
   .v2-camera { perspective: 1550px; }
   .v2-side-note { display: none; }
   .v2-edition { display: none; }
-  .v2-scroll-cue { bottom: 130px; }
+  .v2-scroll-cue { bottom: 98px; }
   .v2-navigation a { font-size: 10px; }
-  .v2-context-one { left: -355px; width: 145px; top: -60px; }
-  .v2-context-two { left: 225px; width: 145px; }
-  .v2-context p { font-size: 27px; }
-  .v2-memory-index { left: -350px; width: 700px; }
+  .v2-context-one { left: -335px; width: 130px; top: -60px; }
+  .v2-context-two { left: 210px; width: 145px; }
+  .v2-context p { font-size: 25px; }
+  .v2-memory-index { left: -325px; width: 650px; }
   .v2-memory-index > div { gap: 20px; }
-  .v2-orbits { width: 760px; left: -380px; }
 }
 @media (max-width: 700px) {
   .v2-scroll { height: 1450svh; }
-  .v2-viewport { min-height: 650px; }
+  .v2-viewport { min-height: 0; }
   .v2-header { left: 20px; right: 20px; height: 74px; }
   .v2-wordmark { font-size: 22px; }
   .v2-edition { display: none; }
@@ -168,7 +165,6 @@
   .v2-context-two { left: 10px; top: 120px; }
   .v2-context-three { left: -155px; top: 220px; width: 310px; }
   .v2-context-three p { font-size: 24px; }
-  .v2-orbits { width: 340px; height: 380px; left: -170px; top: -120px; }
   .v2-memory-index { width: 310px; left: -155px; top: -215px; font-size: 9px; display: block; padding-bottom: 8px; }
   .v2-memory-index > div { margin-top: 9px; gap: 0; justify-content: space-between; font-size: 9px; }
   .v2-memory-query { width: 310px; left: -155px; top: -154px; font-size: 24px; }
@@ -190,6 +186,7 @@
   .v2-reading footer { flex-direction: column; gap: 14px; }
 }
 @media (max-width: 700px) and (max-height: 740px) {
+  .v2-camera { transform: scale(.9); transform-origin: 50% 55%; }
   .v2-intro { top: 12%; }
   .v2-intro h1 { font-size: 58px; margin-top: 24px; }
   .v2-description { font-size: 16px; margin-top: 20px; }
@@ -205,6 +202,20 @@
   .v2-context-one small, .v2-context-two small { display: none; }
   .v2-context p { font-size: 21px; }
   .v2-context small { font-size: 10px; }
+  .v2-scroll-cue { bottom: 83px; }
+}
+@media (max-width: 700px) and (max-height: 620px) {
+  .v2-camera { transform: scale(.75); }
+  .v2-intro { top: 86px; }
+  .v2-intro h1 { font-size: 50px; margin-top: 8px; }
+  .v2-description { margin-top: 14px; }
+  .v2-thoughts { top: 16%; }
+  .v2-statement { font-size: 27px; }
+  .v2-context-three { top: 170px; }
+  .v2-context-three small { display: none; }
+  .v2-final { top: 61%; }
+  .v2-final .v2-statement { font-size: 27px; margin-top: 12px; }
+  .v2-final > p:last-child { margin-top: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .v2-scroll { height: 600svh; }

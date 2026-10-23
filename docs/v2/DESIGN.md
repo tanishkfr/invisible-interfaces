@@ -59,7 +59,7 @@ components:
 
 **Creative North Star: "One photograph / five relationships"**
 
-This document records the implemented `/v2` route. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a completed five-act beta, with an editorial title, an authored mechanical world, and a semantic reading room.
+This document records the implemented `/v2` route. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a five-act local release candidate, with an editorial title, an authored mechanical world, and a semantic reading room.
 
 One photograph remains recognizable as its representation changes from terminal data to a spatial archive, a touch surface, contextual memory, and a final image without surrounding controls. Near-black space, warm machine light, and two typographic voices connect the acts. Native scrolling advances the exhibition; chapter links jump directly to authored resting states.
 
@@ -118,6 +118,13 @@ Additional dark surfaces and grey strokes describe individual machine artifacts.
 
 ## Layout
 
+Phase 3 fit refinement: the sticky viewport follows actual viewport height,
+without a forced 650px phone minimum. Phone heights up to 740px fit the camera
+at 0.9; up to 620px use 0.75 and tighter opening/final spacing. The scroll cue
+occupies its own strip above the chapter rail. Tablet context entrances move
+inward, and their archive index retains a deliberate side inset. These local
+fits are not new reusable typography or spacing tokens.
+
 The route uses a sticky, viewport-height exhibition inside a long native-scroll section. The desktop header and chapter rail share 40px side insets. On phones they compress to 20px, while the title and statements use 25px side insets. The recurring spacing steps above match the existing shared rhythm; they are not a mandate to normalize every scene coordinate.
 
 The opening title occupies the left side and the terminal the right on wide screens. Phones stack the title above the mechanical world. A five-column chapter rail remains at the bottom. Narrow layouts show each chapter's index and verb while hiding its longer name. The rail retains a minimum link height of 64px.
@@ -127,6 +134,10 @@ Responsive behavior is explicit: compact layouts end at 700px; tablet adjustment
 The reading room returns to document flow. Its two-column act list becomes a single column on phones, and its footer stacks vertically. The skip link reaches this section directly.
 
 ## Elevation & Depth
+
+Anticipation's old connector arms/stem were removed because they crossed context
+and result text. The photographic focus brackets and contextual depth movement
+retain the visual relationship without that clutter.
 
 There are no decorative drop shadows in this route. Depth comes from perspective, rotations, translated layers, luminance, thin boundaries, and intentional window occlusion during travel. A single camera/world hierarchy carries the photograph and its surrounding machine artifacts. Its desktop perspective is 1250px, with a tablet adjustment to 1550px.
 
@@ -147,6 +158,9 @@ The terminal and early archive use rectangular shells and thin strokes. The shel
 A persistent five-part machine rail. Each link pairs a numbered index with a chapter name and verb; a thin progress line spans the rail. Inactive links use muted navigation ink. Hover and the current chapter use warm ink, with the current index in amber. The color transition lasts 180ms. Keyboard focus inherits the shared two-pixel amber outline with a three-pixel offset. Links update the hash and jump to the associated resting state.
 
 ### Header and reading links
+
+The v2 About link now reaches its own reading room via a native anchor. The
+preserved v1 About page remains separate and unchanged.
 
 The wordmark, About link, and reading-room links remain native anchors. About and reading links become amber on hover. Reading links carry a visible underline with a five-pixel offset. The header withdraws near the final act; the chapter rail remains available.
 

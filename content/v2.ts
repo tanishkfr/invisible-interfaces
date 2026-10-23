@@ -17,7 +17,7 @@ export const v2Copy = {
   narrative: "One photograph of a red boat travels from an exact command into a spatial archive. The window turns, its frame becomes a touch surface, and the image follows a gesture. Later, context gathers before an explicit request. Finally, the controls withdraw and leave the photograph. Less visible operation can also move judgment out of sight.",
   wordmark: "invisible interfaces",
   edition: "AN INTERACTIVE EXHIBITION",
-  about: "About ↗",
+  about: "About ↓",
   skip: "Skip animation and read the story",
   sideNote: "ONE PHOTOGRAPH / FIVE RELATIONSHIPS",
   terminal: {
