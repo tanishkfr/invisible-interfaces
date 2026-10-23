@@ -178,6 +178,14 @@ The image pulls forward from the archive. Later the touch enclosure folds into a
 
 The supplied Two Horizons recording informed the use of recognizable scale anchors, differing depth velocities and approach/retreat. Its cosmic imagery, particles, palette changes and telemetry were deliberately not imported. The interface's own history supplies the spatial environment. Three.js is an optional, separately loaded enhancement; reduced motion and unavailable/lost WebGL retain the complete CSS/DOM exhibition.
 
+The cinematic refinement brings Gesture closer: the photograph bends and banks
+with the camera while its caption yields, then settles at a larger scale. During
+Anticipation the same continuous sheet forms eight connected creases, approaches
+through an orbit, and opens before the query completes. Context appears after
+the image has returned. There are no gaps, duplicate photographs or new panels.
+The early data field has stronger foreground/background separation. The archive
+arc and final composition remain unchanged. See [refinement acceptance](../V2_CINEMATIC_REFINEMENT.md).
+
 ### Machine artifacts and context
 
 Terminal commands, archive rows, window bars, selected files, glyphs, pointer, gesture trace, context labels, and focus brackets are authored representations of operation. The glyphs transform image data into window geometry. They are not ambient decoration or a generic icon system. Context text is arranged around the image without a notification-card pattern. These authored demonstrations are disclosed in the reading room.

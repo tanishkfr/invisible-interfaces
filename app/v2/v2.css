@@ -61,7 +61,6 @@
 .v2-touch-caption { position: absolute; top: 162px; left: -215px; width: 430px; font-family: var(--font-newsreader), serif; font-size: 23px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .v2-touch-caption small { color: #aaa69e; font-family: var(--font-plex-mono), monospace; font-size: 10px; letter-spacing: .02em; }
 .v2-touch-ring { position: absolute; left: 37px; top: 34px; width: 42px; height: 42px; border: 1px solid #e8e6e3; border-radius: 50%; opacity: 0; transform: translateZ(14px); }
-.v2-gesture-trace { position: absolute; left: -300px; top: -200px; width: 600px; height: 400px; fill: none; stroke: #b4afa4; stroke-width: 1; stroke-dasharray: 360; opacity: 0; transform: translateZ(2px); }
 .v2-context { position: absolute; width: 225px; font-family: var(--font-plex-mono), monospace; transform: translateZ(40px); }
 .v2-context > span { color: #aaa69e; font-size: 11px; letter-spacing: .08em; }
 .v2-context p { margin-top: 10px; font-family: var(--font-newsreader), serif; font-size: 32px; font-weight: 300; line-height: 1.1; }
@@ -164,7 +163,6 @@
   .v2-touch-heading span { font-size: 20px; }
   .v2-touch-caption { top: 112px; width: 252px; left: -126px; font-size: 20px; display: block; }
   .v2-touch-caption small { font-size: 10px; display: block; margin-top: 8px; }
-  .v2-gesture-trace { width: 330px; height: 260px; left: -165px; top: -130px; }
   .v2-satellite { width: 190px; left: -95px; font-size: 10px; }
   .v2-satellite p { margin: 16px; }
   .v2-context { width: 140px; }

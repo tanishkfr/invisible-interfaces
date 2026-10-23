@@ -1,4 +1,4 @@
-# V2 — director's cut motion specification
+# V2 — cinematic refinement motion specification
 
 ## Ownership
 
@@ -25,15 +25,17 @@ Native scroll → section progress → paused 140-unit timeline
 | Time | Behavior |
 | --- | --- |
 | 0–11.5 | Opening poster yields; approach terminal; command thought |
-| 12–20 | Terminal surface recedes; stepped glyph separation and camera approach |
+| 12–20 | Terminal surface recedes; glyphs separate into foreground/background depth; stronger desktop approach |
 | 20–30 | Same glyphs assemble window perimeter; image grows into dither |
 | 29–36 | Window and pointer observation plateau |
 | 37–45 | Sideways camera arc; archive windows pass at different depth planes |
 | 41–56 | Selected photograph lifts out of the archive plane; chrome withdraws; enclosure becomes a landscape touch surface |
 | 55–61 | Touch ring establishes proximity; colour representation arrives |
-| 61–77 | Photograph follows a controlled gesture; surface tilts; elastic release |
-| 77–81 | Gesture observation plateau |
-| 81–100 | Touch plane folds away; photograph bows/unfurls during an orbit; index unfolds from depth; context gathers and query completes |
+| 61–79 | Close photographic approach; opposing banks and material bend; caption yields; image and enclosure settle at larger scale |
+| 79–81 | Gesture observation plateau |
+| 81–94 | Touch plane folds away; photograph bows, then forms a connected concertina through a camera orbit |
+| 94–102 | Photograph approaches and opens; index and query arrive after recall; material becomes flat by 101 |
+| 102–105 | Query completion and contextual meaning resolve after the photograph has returned |
 | 100–112 | Anticipation observation composition with connected memory and provenance |
 | 113–128 | Context recedes into negative Z; transparent enclosure passes the viewer; masthead withdraws; photograph approaches closely |
 | 128–134 | Photograph settles from the close approach to the final editorial composition |
@@ -83,9 +85,12 @@ remain where they visibly change the interface material.
 
 CSS 3D gives the required planar camera arc without duplicating a renderer or
 interface text. Three.js supplies the non-planar photographic transformation that
-CSS 3D cannot express as one continuous surface. One 64×32-segment plane, one
-texture and one shader live inside the existing photograph's CSS camera frame.
-Uniforms follow the same paused timeline: gesture ripple 61–72; bend 81–100.
+CSS 3D cannot express as one continuous surface. Eight connected strips with
+64×32 segments in aggregate, one texture and one shader live inside the existing
+photograph's CSS camera frame. Shared edge positions keep the image continuous;
+separate edge vertices permit creases. Triangle count remains 4,096; vertices
+increase from 2,145 to 2,376. Uniforms follow the same paused timeline: tactile
+bend/ripple 61–79; bow 81–98; connected recall folds 88–101.
 The renderer draws only when a deformation is active, with no independent rAF
 loop. Texture upload, shader compilation and one hidden warm-up draw occur before
 visible use. A ResizeObserver updates the local drawing buffer without per-scroll
@@ -106,5 +111,6 @@ Navigation is a native top-right chapter disclosure, not a bottom timeline. The
 final optional return-to-context link uses the existing chapter jump path and
 restores visible keyboard focus to Chapters. No new mandatory journey is added.
 
-See [current verification](V2_DIRECTORS_CUT.md) for evidence and limits. The
-[Phase 2 verification](V2_PHASE2_VERIFICATION.md) remains historical.
+See [current verification](V2_CINEMATIC_REFINEMENT.md) for evidence and limits.
+The [director's cut](V2_DIRECTORS_CUT.md) and [Phase 2 verification](V2_PHASE2_VERIFICATION.md)
+remain historical checkpoints.

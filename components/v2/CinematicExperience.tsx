@@ -56,7 +56,6 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-memory-index"), { opacity: 0, x: 0, y: 30, z: -180, rotationX: 55 });
       gsap.set(select(".v2-touch-ui"), { x: 0, y: 0, z: 6 });
       gsap.set(select(".v2-query-completion"), { clipPath: "inset(0 100% 0 0)" });
-      gsap.set(select(".v2-gesture-trace"), { opacity: 0, strokeDashoffset: 360 });
       gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15 });
       gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final"), { opacity: 0 });
       gsap.set(select(".v2-final"), { autoAlpha: 0 });
@@ -65,7 +64,7 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      const form = { bend: 0, ripple: 0 };
+      const form = { bend: 0, ripple: 0, recall: 0 };
       let surface: ReturnType<typeof createPhotoSurface> | undefined;
       let cancelled = false;
       // Load the renderer separately. Failure leaves the original photograph intact.
@@ -76,11 +75,14 @@ export default function CinematicExperience() {
           surface.render(form);
         } catch { /* WebGL is optional; CSS spatial choreography remains complete. */ }
       }).catch(() => { /* A failed optional chunk must not interrupt the exhibition. */ });
-      timeline.to(form, { ripple: compact ? 0.018 : 0.035, duration: 3, ease: "power2.out" }, 61)
-        .to(form, { ripple: 0, duration: 6, ease: "power2.inOut" }, 66)
+      timeline.to(form, { bend: compact ? 0.16 : 0.38, ripple: compact ? 0.025 : 0.06, duration: 7, ease: "power2.inOut" }, 61)
+        .to(form, { bend: compact ? -0.1 : -0.22, ripple: 0.015, duration: 7, ease: "power2.inOut" }, 68)
+        .to(form, { bend: 0, ripple: 0, duration: 4, ease: "power2.out" }, 75)
         .to(form, { bend: compact ? 0.75 : 1.25, ripple: 0.025, duration: 6, ease: "power2.inOut" }, 81)
-        .to(form, { bend: compact ? -0.25 : -0.45, ripple: 0, duration: 6, ease: "power2.inOut" }, 87)
-        .to(form, { bend: 0, duration: 7, ease: "power2.out" }, 93);
+        .to(form, { bend: -0.18, ripple: 0, duration: 5, ease: "power2.inOut" }, 87)
+        .to(form, { bend: 0, duration: 6, ease: "power2.out" }, 92)
+        .to(form, { recall: compact ? 0.45 : tablet ? 0.9 : 1, duration: 6, ease: "power2.inOut" }, 88)
+        .to(form, { recall: 0, duration: 7, ease: "power3.inOut" }, 94);
       // A. Move into the terminal; its image data builds the window perimeter.
       timeline.to(select(".v2-intro"), { opacity: 0, x: compact ? 0 : -70, y: -24, duration: 5 }, 2)
         .to(select(".v2-scroll-cue"), { opacity: 0, duration: 2 }, 7)
@@ -91,7 +93,7 @@ export default function CinematicExperience() {
         .to(select(".v2-glyph"), { opacity: 1, duration: 2 }, 13)
         .to(select(".v2-shell"), { opacity: 0, duration: 4 }, 13)
         .to(select(".v2-thought-0"), { opacity: 0, duration: 2 }, 14)
-        .to(select(".v2-world"), { z: compact ? 60 : 180, rotationX: -5, duration: 6, ease: "power2.inOut" }, 14);
+        .to(select(".v2-world"), { z: compact ? 60 : tablet ? 180 : 250, rotationX: -5, duration: 6, ease: "power2.inOut" }, 14);
 
       select(".v2-glyph").forEach((glyph: Element, i: number) => {
         const col = i % 8;
@@ -99,7 +101,7 @@ export default function CinematicExperience() {
         const targetX = i < 16 ? ((i % 8) + 0.5) / 8 * shellW - shellW / 2 : (i < 28 ? -shellW / 2 : shellW / 2);
         const targetY = i < 16 ? (i < 8 ? -shellH / 2 : shellH / 2) : (((i - 16) % 12) + 0.5) / 12 * shellH - shellH / 2;
         gsap.set(glyph, { x: (col - 3.5) * (compact ? 11 : 22) + (compact ? 74 : 150), y: row * 15 - 26 });
-        timeline.to(glyph, { x: (col - 3.5) * (compact ? 39 : 83), y: (row - 2) * (compact ? 37 : 62), z: (row - 2) * (compact ? 12 : 30), rotationY: (col - 3.5) * 6, rotationX: (row - 2) * 6, scale: 1.5, duration: 5, ease: "steps(8)" }, 14 + row * 0.16)
+        timeline.to(glyph, { x: (col - 3.5) * (compact ? 39 : tablet ? 83 : 105), y: (row - 2) * (compact ? 37 : 78), z: (2 - row) * (compact ? 25 : tablet ? 55 : 110), rotationY: (col - 3.5) * 9, rotationX: (row - 2) * 9, scale: 1.5, duration: 5, ease: "steps(8)" }, 14 + row * 0.16)
           .to(glyph, { x: targetX, y: targetY, z: 0, rotationX: 0, rotationY: 0, scale: 0.65, duration: 6, ease: "power2.inOut" }, 20)
           .to(glyph.querySelector(".v2-glyph-letter"), { opacity: 0, duration: 2 }, 24)
           .fromTo(glyph.querySelector(".v2-glyph-piece"), { opacity: 0, scaleX: 0.2, scaleY: 0.2 }, { opacity: 1, scaleX: i < 16 ? shellW / 8 / 6.5 : 0.16, scaleY: i < 16 ? 0.16 : shellH / 12 / 6.5, duration: 3, ease: "power2.inOut" }, 23)
@@ -135,15 +137,19 @@ export default function CinematicExperience() {
         .to(select(".v2-touch-ring"), { scale: 1.7, opacity: 0, duration: 2 }, 57)
         .to(select(".v2-thought-2"), { opacity: 1, duration: 2 }, 57);
 
-      // III. A controlled gesture carries the image; the surface follows it.
-      timeline.to(select(".v2-photo"), { x: compact ? 15 : 48, y: 10, rotationZ: 3, scale: compact ? 1.01 : 1.02, duration: 6, ease: "power2.inOut" }, 61)
-        .to(select(".v2-world"), { rotationZ: -1.5, rotationY: compact ? -3 : -7, duration: 6, ease: "power2.inOut" }, 61)
-        .to(select(".v2-gesture-trace"), { opacity: 0.7, strokeDashoffset: 0, duration: 6 }, 61)
-        .to(select(".v2-shell"), { scaleX: compact ? 1.04 : 0.76, scaleY: compact ? 1.16 : 1.06, duration: 6, ease: "power2.inOut" }, 61)
-        .to(select(".v2-photo"), { x: compact ? -8 : -25, y: -2, rotationZ: -1.5, scale: compact ? 0.98 : 0.96, duration: 5, ease: "power2.inOut" }, 67)
-        .to(select(".v2-photo"), { x: 0, y: 0, rotationZ: 0, scale: compact ? 0.96 : 1, duration: 5, ease: "back.out(1.15)" }, 72)
-        .to(select(".v2-world"), { rotationZ: 0, rotationY: 0, duration: 6, ease: "power2.inOut" }, 70)
-        .to(select(".v2-gesture-trace"), { opacity: 0, duration: 3 }, 73);
+      // III. Take hold: approach, bank with the image, then catch its release.
+      // The caption yields before the photographic surface becomes intimate.
+      timeline.to(select(".v2-touch-ui"), { opacity: 0, z: -100, duration: 3 }, 61)
+        .to(select(".v2-thought-2"), { opacity: 0, duration: 3 }, 61)
+        .to(select(".v2-photo"), { x: compact ? 10 : tablet ? 35 : 75, y: compact ? -7 : -12, z: compact ? 25 : tablet ? 50 : 100, rotationY: compact ? -3 : 12, rotationZ: compact ? 2 : 7, scale: compact ? 1.12 : tablet ? 1.22 : 1.45, duration: 7, ease: "power2.inOut" }, 61)
+        .to(select(".v2-world"), { x: compact ? -5 : tablet ? -20 : -70, z: compact ? 25 : tablet ? 60 : 130, rotationZ: compact ? -2 : -4, rotationX: compact ? 5 : 9, rotationY: compact ? -7 : tablet ? -12 : -22, duration: 7, ease: "power2.inOut" }, 61)
+        .to(select(".v2-shell"), { scaleX: compact ? 1.06 : tablet ? 0.86 : 1.02, scaleY: compact ? 1.22 : 1.19, duration: 7, ease: "power2.inOut" }, 61)
+        .to(select(".v2-photo"), { x: compact ? -10 : tablet ? -20 : -45, y: compact ? 6 : 16, z: compact ? 20 : tablet ? 35 : 70, rotationY: compact ? 4 : -10, rotationZ: compact ? -3 : -6, scale: compact ? 1.08 : tablet ? 1.18 : 1.36, duration: 7, ease: "power2.inOut" }, 68)
+        .to(select(".v2-world"), { x: compact ? 5 : tablet ? 15 : 65, z: compact ? 35 : tablet ? 75 : 160, rotationZ: compact ? 2 : 4, rotationX: compact ? -3 : -5, rotationY: compact ? 6 : 18, duration: 7, ease: "power2.inOut" }, 68)
+        .to(select(".v2-photo"), { x: 0, y: compact ? 0 : -8, z: compact ? 10 : tablet ? 20 : 30, rotationY: 0, rotationZ: 0, scale: compact ? 1.05 : tablet ? 1.12 : 1.25, duration: 4, ease: "power2.out" }, 75)
+        .to(select(".v2-world"), { x: 0, z: compact ? 20 : tablet ? 50 : 100, rotationX: 0, rotationZ: 0, rotationY: 0, duration: 4, ease: "power2.out" }, 75)
+        .to(select(".v2-shell"), { scaleX: compact ? 1.03 : tablet ? 0.8 : 0.92, scaleY: compact ? 1.19 : 1.1, duration: 4, ease: "power2.out" }, 75)
+        .to(select(".v2-thought-2"), { opacity: 1, duration: 3 }, 76);
 
       // IV. Release the image. Its old touch plane folds into the archive floor,
       // while the camera and the counter-rotating photograph describe an orbit.
@@ -153,16 +159,18 @@ export default function CinematicExperience() {
         .to(select(".v2-world"), { x: compact || tablet ? 0 : 70, z: compact ? 35 : 140, rotationX: compact ? 4 : 7, rotationY: compact ? -8 : tablet ? -10 : -18, duration: 6, ease: "power2.inOut" }, 82)
         .to(select(".v2-photo"), { x: compact ? 0 : tablet ? -22 : -80, y: compact ? -4 : -20, z: compact ? 25 : 110, rotationY: compact ? 8 : 18, rotationZ: compact ? -4 : -8, scale: compact ? 0.94 : 1.04, duration: 6, ease: "power2.inOut" }, 82)
         .to(select(".v2-shell"), { scaleX: compact ? 1 : 0.96, scaleY: compact ? 0.88 : 0.91, z: -60, rotationX: 0, rotationY: 0, opacity: 0.12, duration: 12, ease: "power2.inOut" }, 88)
-        .to(select(".v2-world"), { x: 0, z: 0, rotationX: 0, rotationY: 0, duration: 10, ease: "power2.inOut" }, 88)
-        .to(select(".v2-photo"), { x: 0, y: compact ? 10 : 38, z: 4, rotationY: 0, rotationZ: 0, scale: compact ? 0.96 : tablet ? 0.9 : 1.08, duration: 12, ease: "power2.inOut" }, 88)
-        .to(select(".v2-memory-index"), { opacity: 1, y: 0, z: 0, rotationX: 0, duration: 8, ease: "power2.inOut" }, 89)
-        .to(select(".v2-memory-query"), { opacity: 1, y: 0, duration: 5, ease: "power2.inOut" }, 91)
-        .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 7, ease: "steps(14)" }, 94)
-        .to(select(".v2-photo-focus"), { opacity: 0.8, scale: 1, duration: 8, ease: "power2.inOut" }, 92)
-        .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 95)
-        .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 7, ease: "power2.inOut" }, 98)
-        .to(select(".v2-context-three"), { opacity: 1, duration: 3 }, 102)
-        .to(select(".v2-thought-3"), { opacity: 1, duration: 3 }, 100);
+        .to(select(".v2-world"), { x: compact || tablet ? 0 : -65, z: compact ? 0 : tablet ? -20 : -50, rotationX: compact ? -3 : -8, rotationY: compact ? 8 : tablet ? 14 : 28, rotationZ: 2, duration: 6, ease: "power2.inOut" }, 88)
+        .to(select(".v2-photo"), { x: compact ? 0 : tablet ? -10 : 45, y: compact ? 10 : 0, z: compact ? 10 : tablet ? 35 : 160, rotationY: compact ? -8 : -18, rotationZ: compact ? 1 : 3, scale: compact ? 1.15 : tablet ? 1.3 : 2, duration: 6, ease: "power2.inOut" }, 88)
+        .to(select(".v2-world"), { x: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, duration: 8, ease: "power3.inOut" }, 94)
+        .to(select(".v2-photo"), { x: 0, y: compact ? 10 : 38, z: 4, rotationY: 0, rotationZ: 0, scale: compact ? 0.96 : tablet ? 0.9 : 1.08, duration: 8, ease: "power3.inOut" }, 94)
+        .to(select(".v2-memory-index"), { opacity: 1, y: 0, z: 0, rotationX: 0, duration: 4, ease: "power2.inOut" }, 97)
+        .to(select(".v2-memory-query"), { opacity: 1, y: 0, duration: 3, ease: "power2.inOut" }, 99)
+        .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 3, ease: "steps(14)" }, 102)
+        .to(select(".v2-photo-focus"), { opacity: 0.8, scale: 1, duration: 4, ease: "power2.inOut" }, 101)
+        .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.inOut" }, 101)
+        .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.inOut" }, 101)
+        .to(select(".v2-context-three"), { opacity: 1, duration: 2 }, 103)
+        .to(select(".v2-thought-3"), { opacity: 1, duration: 3 }, 102);
 
       // C. Leave the last enclosure behind: its transparent perimeter passes the
       // viewer while context recedes. The photograph approaches, then exhales.
@@ -317,7 +325,6 @@ export default function CinematicExperience() {
                 <p className="v2-touch-caption">{v2Copy.touch.caption}<small>{v2Copy.touch.detail}</small></p>
               </div>
               <div className="v2-touch-ring" />
-              <svg className="v2-gesture-trace" viewBox="0 0 600 400"><path d="M130 260C180 285 300 285 350 240S410 140 470 160" /></svg>
               <div className="v2-memory-index"><span>{v2Copy.memory.index}</span><div>{v2Copy.memory.sequence.map((word) => <span key={word}>{word}</span>)}</div></div>
               <p className="v2-memory-query"><span>{v2Copy.memory.query}</span><span className="v2-query-completion">{v2Copy.memory.completion}</span></p>
               <div className="v2-context v2-context-one"><span>{v2Copy.contexts[0].label}</span><p>{v2Copy.contexts[0].title}</p><small>{v2Copy.contexts[0].detail}</small></div>

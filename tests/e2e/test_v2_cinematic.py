@@ -13,7 +13,7 @@ OUT = Path(__file__).resolve().parents[2] / os.environ.get("II_OUTPUT_DIR", "out
 OUT.mkdir(parents=True, exist_ok=True)
 ENGINE = os.environ.get("II_BROWSER", "chromium")
 RECORD = os.environ.get("II_RECORD_VIDEO", "1" if ENGINE == "chromium" else "0") == "1"
-TIMES = [0, 8, 11.5, 14, 18, 24, 26, 27, 32, 36, 43, 47, 48, 50, 53, 54, 55, 59, 61, 67, 73, 79, 80, 84, 86, 88, 90, 94, 96, 98, 102, 104, 106, 112, 113, 116, 118, 124, 128, 132, 140]
+TIMES = [0, 8, 11.5, 14, 18, 24, 26, 27, 32, 36, 43, 47, 48, 50, 53, 54, 55, 59, 61, 64, 67, 70, 73, 76, 79, 80, 84, 86, 87, 88, 90, 93, 94, 96, 98, 99, 102, 104, 106, 112, 113, 116, 118, 124, 128, 132, 140]
 RESTS = [(11.5,"0"),(32,"1"),(79,"2"),(106,"3"),(140,"4")]
 PROFILE_INIT = """window.__v2Profile={longTasks:[],shifts:[]};
 if(PerformanceObserver.supportedEntryTypes.includes('longtask'))new PerformanceObserver(list=>{
@@ -80,6 +80,9 @@ with sync_playwright() as p:
     assert baseline["140"]["styles"][3][1]=="1" and baseline["140"]["styles"][4][1]=="1"
     assert baseline["140"]["styles"][11][2]=="hidden"
     results["gesture_context_and_absence"]=True
+    assert baseline['102']['styles'][4][2]=='visible'
+    assert '100%' in baseline['102']['styles'][9][4]
+    results['photograph_settles_before_query_completion']=True
 
     scrub(page,0)
     for _ in range(8):page.mouse.wheel(0,120);page.wait_for_timeout(35)

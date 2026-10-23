@@ -20,14 +20,15 @@ with sync_playwright() as p:
         page.evaluate("t=>scrollTo(0,(document.querySelector('.v2-scroll').offsetHeight-innerHeight)*t/140)",t)
         page.wait_for_function("t=>Math.abs(+document.querySelector('main').dataset.progress-t/140)<.0002",arg=t)
         page.wait_for_timeout(100)
-    seek(87)
-    assert page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
-    assert page.locator('.v2-color').evaluate("e=>getComputedStyle(e).visibility")=="hidden"
-    first = page.screenshot(path=str(OUT/'surface-curled.png'))
-    seek(100)
-    assert not page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
-    seek(87)
-    assert page.screenshot()==first, "WebGL reverse rendered pixels changed"
+    for t in [67,87,94]:
+        seek(t)
+        assert page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
+        assert page.locator('.v2-color').evaluate("e=>getComputedStyle(e).visibility")=="hidden"
+        first = page.screenshot(path=str(OUT/f'surface-{t}.png'))
+        seek(106)
+        assert not page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
+        seek(t)
+        assert page.screenshot()==first, f"WebGL reverse rendered pixels changed at {t}"
     # Losing the GPU must reveal the same crisp photograph immediately.
     page.evaluate("window.__lose = document.querySelector('canvas').getContext('webgl2').getExtension('WEBGL_lose_context'); window.__lose.loseContext()")
     page.wait_for_function("!document.querySelector('.v2-photo').hasAttribute('data-surface-active')")
@@ -40,12 +41,12 @@ with sync_playwright() as p:
     assert not page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
     page.emulate_media(reduced_motion="no-preference")
     page.locator('.v2-photo-surface[data-surface-ready="true"]').wait_for(state="attached")
-    seek(87)
+    seek(94)
     assert page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
     for w,h in [(1440,900),(768,1024),(375,667),(320,568)]:
         page.set_viewport_size({"width":w,"height":h})
         page.wait_for_timeout(200)
-        seek(87)
+        seek(94)
         page.screenshot(path=str(OUT/f'surface-{w}x{h}.png'))
         page.locator('.v2-chapters summary').click()
         nav=page.locator('.v2-navigation').bounding_box()
@@ -53,9 +54,24 @@ with sync_playwright() as p:
         page.screenshot(path=str(OUT/f'chapters-{w}x{h}.png'))
         page.keyboard.press("Escape")
     assert not errors,errors
+    fallback=browser.new_page(viewport={"width":320,"height":568})
+    fallback_errors=[]
+    fallback.on('pageerror',lambda e:fallback_errors.append(str(e)))
+    fallback.add_init_script("""const original=HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext=function(type,...args){
+        return type==='webgl'||type==='webgl2'?null:original.call(this,type,...args);
+      };""")
+    fallback.goto(BASE_URL+'/v2');fallback.locator('main[data-ready=true]').wait_for()
+    fallback.evaluate("scrollTo(0,(document.querySelector('.v2-scroll').offsetHeight-innerHeight)*94/140)")
+    fallback.wait_for_timeout(500)
+    assert fallback.locator('.v2-color').evaluate("e=>getComputedStyle(e).visibility")=="visible"
+    assert not fallback.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
+    assert fallback.evaluate('document.documentElement.scrollWidth<=innerWidth')
+    assert not fallback_errors,fallback_errors
+    fallback.screenshot(path=str(OUT/'webgl-unavailable-320.png'))
     result={"browser":browser.version,"webgl_rendered":True,"reverse_pixel_match":True,
-      "context_loss_fallback_and_restore":True,"reduced_motion_rebuild":True,
-      "chapters_menu_viewports":4,"console_errors":errors,"source_pixels":page.locator('.v2-artifact-color').evaluate("e=>[e.naturalWidth,e.naturalHeight]")}
+      "context_loss_fallback_and_restore":True,"reduced_motion_rebuild":True,"reverse_pixel_states":[67,87,94],
+      "chapters_menu_viewports":4,"simulated_webgl_unavailable":True,"console_errors":errors,"source_pixels":page.locator('.v2-artifact-color').evaluate("e=>[e.naturalWidth,e.naturalHeight]")}
     (OUT/'surface-acceptance.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     print(json.dumps(result,indent=2))
     browser.close()
