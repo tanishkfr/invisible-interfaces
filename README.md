@@ -38,3 +38,23 @@ Production verification:
 The browser walkthroughs live in tests/e2e and cover the opening, terminal, morph, anticipation scene, entrusted absence, keyboard navigation, mobile layout, reduced motion, copy integrity, and the About/404 routes.
 
 See CASESTUDY.md for the design argument and VISUAL_SYSTEM.md for the current exhibition system.
+
+## V2 cinematic study
+
+The isolated Phase 1 preview lives at `/v2`. Three scroll-controlled studies carry
+the same photograph from command marks into a window, around a spatial desktop
+into a touch surface, and out of an anticipatory interface into stillness.
+The original exhibition remains at `/`.
+
+See [creative direction](docs/V2_CREATIVE_DIRECTION.md),
+[motion specification](docs/V2_MOTION_SPEC.md), and
+[verification and limitations](docs/V2_VERIFICATION.md). Selected browser evidence
+is retained in `docs/v2-evidence/`; full captures and the recording are generated
+in `output/playwright/`.
+
+Run the focused browser suite against a local server with Python Playwright:
+
+    python tests/e2e/test_v2_cinematic.py
+
+Set `II_BASE_URL` when using a different port. The study has not been pushed or
+deployed. Full acceptance remains partial; see the verification report.

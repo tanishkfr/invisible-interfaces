@@ -1,0 +1,19 @@
+{
+  "320": {
+    "initial_no_hscroll": true,
+    "morph_no_hscroll": true,
+    "minimum_machine_type": 8.4,
+    "final_no_hscroll": true,
+    "entrust_target_height": 44
+  },
+  "375": {
+    "initial_no_hscroll": true,
+    "morph_no_hscroll": true,
+    "minimum_machine_type": 10,
+    "final_no_hscroll": true,
+    "entrust_target_height": 44
+  },
+  "reduced_matches": true,
+  "cursor_animation": "none",
+  "reduced_no_hscroll": true
+}
