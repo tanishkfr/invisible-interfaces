@@ -13,7 +13,7 @@ export const v2Copy = {
   eyebrow: "A STUDY IN HUMAN ATTENTION",
   description: "The task stays the same.\nEverything between us changes.",
   scroll: "SCROLL TO TRANSFORM",
-  disclosure: "An illustrative exhibition, not a chronology of replacement. The photographic scene was generated for this work. Every representation comes from that same image. The archive, gestures, and contextual memory are authored demonstrations; no inference or background task is running.",
+  disclosure: "An illustrative exhibition, not a chronology of replacement. The photographic scene was generated for this work. Every representation comes from that same image. The archive and contextual recall are authored demonstrations; no inference or background task is running. Your optional framing is held only while this page is open, clears on reload, and can be reset at the ending.",
   narrative: "One photograph of a red boat travels from an exact command into a spatial archive. The window turns, its frame becomes a touch surface, and the image follows a gesture. Later, context gathers before an explicit request. Finally, the controls withdraw and leave the photograph. Less visible operation can also move judgment out of sight.",
   wordmark: "invisible interfaces",
   edition: "AN INTERACTIVE EXHIBITION",

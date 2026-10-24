@@ -3,7 +3,7 @@ import {
   SRGBColorSpace, TextureLoader, WebGLRenderer,
 } from "three";
 
-export type PhotoForm = { bend: number; ripple: number; recall: number };
+export type PhotoForm = { bend: number; ripple: number; recall: number; release: number; zoom: number };
 
 /** One scroll-driven sheet, inside the existing CSS camera. No animation loop. */
 export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement) {
@@ -39,11 +39,11 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   const material = new ShaderMaterial({
     side: DoubleSide,
     transparent: true,
-    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uRecall: { value: 0 } },
+    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uFolds: { value: new Float32Array([.25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0]) }, uZoom: { value: 1 } },
     vertexShader: `
       uniform float uBend;
       uniform float uRipple;
-      uniform float uRecall;
+      uniform vec2 uFolds[8];
       attribute float aBand;
       varying vec2 vUv;
       varying float vLight;
@@ -59,22 +59,32 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
         p.z += uBend * p.x * p.y * 0.38;
         p.z += sin(uv.x * 8.0 - uv.y * 5.0) * sin(uv.y * 3.14159265) * uRipple;
         vLight = 1.0 - abs(sin(angle)) * 0.15;
-        float fold = uRecall * 0.9;
         float leaf = floor((aBand + 1.0) * 4.0);
         float localX = position.x - (aBand - 0.125);
-        float ridge = mod(leaf, 2.0) < 0.5 ? localX : 0.25 - localX;
-        p.x *= cos(fold);
-        p.z += ridge * sin(fold);
-        vLight *= 1.0 - (mod(leaf, 2.0) < 0.5 ? 0.06 : 0.14) * sin(fold);
+        vec2 extent = vec2(0.0);
+        vec2 preceding = vec2(0.0);
+        vec2 direction = vec2(1.0, 0.0);
+        // Integrating each hinge keeps both copies of every shared edge together.
+        for (int i = 0; i < 8; i++) {
+          extent += uFolds[i];
+          if (float(i) < leaf) preceding += uFolds[i];
+          if (float(i) == leaf) direction = uFolds[i] * 4.0;
+        }
+        vec2 sheet = -extent * 0.5 + preceding + localX * direction;
+        p.x += sheet.x - position.x;
+        p.z += sheet.y;
+        vLight *= 1.0 - abs(direction.y) * (mod(leaf, 2.0) < 0.5 ? 0.06 : 0.14);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
       }
     `,
     fragmentShader: `
       uniform sampler2D uImage;
+      uniform float uZoom;
       varying vec2 vUv;
       varying float vLight;
       void main() {
-        gl_FragColor = texture2D(uImage, vUv);
+        vec2 focus = vec2(0.10, 0.22);
+        gl_FragColor = texture2D(uImage, (vUv - focus) / uZoom + focus);
         gl_FragColor.rgb *= vLight;
         #include <colorspace_fragment>
       }
@@ -84,15 +94,23 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   let disposed = false;
   let ready = false;
   let lost = false;
-  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0 };
+  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1 };
   const render = (form: PhotoForm) => {
     current = { ...form };
-    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.ripple) > 0.001 || form.recall > 0.001);
+    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.ripple) > 0.001 || (form.recall > 0.001 && form.release < 0.999));
     photo.toggleAttribute("data-surface-active", active);
     if (!active || disposed) return;
     material.uniforms.uBend.value = form.bend;
     material.uniforms.uRipple.value = form.ripple;
-    material.uniforms.uRecall.value = form.recall;
+    const folds = material.uniforms.uFolds.value;
+    for (let i = 0; i < 8; i++) {
+      // Release travels from the distant shore toward the boat on the left.
+      const t = Math.max(0, Math.min(1, (form.release - (7 - i) * 0.045) / 0.65));
+      const angle = form.recall * 0.9 * (1 - t * t * (3 - 2 * t)) * (i % 2 ? -1 : 1);
+      folds[i * 2] = Math.cos(angle) * 0.25;
+      folds[i * 2 + 1] = Math.sin(angle) * 0.25;
+    }
+    material.uniforms.uZoom.value = form.zoom;
     renderer.render(scene, camera);
   };
   // CSS transforms never alter this box; only viewport/media layout resizes it.
@@ -114,8 +132,13 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
       if (disposed) return;
       ready = true;
       canvas.dataset.surfaceReady = "true";
-      resize();
-      renderer.render(scene, camera);
+      const initial = current;
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+      // Exercise the curved path as well as compilation before its first visible
+      // use. Restore the real pose in this same task, before the browser paints.
+      render({ ...initial, bend: 0.38, ripple: 0.025, recall: 0.9, release: 0.35, zoom: 1.2 });
+      renderer.getContext().finish();
+      render(initial);
     }).catch(() => { /* Preserve the DOM image if the optional shader fails. */ });
   });
   const onLost = (event: Event) => {
@@ -135,7 +158,11 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
       canvas.removeEventListener("webglcontextrestored", onRestored);
       photo.removeAttribute("data-surface-active");
       delete canvas.dataset.surfaceReady;
-      texture.dispose(); geometry.dispose(); material.dispose(); renderer.dispose();
+      texture.dispose(); geometry.dispose(); material.dispose();
+      // The canvas/context is reused on responsive rebuild. In particular,
+      // WebKit rejects Three's next 3D placeholder upload if flip-Y stays set.
+      renderer.resetState();
+      renderer.dispose();
     },
   };
 }

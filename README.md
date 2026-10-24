@@ -10,7 +10,8 @@ No push, merge, deployment or homepage replacement is part of this phase.
 
 ## Experience and documentation
 
-- [Anticipation continuity: current acceptance and matched motion comparisons](docs/V2_ANTICIPATION_CONTINUITY.md)
+- [Lived memory: interactive motion and accountable ending](docs/V2_LIVED_MEMORY.md)
+- [Anticipation continuity: preceding checkpoint](docs/V2_ANTICIPATION_CONTINUITY.md)
 - [Cinematic refinement: preceding checkpoint](docs/V2_CINEMATIC_REFINEMENT.md)
 - [Director's cut: reference study, changes and acceptance](docs/V2_DIRECTORS_CUT.md)
 - [V2 case study](docs/V2_CASESTUDY.md)
@@ -23,10 +24,10 @@ No push, merge, deployment or homepage replacement is part of this phase.
 - [Genuine visitor evaluation guide and capture template](docs/V2_VISITOR_TESTING.md)
 
 Current matched before/after films, desktop/mobile frames and verification are in
-`docs/v2-continuity-evidence/`. The Anticipation continuity report is the current
+`docs/v2-memory-evidence/`. The Lived memory report is the current
 creative/engineering checkpoint. Earlier phase reports and media remain historical
 checkpoints. Full captures and trial comparisons are in
-`output/playwright/continuity/` (ignored).
+`output/playwright/lived-memory/` (ignored).
 
 ## Run and build
 
@@ -50,9 +51,10 @@ Use Python Playwright with installed browser engines against a running export:
 
 ```powershell
 $env:II_BASE_URL='http://localhost:3002'
-$env:II_OUTPUT_DIR='output/playwright/continuity'
+$env:II_OUTPUT_DIR='output/playwright/lived-memory'
 $env:II_RECORD_VIDEO='0'
 python tests/e2e/test_v2_cinematic.py
+python tests/e2e/test_v2_memory.py
 python tests/e2e/inspect_v2_layout.py
 python tests/e2e/test_v2_surface.py
 ```
@@ -70,7 +72,8 @@ from v2's corrected narrow layouts.
 
 ## Privacy and disclosure
 
-V2 uses authored demonstrations, with no inference, background work, analytics
+V2 uses authored contextual recall and an optional visit-local framing choice,
+with no inference, background work, analytics
 or attention ledger. Its fictional photographic scene was generated for the
 work, and every era representation derives from that one image. Fonts and images
 are local exported assets. V1's separate attention ledger remains session-only,

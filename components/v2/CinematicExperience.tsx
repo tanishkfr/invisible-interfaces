@@ -14,6 +14,8 @@ const GLYPHS = [".", ":", "+", "*", "#", "=", "~", "/"];
 
 export default function CinematicExperience() {
   const root = useRef<HTMLElement>(null);
+  // A visit-local choice survives responsive rebuilds, never a reload.
+  const memory = useRef({ value: 0, chosen: false });
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -21,12 +23,20 @@ export default function CinematicExperience() {
     const media = gsap.matchMedia();
     let disposed = false;
     let refreshFrame = 0;
+    const refreshLayout = () => {
+      // A media rebuild can leave ScrollTrigger's recorded position behind the
+      // browser's newest scroll. Measure from the native scroller, then retain it.
+      const y = window.scrollY;
+      ScrollTrigger.refresh();
+      window.scrollTo({ top: y, behavior: "instant" });
+      ScrollTrigger.update();
+    };
     // Firefox can apply the reduced-motion height after matchMedia rebuilds.
     // Refresh from the measured section resize, once its new layout exists.
     const section = el.querySelector(".v2-scroll");
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(refreshFrame);
-      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      refreshFrame = requestAnimationFrame(refreshLayout);
     });
     if (section) observer.observe(section);
     media.add({ compact: "(max-width: 700px)", tablet: "(min-width: 701px) and (max-width: 1100px)", reduce: "(prefers-reduced-motion: reduce)", wide: "(min-width: 1101px)" }, (context) => {
@@ -64,7 +74,7 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      const form = { bend: 0, ripple: 0, recall: 0 };
+      const form = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1 };
       let surface: ReturnType<typeof createPhotoSurface> | undefined;
       let cancelled = false;
       // Load the renderer separately. Failure leaves the original photograph intact.
@@ -82,7 +92,8 @@ export default function CinematicExperience() {
         .to(form, { bend: -0.18, ripple: 0, duration: 5, ease: "power2.inOut" }, 87)
         .to(form, { bend: 0, duration: 6, ease: "power2.out" }, 92)
         .to(form, { recall: compact ? 0.45 : tablet ? 0.9 : 1, duration: 6, ease: "power2.inOut" }, 88)
-        .to(form, { recall: 0, duration: 6, ease: "power2.inOut" }, 94);
+        .to(form, { release: 1, duration: 6, ease: "power2.inOut" }, 94)
+        .to(form, { recall: 0, duration: 0.01 }, 100);
       // A. Move into the terminal; its image data builds the window perimeter.
       timeline.to(select(".v2-intro"), { opacity: 0, x: compact ? 0 : -70, y: -24, duration: 5 }, 2)
         .to(select(".v2-scroll-cue"), { opacity: 0, duration: 2 }, 7)
@@ -169,7 +180,7 @@ export default function CinematicExperience() {
         .to(select(".v2-memory-query"), { opacity: 1, duration: 2, ease: "power2.inOut" }, 100)
         .to(select(".v2-query-completion"), { clipPath: "inset(0 0% 0 0)", duration: 3, ease: "steps(14)" }, 102)
         // The original brackets find the recognizable subject before any query.
-        .to(select(".v2-photo-focus"), { opacity: 0.85, xPercent: -24, yPercent: 26, scaleX: 0.46, scaleY: 0.4, duration: 3, ease: "power2.out" }, 97)
+        .to(select(".v2-photo-focus"), { opacity: 0.85, xPercent: -19, yPercent: 23, scaleX: 0.58, scaleY: 0.46, duration: 3, ease: "power2.out" }, 97)
         .to(select(".v2-photo-focus"), { xPercent: 0, yPercent: 0, scaleX: 1, scaleY: 1, opacity: 0.8, duration: 6, ease: "power2.inOut" }, 100)
         .to(select(".v2-context-one"), { x: 0, y: 0, z: 20, opacity: 1, duration: 5, ease: "power2.out" }, 100)
         .to(select(".v2-context-two"), { x: 0, y: 0, z: 20, opacity: 1, duration: 4, ease: "power2.out" }, 101)
@@ -193,14 +204,155 @@ export default function CinematicExperience() {
         .to(select(".v2-header, .v2-side-note"), { autoAlpha: 0, duration: 7 }, 120)
         .to(select(".v2-final"), { autoAlpha: 1, duration: 5 }, 134);
 
+      const photo = el.querySelector<HTMLElement>(".v2-photo")!;
+      const image = el.querySelector<HTMLElement>(".v2-color img")!;
+      const framing = el.querySelector<HTMLElement>(".v2-framing")!;
+      const frameButtons = Array.from(framing.querySelectorAll<HTMLButtonElement>("button"));
+      const status = el.querySelector<HTMLElement>(".v2-framing-status")!;
+      const dialog = el.querySelector<HTMLDialogElement>(".v2-inspection")!;
+      const inspectButton = el.querySelector<HTMLButtonElement>(".v2-inspect-button")!;
+      const closeButton = dialog.querySelector<HTMLButtonElement>(".v2-inspection-close")!;
+      const resetButton = dialog.querySelector<HTMLButtonElement>(".v2-inspection-reset")!;
+      const inspectionParts = Array.from(dialog.querySelectorAll<HTMLElement>("header, section, footer"));
+      let sceneTime = 0;
+      let frameTween: gsap.core.Tween | undefined;
+      let inspectionTween: gsap.core.Tween | undefined;
+      let previousOverflow = "";
+      let previousPadding = "";
+      let lastZoom = -1;
+      const smooth = (n: number) => { const t = Math.max(0, Math.min(1, n)); return t * t * (3 - 2 * t); };
+      const paintFraming = () => {
+        const weight = sceneTime < 55 ? 0 : sceneTime < 81 ? 1 : sceneTime < 88 ? 1 - smooth((sceneTime - 81) / 7) : sceneTime < 95 ? 0 : sceneTime < 101 ? smooth((sceneTime - 95) / 6) : 1 - smooth((sceneTime - 113) / 15);
+        form.zoom = 1 + memory.current.value * weight * 0.48;
+        if (form.zoom !== lastZoom) {
+          image.style.transform = `scale(${form.zoom})`;
+          photo.dataset.framing = form.zoom.toFixed(4);
+          lastZoom = form.zoom;
+        }
+        surface?.render(form);
+      };
+      const describeFraming = () => {
+        const close = memory.current.value > 0.5;
+        frameButtons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === (close ? 1 : 0))));
+        el.querySelector(".v2-context-three p")!.textContent = memory.current.chosen ? "Your framing, resurfaced." : v2Copy.contexts[2].title;
+        dialog.querySelector(".v2-inspection-framing")!.textContent = memory.current.chosen ? (close ? "The boat, closer." : "The wider shore.") : "The original shore.";
+        dialog.querySelector(".v2-inspection-reason")!.textContent = memory.current.chosen ? "Your Gesture framing, recalled before the query." : "No framing changed. Authored shore context.";
+        resetButton.disabled = !memory.current.chosen;
+      };
+      const setFraming = (value: number, animate = false) => {
+        frameTween?.kill();
+        memory.current.chosen = true;
+        if (animate && !reduced) frameTween = gsap.to(memory.current, { value, duration: 0.65, ease: "power3.out", onUpdate: paintFraming, onComplete: describeFraming });
+        else { memory.current.value = value; paintFraming(); }
+        // Describe the requested endpoint immediately; no React updates per frame.
+        frameButtons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === (value > 0.5 ? 1 : 0))));
+        status.textContent = value > 0.5 ? "Boat framing remembered for this visit." : "Wide framing remembered for this visit.";
+        if (!animate || reduced) describeFraming();
+      };
+      const chooseFrame = (event: MouseEvent) => setFraming(Number((event.currentTarget as HTMLButtonElement).dataset.frame), event.detail > 0);
+      frameButtons.forEach(button => button.addEventListener("click", chooseFrame));
+      let drag: { id: number; x: number; y: number; value: number; chosen: boolean; moved: boolean } | undefined;
+      const onPointerDown = (event: PointerEvent) => {
+        if (framing.hidden || !event.isPrimary || event.button !== 0) return;
+        frameTween?.kill();
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY, value: memory.current.value, chosen: memory.current.chosen, moved: false };
+        photo.setPointerCapture(event.pointerId);
+      };
+      const onPointerMove = (event: PointerEvent) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const dx = event.clientX - drag.x;
+        if (!drag.moved && (Math.abs(dx) < 5 || Math.abs(dx) < Math.abs(event.clientY - drag.y) * 1.2)) return;
+        drag.moved = true;
+        photo.dataset.dragging = "true";
+        memory.current.value = Math.max(0, Math.min(1, drag.value + dx / (compact ? 150 : 260)));
+        memory.current.chosen = true;
+        paintFraming();
+      };
+      const onPointerEnd = (event: PointerEvent) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        if (event.type === "pointercancel") { memory.current.value = drag.value; memory.current.chosen = drag.chosen; paintFraming(); }
+        else if (drag.moved) status.textContent = "Your framing is remembered for this visit.";
+        if (photo.hasPointerCapture(drag.id)) photo.releasePointerCapture(drag.id);
+        drag = undefined;
+        delete photo.dataset.dragging;
+        describeFraming();
+      };
+      photo.addEventListener("pointerdown", onPointerDown);
+      photo.addEventListener("pointermove", onPointerMove);
+      photo.addEventListener("pointerup", onPointerEnd);
+      photo.addEventListener("pointercancel", onPointerEnd);
+      const finishInspection = () => {
+        if (!dialog.open) return;
+        dialog.close();
+        delete el.dataset.inspecting;
+        document.body.style.overflow = previousOverflow;
+        document.body.style.paddingRight = previousPadding;
+        if (sceneTime >= 134) inspectButton.focus({ preventScroll: true });
+      };
+      const closeInspection = (immediate = false) => {
+        inspectionTween?.kill();
+        if (!dialog.open) return;
+        if (immediate || reduced) finishInspection();
+        else inspectionTween = gsap.to(inspectionParts, { opacity: 0, x: i => i === 1 ? 48 : i === 2 ? -48 : 0, y: 8, duration: 0.3, ease: "power2.in", onComplete: finishInspection });
+      };
+      const openInspection = (event: MouseEvent) => {
+        if (sceneTime < 134 || dialog.open) return;
+        describeFraming();
+        previousOverflow = document.body.style.overflow;
+        previousPadding = document.body.style.paddingRight;
+        const gutter = window.innerWidth - document.documentElement.clientWidth;
+        const padding = parseFloat(getComputedStyle(document.body).paddingRight) || 0;
+        document.body.style.paddingRight = `${padding + gutter}px`;
+        document.body.style.overflow = "hidden";
+        el.dataset.inspecting = "true";
+        dialog.showModal();
+        inspectionTween?.kill();
+        const instant = reduced || event.detail === 0;
+        inspectionTween = gsap.fromTo(inspectionParts, { opacity: instant ? 1 : 0, x: (i: number) => instant ? 0 : i === 1 ? 64 : i === 2 ? -64 : 0, y: (i: number) => instant ? 0 : i === 0 ? -12 : i === 3 ? 20 : 0 }, { opacity: 1, x: 0, y: 0, duration: instant ? 0 : 0.8, stagger: instant ? 0 : 0.07, ease: "power3.out" });
+        closeButton.focus({ preventScroll: true });
+      };
+      const onCloseInspection = (event: MouseEvent) => closeInspection(event.detail === 0);
+      const onCancelInspection = (event: Event) => { event.preventDefault(); closeInspection(true); };
+      const onInspectionKeyDown = (event: KeyboardEvent) => {
+        if (event.key !== "Tab") return;
+        const first = resetButton.disabled ? closeButton : resetButton;
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); closeButton.focus(); }
+        else if (!event.shiftKey && document.activeElement === closeButton) { event.preventDefault(); first.focus(); }
+      };
+      const resetFraming = () => {
+        frameTween?.kill(); memory.current.value = 0; memory.current.chosen = false;
+        paintFraming(); describeFraming();
+        status.textContent = "Original framing restored. Nothing is remembered.";
+        if (dialog.open) closeButton.focus({ preventScroll: true });
+      };
+      inspectButton.addEventListener("click", openInspection);
+      closeButton.addEventListener("click", onCloseInspection);
+      resetButton.addEventListener("click", resetFraming);
+      dialog.addEventListener("cancel", onCancelInspection);
+      dialog.addEventListener("keydown", onInspectionKeyDown);
+      describeFraming();
       const links = Array.from(el.querySelectorAll<HTMLAnchorElement>("[data-act-link]"));
       let active = -1;
       const render = (progress: number) => {
         const time = progress * EXHIBITION_DURATION;
         const boundary = ACT_BOUNDARIES.findIndex((at) => time < at);
         const index = boundary < 0 ? 4 : boundary;
-        timeline.time(reduced ? acts[index].rest : time, false);
-        surface?.render(form);
+        sceneTime = reduced ? acts[index].rest : time;
+        timeline.time(sceneTime, false);
+        paintFraming();
+        const canFrame = sceneTime >= 55 && sceneTime <= 81;
+        if (!canFrame && drag) {
+          if (photo.hasPointerCapture(drag.id)) photo.releasePointerCapture(drag.id);
+          drag = undefined;
+          delete photo.dataset.dragging;
+          describeFraming();
+        }
+        if (framing.hidden === canFrame) {
+          if (!canFrame && framing.contains(document.activeElement)) el.querySelector<HTMLElement>(".v2-chapters summary")?.focus({ preventScroll: true });
+          framing.hidden = !canFrame;
+          el.toggleAttribute("data-framing-available", canFrame);
+        }
+        if (dialog.open && sceneTime < 134) closeInspection(true);
         el.dataset.act = String(index);
         el.dataset.progress = progress.toFixed(4);
         if (index !== active) {
@@ -252,13 +404,25 @@ export default function CinematicExperience() {
       el.dataset.ready = "true";
       const hashIndex = acts.findIndex((act) => `#${act.verb.toLowerCase()}` === location.hash);
       const frame = requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
+        refreshLayout();
         if (hashIndex >= 0 && window.scrollY < 1) {
           window.scrollTo(0, trigger.start + acts[hashIndex].at * (trigger.end - trigger.start));
           render(acts[hashIndex].at);
         }
       });
       return () => {
+        frameTween?.kill(); inspectionTween?.kill(); finishInspection();
+        frameButtons.forEach(button => button.removeEventListener("click", chooseFrame));
+        photo.removeEventListener("pointerdown", onPointerDown);
+        photo.removeEventListener("pointermove", onPointerMove);
+        photo.removeEventListener("pointerup", onPointerEnd);
+        photo.removeEventListener("pointercancel", onPointerEnd);
+        inspectButton.removeEventListener("click", openInspection);
+        closeButton.removeEventListener("click", onCloseInspection);
+        resetButton.removeEventListener("click", resetFraming);
+        dialog.removeEventListener("cancel", onCancelInspection);
+        dialog.removeEventListener("keydown", onInspectionKeyDown);
+        delete photo.dataset.dragging;
         cancelled = true;
         surface?.dispose();
         cancelAnimationFrame(frame);
@@ -270,7 +434,7 @@ export default function CinematicExperience() {
       };
     }, el);
     // Fonts can change layout after restoration; refresh without changing scroll.
-    document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
+    document.fonts.ready.then(() => { if (!disposed) refreshLayout(); });
     return () => { disposed = true; observer.disconnect(); cancelAnimationFrame(refreshFrame); media.revert(); };
   }, []);
 
@@ -337,7 +501,21 @@ export default function CinematicExperience() {
             </div>
           </div>
 
-          <div className="v2-final"><p className="v2-eyebrow">05 / THE ABSENCE</p><p className="v2-statement">{acts[4].title}</p><p className="v2-final-detail">{acts[4].detail}</p><a href="#expect" data-act-link={3}>Bring the context back <span aria-hidden="true">↑</span></a></div>
+          <fieldset className="v2-framing" hidden>
+            <legend>Drag the photograph. Leave a framing.</legend>
+            <button type="button" data-frame="0" aria-pressed="true">Wide shore</button>
+            <button type="button" data-frame="1" aria-pressed="false">Closer to the boat</button>
+          </fieldset>
+          <p className="v2-framing-status sr-only" role="status" />
+          <div className="v2-final"><p className="v2-eyebrow">05 / THE ABSENCE</p><p className="v2-statement">{acts[4].title}</p><p className="v2-final-detail">{acts[4].detail}</p><div className="v2-final-actions"><button className="v2-inspect-button" type="button" aria-haspopup="dialog">Why this image?</button><a href="#expect" data-act-link={3}>Bring the context back <span aria-hidden="true">↑</span></a></div></div>
+          <dialog className="v2-inspection" aria-labelledby="v2-inspection-title" aria-describedby="v2-inspection-disclosure">
+            <header><p className="v2-eyebrow">VISIBLE ON REQUEST</p><h2 id="v2-inspection-title">Why this photograph?</h2></header>
+            <div className="v2-inspection-context">
+              <section><h3>WHAT RETURNED</h3><p className="v2-inspection-framing" /></section>
+              <section><h3>WHAT IT REMEMBERED</h3><p className="v2-inspection-reason" /></section>
+            </div>
+            <footer><p id="v2-inspection-disclosure">A generated image. Authored recall.<br />Framing clears on reload.</p><div><button className="v2-inspection-reset" type="button">Use original framing</button><button className="v2-inspection-close" type="button">Return to the photograph <span aria-hidden="true">↘</span></button></div></footer>
+          </dialog>
           <div className="v2-scroll-cue" aria-hidden="true">{v2Copy.scroll}<span>↓</span></div>
 
           <span className="v2-side-note" aria-hidden="true">{v2Copy.sideNote}</span>

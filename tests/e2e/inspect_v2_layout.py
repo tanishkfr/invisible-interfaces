@@ -17,7 +17,7 @@ BOUNDS = """() => {
   const selectors=['.v2-header','.v2-chapters','.v2-navigation','.v2-intro','.v2-thought-0',
     '.v2-thought-1','.v2-thought-2','.v2-thought-3','.v2-final','.v2-photo',
     '.v2-touch-heading','.v2-touch-caption','.v2-memory-index','.v2-memory-query',
-    '.v2-context-one','.v2-context-two','.v2-context-three','.v2-shell','.v2-scroll-cue'];
+    '.v2-context-one','.v2-context-two','.v2-context-three','.v2-shell','.v2-scroll-cue','.v2-framing'];
   return selectors.map(selector=>{
     const e=document.querySelector(selector);
     let r=e.getBoundingClientRect();

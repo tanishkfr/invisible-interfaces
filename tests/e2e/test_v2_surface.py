@@ -20,7 +20,7 @@ with sync_playwright() as p:
         page.evaluate("t=>scrollTo(0,(document.querySelector('.v2-scroll').offsetHeight-innerHeight)*t/140)",t)
         page.wait_for_function("t=>Math.abs(+document.querySelector('main').dataset.progress-t/140)<.0002",arg=t)
         page.wait_for_timeout(100)
-    for t in [67,87,94]:
+    for t in [67,87,94,96,98]:
         seek(t)
         assert page.locator('.v2-photo').evaluate("e=>e.hasAttribute('data-surface-active')")
         assert page.locator('.v2-color').evaluate("e=>getComputedStyle(e).visibility")=="hidden"
@@ -70,7 +70,7 @@ with sync_playwright() as p:
     assert not fallback_errors,fallback_errors
     fallback.screenshot(path=str(OUT/'webgl-unavailable-320.png'))
     result={"browser":browser.version,"webgl_rendered":True,"reverse_pixel_match":True,
-      "context_loss_fallback_and_restore":True,"reduced_motion_rebuild":True,"reverse_pixel_states":[67,87,94],
+      "context_loss_fallback_and_restore":True,"reduced_motion_rebuild":True,"reverse_pixel_states":[67,87,94,96,98],
       "chapters_menu_viewports":4,"simulated_webgl_unavailable":True,"console_errors":errors,"source_pixels":page.locator('.v2-artifact-color').evaluate("e=>[e.naturalWidth,e.naturalHeight]")}
     (OUT/'surface-acceptance.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     print(json.dumps(result,indent=2))

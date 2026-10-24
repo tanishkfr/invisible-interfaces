@@ -1,4 +1,4 @@
-# V2 — cinematic refinement motion specification
+# V2 — interactive exhibition motion specification
 
 ## Ownership
 
@@ -30,17 +30,33 @@ Native scroll → section progress → paused 140-unit timeline
 | 29–36 | Window and pointer observation plateau |
 | 37–45 | Sideways camera arc; archive windows pass at different depth planes |
 | 41–56 | Selected photograph lifts out of the archive plane; chrome withdraws; enclosure becomes a landscape touch surface |
-| 55–61 | Touch ring establishes proximity; colour representation arrives |
+| 55–61 | Touch ring establishes proximity; colour representation arrives; optional native framing controls become available |
 | 61–79 | Close photographic approach; opposing banks and material bend; caption yields; image and enclosure settle at larger scale |
 | 79–81 | Gesture observation plateau |
 | 81–94 | Touch plane folds away; photograph bows, then forms a connected concertina through a camera orbit |
-| 94–100 | Photograph opens toward the viewer and lowers into a clear reading lane; material becomes flat by 100, retaining its close scale |
+| 94–100 | Connected hinges release progressively from the far shore toward the boat; image opens toward the viewer, retaining its close scale |
 | 97–100 | Existing amber focus corners identify the boat before the query appears |
 | 100–106 | Photograph gently settles; focus opens to the whole memory; existing context gathers from depth, followed by query completion at 102–105 |
 | 106–112 | Anticipation observation composition with connected memory and provenance |
 | 113–128 | Context recedes into negative Z; transparent enclosure passes the viewer; masthead withdraws; photograph approaches closely |
 | 128–134 | Photograph settles from the close approach to the final editorial composition |
 | 134–140 | Closing thought and optional return-to-context link arrive; stillness |
+
+The visitor can drag horizontally over the photograph at 55–81 or use the two
+framing buttons. Native vertical touch scrolling is preserved. Visit-local crop
+strength drives identical DOM image and shader UV framing (origin 10% / 78%,
+maximum magnification 1.48). Its timeline envelope is full during Gesture,
+withdraws over 81–88, returns over 95–101, holds through 113, and releases to the
+original full photograph over 113–128. It survives media rebuilds, clears on
+reload, and can be explicitly reset. Input never adds React updates per frame.
+
+Why this image opens a native dialog at the ending. Context travels outward
+from the image, and an amber boundary returns around the existing photograph.
+The dialog identifies the actual framing/default, discloses authored recall,
+offers reset and closes without a timeline jump. Pointer entrances use 0.8s
+spatial easing; keyboard, Escape and reduced-motion actions are immediate.
+Modal focus wraps, reset preserves focus, and close explicitly restores focus.
+Body overflow and gutter compensation are restored on close/media cleanup.
 
 Chapter state boundaries are 27, 55, 86 and 118. Navigation targets are 11.5,
 32, 79, 106 and 140. Reduced motion samples exactly those representative states.
@@ -91,14 +107,22 @@ CSS 3D cannot express as one continuous surface. Eight connected strips with
 photograph's CSS camera frame. Shared edge positions keep the image continuous;
 separate edge vertices permit creases. Triangle count remains 4,096; vertices
 increase from 2,145 to 2,376. Uniforms follow the same paused timeline: tactile
-bend/ripple 61–79; bow 81–98; connected recall folds 88–100.
+bend/ripple 61–79; bow 81–98; connected recall folds 88–100. Eight CPU-computed
+hinge vectors are integrated in the vertex shader so a moving release front can
+open each panel while both copies of every shared edge remain coincident.
 The renderer draws only when a deformation is active, with no independent rAF
 loop. Texture upload, shader compilation and one hidden warm-up draw occur before
-visible use. A ResizeObserver updates the local drawing buffer without per-scroll
+visible use. The hidden draw exercises a representative curved/folded pose,
+waits once for GPU completion, then restores the actual pose before paint. This
+moves a measured first-visible-bend cost into optional initialization. A
+ResizeObserver updates the local drawing buffer without per-scroll
 layout reads. Context loss reveals the DOM photograph immediately. Resize/media
 cleanup disposes texture, geometry, material, renderer, observers and listeners;
 pending imports/compilation are guarded against disposal. Reduced motion skips
-initialization entirely. The small sheet uses a fixed 2× drawing buffer so the
+initialization entirely. Renderer state is reset before disposal: a responsive
+rebuild reuses the canvas, and WebKit requires stale flip-Y/premultiplication
+flags to be cleared before Three.js constructs its 3D placeholder textures.
+The small sheet uses a fixed 2× drawing buffer so the
 outer CSS camera does not soften its texture on 1× displays.
 
 Do not add permanent will-change hints to the photograph/world. Rendered
@@ -112,7 +136,8 @@ Navigation is a native top-right chapter disclosure, not a bottom timeline. The
 final optional return-to-context link uses the existing chapter jump path and
 restores visible keyboard focus to Chapters. No new mandatory journey is added.
 
-See [current verification](V2_ANTICIPATION_CONTINUITY.md) for evidence and limits.
+See [current verification](V2_LIVED_MEMORY.md) for evidence and limits.
+The [Anticipation continuity pass](V2_ANTICIPATION_CONTINUITY.md) is the preceding checkpoint.
 The [cinematic refinement](V2_CINEMATIC_REFINEMENT.md) records the preceding pass.
 The [director's cut](V2_DIRECTORS_CUT.md) and [Phase 2 verification](V2_PHASE2_VERIFICATION.md)
 remain historical checkpoints.

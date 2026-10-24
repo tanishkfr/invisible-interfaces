@@ -142,7 +142,7 @@ with sync_playwright() as p:
     page.emulate_media(reduced_motion="reduce");page.wait_for_timeout(250)
     for t,act in RESTS:
         state=scrub(page,t)
-        assert state["act"]==act
+        assert state["act"]==act, {"time":t,"expected_act":act,"act":state["act"],"progress":state["progress"],"scroll":page.evaluate("({y:scrollY,section:document.querySelector('.v2-scroll').offsetHeight,height:innerHeight})")}
         page.screenshot(path=str(OUT/f"{ENGINE}-reduced-{act}.png"))
         mismatches=[{"index":i,"expected":b,"actual":a} for i,(a,b) in enumerate(zip(state['styles'],baseline[str(t)]['styles'])) if a!=b]
         assert not mismatches,f"Reduced composition mismatch: {act}: {json.dumps(mismatches)}"

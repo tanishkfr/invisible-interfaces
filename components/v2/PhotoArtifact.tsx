@@ -10,6 +10,7 @@ export default function PhotoArtifact({ era }: { era: "terminal" | "dither" | "f
       height={era === "dither" ? 160 : artifact.web_dimensions[1]}
       alt=""
       aria-hidden="true"
+      draggable={false}
       decoding="async"
       fetchPriority="high"
       className={era === "dither" ? "v2-artifact-dither" : "v2-artifact-color"}

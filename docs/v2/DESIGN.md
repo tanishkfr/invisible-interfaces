@@ -190,6 +190,32 @@ There are no gaps, duplicate photographs or new panels.
 The early data field has stronger foreground/background separation. The archive
 arc, Gesture camera and final composition remain unchanged. See [continuity acceptance](../V2_ANTICIPATION_CONTINUITY.md).
 
+### Visitor framing and accountable return
+
+Gesture now accepts a real, optional framing choice. Horizontal dragging over
+the photograph changes the crop; vertical touch movement remains native scroll.
+Two small native buttons provide the same wide/closer choices for keyboard and
+touch access. They appear only during Gesture. No bottom chapter timeline returns.
+
+Framing is a component-local value, retained across responsive/preference rebuilds
+and cleared by reload or the ending's explicit reset. It is eased out during the
+fold, recalled before the query completes, then yields to the whole photograph
+for the quiet ending. DOM and shader use the same crop origin and magnification.
+
+The eight connected panels release from the far shore toward the boat. Cumulative
+hinge positions keep shared edges together; this is one sheet, not independent
+strips. The same scroll timeline owns the release, including reversal.
+
+At the ending, Why this image opens a native modal inspection around the same
+photograph. Context moves outward into the surrounding space; an amber perimeter
+returns. It identifies the visitor's framing or the authored default, discloses
+generation/authored recall and offers reset. Closing withdraws that information
+without changing scroll position. Escape, focus wrapping/restoration, immediate
+keyboard actions and reduced motion are supported. Short phones arrange concise
+context below the image, retaining readable controls without overlap.
+
+See [interactive motion acceptance](../V2_LIVED_MEMORY.md).
+
 ### Machine artifacts and context
 
 Terminal commands, archive rows, window bars, selected files, glyphs, pointer, gesture trace, context labels, and focus brackets are authored representations of operation. The glyphs transform image data into window geometry. They are not ambient decoration or a generic icon system. Context text is arranged around the image without a notification-card pattern. These authored demonstrations are disclosed in the reading room.
@@ -209,4 +235,4 @@ Terminal commands, archive rows, window bars, selected files, glyphs, pointer, g
 - **Don't** replace the pinned cinematic composition with a generic card grid.
 - **Don't** turn the terminal's machine glyphs into unrelated decorative particles.
 - **Don't** treat per-scene coordinates, camera poses, or terminal illustration text sizes as global reusable tokens.
-- **Don't** invent live inference, background tasks, or interactive controls for the authored demonstrations.
+- **Don't** present authored recall as live inference or invent background tasks. The optional framing is real visitor input; disclose that distinction.
