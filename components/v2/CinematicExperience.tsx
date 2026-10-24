@@ -473,7 +473,7 @@ export default function CinematicExperience() {
       <section className="v2-scroll" aria-label="Invisible Interfaces cinematic exhibition">
         <div className="v2-viewport">
           <header className="v2-header">
-            <a className="v2-wordmark" href="/v2">{v2Copy.wordmark}<span aria-hidden>↘</span></a>
+            <a className="v2-wordmark" href="/">{v2Copy.wordmark}<span aria-hidden>↘</span></a>
             <span className="v2-edition">{v2Copy.edition} <span>/ 02</span></span>
           </header>
           <details className="v2-chapters">
@@ -557,7 +557,7 @@ export default function CinematicExperience() {
         <p>{v2Copy.narrative}</p>
         <ol>{acts.map((act) => <li key={act.name}><strong>{act.name}</strong><span>{act.detail}</span></li>)}</ol>
         <p className="v2-disclosure">{v2Copy.disclosure}</p>
-        <div className="v2-reading-links"><a href="#instruct" data-act-link={0}>{v2Copy.reading.replay}</a><a href="/">{v2Copy.reading.original}</a></div>
+        <div className="v2-reading-links"><a href="#instruct" data-act-link={0}>{v2Copy.reading.replay}</a><a href="/v1">{v2Copy.reading.original}</a></div>
         <footer><span>{v2Copy.reading.brand}</span><span>{v2Copy.reading.author}</span><span>{v2Copy.reading.phase}</span></footer>
       </section>
     </main>
