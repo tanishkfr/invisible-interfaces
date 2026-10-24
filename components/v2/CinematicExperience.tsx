@@ -74,7 +74,7 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      const form = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1 };
+      const form = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0 };
       let surface: ReturnType<typeof createPhotoSurface> | undefined;
       let cancelled = false;
       // Load the renderer separately. Failure leaves the original photograph intact.
@@ -82,7 +82,7 @@ export default function CinematicExperience() {
         if (cancelled) return;
         try {
           surface = createPhotoSurface(el.querySelector(".v2-photo-surface")!, el.querySelector(".v2-photo")!);
-          surface.render(form);
+          paintFraming();
         } catch { /* WebGL is optional; CSS spatial choreography remains complete. */ }
       }).catch(() => { /* A failed optional chunk must not interrupt the exhibition. */ });
       timeline.to(form, { bend: compact ? 0.16 : 0.38, ripple: compact ? 0.025 : 0.06, duration: 7, ease: "power2.inOut" }, 61)
@@ -206,6 +206,7 @@ export default function CinematicExperience() {
 
       const photo = el.querySelector<HTMLElement>(".v2-photo")!;
       const image = el.querySelector<HTMLElement>(".v2-color img")!;
+      const color = el.querySelector<HTMLElement>(".v2-color")!;
       const framing = el.querySelector<HTMLElement>(".v2-framing")!;
       const frameButtons = Array.from(framing.querySelectorAll<HTMLButtonElement>("button"));
       const status = el.querySelector<HTMLElement>(".v2-framing-status")!;
@@ -216,10 +217,14 @@ export default function CinematicExperience() {
       const inspectionParts = Array.from(dialog.querySelectorAll<HTMLElement>("header, section, footer"));
       let sceneTime = 0;
       let frameTween: gsap.core.Tween | undefined;
+      // Temporary hand pressure is composed with, never written into, the scroll pose.
+      const hand = { pull: 0 };
+      let handTween: gsap.core.Tween | undefined;
       let inspectionTween: gsap.core.Tween | undefined;
       let previousOverflow = "";
       let previousPadding = "";
       let lastZoom = -1;
+      let lastPull = 0;
       const smooth = (n: number) => { const t = Math.max(0, Math.min(1, n)); return t * t * (3 - 2 * t); };
       const paintFraming = () => {
         const weight = sceneTime < 55 ? 0 : sceneTime < 81 ? 1 : sceneTime < 88 ? 1 - smooth((sceneTime - 81) / 7) : sceneTime < 95 ? 0 : sceneTime < 101 ? smooth((sceneTime - 95) / 6) : 1 - smooth((sceneTime - 113) / 15);
@@ -229,7 +234,17 @@ export default function CinematicExperience() {
           photo.dataset.framing = form.zoom.toFixed(4);
           lastZoom = form.zoom;
         }
-        surface?.render(form);
+        if (hand.pull !== lastPull) {
+          // The DOM photograph also responds if the optional GPU surface is absent.
+          color.style.transform = hand.pull ? `perspective(700px) rotateY(${hand.pull * 5}deg) rotateZ(${-hand.pull * 2.5}deg)` : "";
+          lastPull = hand.pull;
+        }
+        surface?.render({ ...form, bend: form.bend + hand.pull * 0.45, bank: hand.pull * 0.044 });
+      };
+      const settleHand = (immediate = false) => {
+        handTween?.kill();
+        if (immediate || reduced || hand.pull === 0) { hand.pull = 0; paintFraming(); }
+        else handTween = gsap.to(hand, { pull: 0, duration: 0.6, ease: "power3.out", onUpdate: paintFraming });
       };
       const describeFraming = () => {
         const close = memory.current.value > 0.5;
@@ -241,6 +256,7 @@ export default function CinematicExperience() {
       };
       const setFraming = (value: number, animate = false) => {
         frameTween?.kill();
+        settleHand(true);
         memory.current.chosen = true;
         if (animate && !reduced) frameTween = gsap.to(memory.current, { value, duration: 0.65, ease: "power3.out", onUpdate: paintFraming, onComplete: describeFraming });
         else { memory.current.value = value; paintFraming(); }
@@ -251,11 +267,12 @@ export default function CinematicExperience() {
       };
       const chooseFrame = (event: MouseEvent) => setFraming(Number((event.currentTarget as HTMLButtonElement).dataset.frame), event.detail > 0);
       frameButtons.forEach(button => button.addEventListener("click", chooseFrame));
-      let drag: { id: number; x: number; y: number; value: number; chosen: boolean; moved: boolean } | undefined;
+      let drag: { id: number; x: number; y: number; lastX: number; at: number; velocity: number; value: number; chosen: boolean; moved: boolean } | undefined;
       const onPointerDown = (event: PointerEvent) => {
         if (framing.hidden || !event.isPrimary || event.button !== 0) return;
         frameTween?.kill();
-        drag = { id: event.pointerId, x: event.clientX, y: event.clientY, value: memory.current.value, chosen: memory.current.chosen, moved: false };
+        handTween?.kill();
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, at: event.timeStamp, velocity: 0, value: memory.current.value, chosen: memory.current.chosen, moved: false };
         photo.setPointerCapture(event.pointerId);
       };
       const onPointerMove = (event: PointerEvent) => {
@@ -266,21 +283,29 @@ export default function CinematicExperience() {
         photo.dataset.dragging = "true";
         memory.current.value = Math.max(0, Math.min(1, drag.value + dx / (compact ? 150 : 260)));
         memory.current.chosen = true;
+        const velocity = (event.clientX - drag.lastX) / Math.max(16, event.timeStamp - drag.at);
+        drag.velocity = drag.velocity * 0.5 + Math.max(-1.5, Math.min(1.5, velocity)) * 0.5;
+        drag.lastX = event.clientX; drag.at = event.timeStamp;
+        if (!reduced) hand.pull = Math.max(-1, Math.min(1, dx / (compact ? 150 : 260) * 0.65 + drag.velocity * 0.22));
         paintFraming();
       };
       const onPointerEnd = (event: PointerEvent) => {
         if (!drag || event.pointerId !== drag.id) return;
-        if (event.type === "pointercancel") { memory.current.value = drag.value; memory.current.chosen = drag.chosen; paintFraming(); }
+        const cancelled = event.type !== "pointerup";
+        if (cancelled) { memory.current.value = drag.value; memory.current.chosen = drag.chosen; }
         else if (drag.moved) status.textContent = "Your framing is remembered for this visit.";
-        if (photo.hasPointerCapture(drag.id)) photo.releasePointerCapture(drag.id);
+        const id = drag.id;
         drag = undefined;
+        if (photo.hasPointerCapture(id)) photo.releasePointerCapture(id);
         delete photo.dataset.dragging;
+        settleHand(cancelled);
         describeFraming();
       };
       photo.addEventListener("pointerdown", onPointerDown);
       photo.addEventListener("pointermove", onPointerMove);
       photo.addEventListener("pointerup", onPointerEnd);
       photo.addEventListener("pointercancel", onPointerEnd);
+      photo.addEventListener("lostpointercapture", onPointerEnd);
       const finishInspection = () => {
         if (!dialog.open) return;
         dialog.close();
@@ -339,14 +364,16 @@ export default function CinematicExperience() {
         const index = boundary < 0 ? 4 : boundary;
         sceneTime = reduced ? acts[index].rest : time;
         timeline.time(sceneTime, false);
-        paintFraming();
         const canFrame = sceneTime >= 55 && sceneTime <= 81;
         if (!canFrame && drag) {
-          if (photo.hasPointerCapture(drag.id)) photo.releasePointerCapture(drag.id);
+          const id = drag.id;
           drag = undefined;
+          if (photo.hasPointerCapture(id)) photo.releasePointerCapture(id);
           delete photo.dataset.dragging;
           describeFraming();
         }
+        if (!canFrame) { handTween?.kill(); hand.pull = 0; }
+        paintFraming();
         if (framing.hidden === canFrame) {
           if (!canFrame && framing.contains(document.activeElement)) el.querySelector<HTMLElement>(".v2-chapters summary")?.focus({ preventScroll: true });
           framing.hidden = !canFrame;
@@ -411,12 +438,14 @@ export default function CinematicExperience() {
         }
       });
       return () => {
-        frameTween?.kill(); inspectionTween?.kill(); finishInspection();
+        frameTween?.kill(); handTween?.kill(); inspectionTween?.kill(); finishInspection();
+        color.style.transform = "";
         frameButtons.forEach(button => button.removeEventListener("click", chooseFrame));
         photo.removeEventListener("pointerdown", onPointerDown);
         photo.removeEventListener("pointermove", onPointerMove);
         photo.removeEventListener("pointerup", onPointerEnd);
         photo.removeEventListener("pointercancel", onPointerEnd);
+        photo.removeEventListener("lostpointercapture", onPointerEnd);
         inspectButton.removeEventListener("click", openInspection);
         closeButton.removeEventListener("click", onCloseInspection);
         resetButton.removeEventListener("click", resetFraming);

@@ -3,7 +3,7 @@ import {
   SRGBColorSpace, TextureLoader, WebGLRenderer,
 } from "three";
 
-export type PhotoForm = { bend: number; ripple: number; recall: number; release: number; zoom: number };
+export type PhotoForm = { bend: number; ripple: number; recall: number; release: number; zoom: number; bank: number };
 
 /** One scroll-driven sheet, inside the existing CSS camera. No animation loop. */
 export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement) {
@@ -39,10 +39,11 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   const material = new ShaderMaterial({
     side: DoubleSide,
     transparent: true,
-    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uFolds: { value: new Float32Array([.25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0]) }, uZoom: { value: 1 } },
+    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uBank: { value: 0 }, uFolds: { value: new Float32Array([.25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0]) }, uZoom: { value: 1 } },
     vertexShader: `
       uniform float uBend;
       uniform float uRipple;
+      uniform float uBank;
       uniform vec2 uFolds[8];
       attribute float aBand;
       varying vec2 vUv;
@@ -73,6 +74,7 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
         vec2 sheet = -extent * 0.5 + preceding + localX * direction;
         p.x += sheet.x - position.x;
         p.z += sheet.y;
+        p.xy = mat2(cos(uBank), sin(uBank), -sin(uBank), cos(uBank)) * p.xy;
         vLight *= 1.0 - abs(direction.y) * (mod(leaf, 2.0) < 0.5 ? 0.06 : 0.14);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
       }
@@ -94,14 +96,15 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   let disposed = false;
   let ready = false;
   let lost = false;
-  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1 };
+  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0 };
   const render = (form: PhotoForm) => {
     current = { ...form };
-    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.ripple) > 0.001 || (form.recall > 0.001 && form.release < 0.999));
+    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.bank) > 0.001 || Math.abs(form.ripple) > 0.001 || (form.recall > 0.001 && form.release < 0.999));
     photo.toggleAttribute("data-surface-active", active);
     if (!active || disposed) return;
     material.uniforms.uBend.value = form.bend;
     material.uniforms.uRipple.value = form.ripple;
+    material.uniforms.uBank.value = form.bank;
     const folds = material.uniforms.uFolds.value;
     for (let i = 0; i < 8; i++) {
       // Release travels from the distant shore toward the boat on the left.
@@ -136,8 +139,11 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
       renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
       // Exercise the curved path as well as compilation before its first visible
       // use. Restore the real pose in this same task, before the browser paints.
-      render({ ...initial, bend: 0.38, ripple: 0.025, recall: 0.9, release: 0.35, zoom: 1.2 });
-      renderer.getContext().finish();
+      render({ ...initial, bend: 0.38, ripple: 0.025, recall: 0.9, release: 0.35, zoom: 1.2, bank: 0.044 });
+      const gl = renderer.getContext();
+      // Exercise readback as well: software compositors pay for this path when
+      // the hidden canvas first joins the visible CSS 3D scene.
+      gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
       render(initial);
     }).catch(() => { /* Preserve the DOM image if the optional shader fails. */ });
   });

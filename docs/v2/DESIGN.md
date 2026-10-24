@@ -197,6 +197,14 @@ the photograph changes the crop; vertical touch movement remains native scroll.
 Two small native buttons provide the same wide/closer choices for keyboard and
 touch access. They appear only during Gesture. No bottom chapter timeline returns.
 
+The photograph responds to horizontal drag distance and speed with a restrained
+signed curl and bank. Pressure follows the hand directly, then settles over 600ms
+with a non-oscillating release. This temporary shape is composed with the existing
+scroll pose; only the framing is remembered. Cancellation rolls back the unfinished
+choice, and leaving Gesture clears pressure before the next act. Keyboard and
+reduced-motion choices are immediate. Without WebGL, the DOM photograph supplies
+a small perspective/bank response. Vertical scrolling and pinch zoom stay native.
+
 Framing is a component-local value, retained across responsive/preference rebuilds
 and cleared by reload or the ending's explicit reset. It is eased out during the
 fold, recalled before the query completes, then yields to the whole photograph

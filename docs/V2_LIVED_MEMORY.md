@@ -71,3 +71,38 @@ The final scroll safeguard preserved all 60 selected-framing PNGs byte-for-byte 
 ## Repository
 
 Work is isolated on `codex/v2-lived-memory`, starting at `5c8dd78037806e2d45d9c4cb9ccb11bb4c7f28a8`. Completed changes are committed locally; the final handoff records the ending SHA and working tree. Nothing is pushed, merged, deployed or published. V1 source, global styling, dependencies and photographic assets are unchanged.
+
+## Direct manipulation follow-up
+
+Following `a8139ab`, horizontal input also presses into the photographic material.
+Distance and filtered pointer speed produce a signed curl (up to 0.45 additional
+bend) and bank (up to 0.044 radians). Pressure follows input immediately and
+settles over 600ms with `power3.out`, without oscillation. The framing stays
+remembered; pressure is transient and never mutates the scroll timeline's pose.
+Cancellation restores the unfinished choice. Act exit, keyboard selection,
+responsive cleanup and reduced motion clear pressure immediately. The DOM image
+provides restrained perspective/bank feedback when WebGL is unavailable.
+
+The hand-response suite checks five viewports from 320x568 to 1440x900 in
+Chromium, Firefox and WebKit: signed/speed response, release, interruption,
+capture-loss rollback, act exit, pixel-identical scroll replay, keyboard/reduced
+motion and absent-WebGL behavior. The existing memory suite passes all three
+engines, including inspection fit at eleven sizes and Chromium emulated touch
+drag/native vertical scroll. The surface lifecycle suite also passes. Physical
+phones and actual Safari remain untested.
+
+Profiling found a 106-142ms first-drag task in Chromium's WebGL readback/commit
+path. Optional initialization now exercises a banked pose and one-pixel readback
+before restoring the real image in the same task. This moves work to initialization.
+Final serial drag measurements recorded no long tasks: p95 16.8ms at both
+1440x900 and 390x844; maximum intervals 33.4ms and 16.8ms respectively. These are
+local rAF measurements, not presented GPU-frame or physical-device guarantees.
+Entry JavaScript is 158,672 gzip bytes; optional rendering is 138,054 bytes.
+No assets, dependencies, idle loop or per-frame React updates were added.
+
+[Desktop mouse recording](v2-hand-evidence/desktop.mp4) and
+[emulated touch recording](v2-hand-evidence/mobile.mp4) show actual input,
+release/reversal and continued scroll into the remembered framing. Evidence and
+measurements are in `docs/v2-hand-evidence/`; raw probes are ignored under
+`output/playwright/hand-response/`. This follow-up is included in the
+`codex/v2-lived-memory` review branch alongside the complete V2 experience.
