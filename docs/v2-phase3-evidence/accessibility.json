@@ -1,0 +1,151 @@
+{
+  "scope": "Focused semantics, keyboard focus, readable content, essential text palette contrast. No full WCAG or screen-reader compliance claim.",
+  "contrast": [
+    {
+      "color": "#e8e6e3",
+      "background": "#0a0a0b",
+      "ratio": 15.89,
+      "AA_normal": true
+    },
+    {
+      "color": "#e8e6e3",
+      "background": "#111112",
+      "ratio": 15.15,
+      "AA_normal": true
+    },
+    {
+      "color": "#aaa69e",
+      "background": "#0a0a0b",
+      "ratio": 8.16,
+      "AA_normal": true
+    },
+    {
+      "color": "#aaa69e",
+      "background": "#111112",
+      "ratio": 7.78,
+      "AA_normal": true
+    },
+    {
+      "color": "#b0aba2",
+      "background": "#0a0a0b",
+      "ratio": 8.66,
+      "AA_normal": true
+    },
+    {
+      "color": "#b0aba2",
+      "background": "#111112",
+      "ratio": 8.26,
+      "AA_normal": true
+    },
+    {
+      "color": "#97938b",
+      "background": "#0a0a0b",
+      "ratio": 6.47,
+      "AA_normal": true
+    },
+    {
+      "color": "#97938b",
+      "background": "#111112",
+      "ratio": 6.17,
+      "AA_normal": true
+    },
+    {
+      "color": "#e8a33d",
+      "background": "#0a0a0b",
+      "ratio": 9.18,
+      "AA_normal": true
+    },
+    {
+      "color": "#e8a33d",
+      "background": "#111112",
+      "ratio": 8.75,
+      "AA_normal": true
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "skipFocus": {
+        "name": "Skip animation and read the story",
+        "outline": "rgb(232, 163, 61) solid 2px",
+        "visible": true,
+        "hasFocus": true,
+        "matchesFocus": true,
+        "height": 44,
+        "y": 16,
+        "bottom": 60,
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "transition": "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)"
+      },
+      "semantics": {
+        "lang": "en",
+        "h1": 1,
+        "h2": 1,
+        "acts": 5,
+        "cameraHidden": "true",
+        "readingWidth": 1209.625,
+        "overflow": false
+      },
+      "note": ""
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "skipFocus": {
+        "name": "Skip animation and read the story",
+        "outline": "rgb(232, 163, 61) solid 2px",
+        "visible": true,
+        "hasFocus": true,
+        "matchesFocus": true,
+        "height": 44,
+        "y": 16,
+        "bottom": 60,
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "transition": "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)"
+      },
+      "semantics": {
+        "lang": "en",
+        "h1": 1,
+        "h2": 1,
+        "acts": 5,
+        "cameraHidden": "true",
+        "readingWidth": 268.8125,
+        "overflow": false
+      },
+      "note": ""
+    },
+    {
+      "width": 640,
+      "height": 400,
+      "skipFocus": {
+        "name": "Skip animation and read the story",
+        "outline": "rgb(232, 163, 61) solid 2px",
+        "visible": true,
+        "hasFocus": true,
+        "matchesFocus": true,
+        "height": 44,
+        "y": 16,
+        "bottom": 60,
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "transition": "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)"
+      },
+      "semantics": {
+        "lang": "en",
+        "h1": 1,
+        "h2": 1,
+        "acts": 5,
+        "cameraHidden": "true",
+        "readingWidth": 537.625,
+        "overflow": false
+      },
+      "note": "640x400 is a 200%-equivalent reflow viewport for1280x800; reading path checked, not physical browser zoom or cinematic fit."
+    }
+  ],
+  "aboutCurrentReading": true,
+  "metadata": {
+    "canonical": "https://invisible-interfaces.vercel.app/v2",
+    "og": "A cinematic, scroll-driven exploration of how human-computer interaction evolved. One photograph. Five relationships.",
+    "noindex": "noindex, nofollow"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "engine": "chromium",
+  "browser": "151.0.7922.34",
+  "direction_and_speed_response": true,
+  "weighted_settle_and_reverse_pixels": true,
+  "lost_capture_rollback": true,
+  "act_exit_clears_pressure": true,
+  "interruptible_release": true,
+  "immediate_keyboard_and_reduced_motion": true,
+  "webgl_unavailable_feedback": true,
+  "viewports": {
+    "1440x900": true,
+    "768x1024": true,
+    "390x844": true,
+    "375x667": true,
+    "320x568": true
+  },
+  "errors": []
+}

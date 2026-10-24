@@ -1,0 +1,1845 @@
+{
+  "base": "http://localhost:3002",
+  "runs": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mobileEmulation": false,
+      "errors": [],
+      "consoleErrors": [],
+      "browser": {
+        "protocolVersion": "1.3",
+        "product": "Chrome/156.0.8078.4",
+        "revision": "@f842f52ef39fd97b449eb27cff414bf05a98ddce",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "jsVersion": "15.6.75"
+      },
+      "status": 200,
+      "buildMarker": {
+        "aboutHref": "#v2-reading",
+        "scripts": [
+          "http://localhost:3002/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+          "http://localhost:3002/_next/static/chunks/255-2005b055456c798b.js",
+          "http://localhost:3002/_next/static/chunks/main-app-e7add8873b4fcee2.js",
+          "http://localhost:3002/_next/static/chunks/c15bf2b0-52e8419f34af26ab.js",
+          "http://localhost:3002/_next/static/chunks/674-11ce4e20ffeb7102.js",
+          "http://localhost:3002/_next/static/chunks/app/v2/page-5274031becb12835.js",
+          "http://localhost:3002/_next/static/chunks/polyfills-42372ed130431b0a.js",
+          "http://localhost:3002/_next/static/chunks/webpack-8c6e4cf20c311de7.js"
+        ],
+        "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+      },
+      "load": {
+        "nav": [
+          {
+            "name": "http://localhost:3002/v2",
+            "entryType": "navigation",
+            "startTime": 0,
+            "duration": 234.80000000074506,
+            "navigationId": 2997,
+            "initiatorType": "navigation",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "text/html",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.6000000014901161,
+            "domainLookupStart": 0.6000000014901161,
+            "domainLookupEnd": 0.6000000014901161,
+            "connectStart": 0.6000000014901161,
+            "secureConnectionStart": 0,
+            "connectEnd": 0.6000000014901161,
+            "requestStart": 1.300000000745058,
+            "responseStart": 49.100000001490116,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 49.100000001490116,
+            "responseEnd": 49.400000002235174,
+            "transferSize": 22454,
+            "encodedBodySize": 22154,
+            "decodedBodySize": 22154,
+            "responseStatus": 200,
+            "serverTiming": [],
+            "unloadEventStart": 0,
+            "unloadEventEnd": 0,
+            "domInteractive": 101.60000000149012,
+            "domContentLoadedEventStart": 101.69999999925494,
+            "domContentLoadedEventEnd": 102,
+            "domComplete": 234.30000000074506,
+            "loadEventStart": 234.30000000074506,
+            "loadEventEnd": 234.80000000074506,
+            "type": "navigate",
+            "redirectCount": 0,
+            "activationStart": 0,
+            "criticalCHRestart": 0,
+            "notRestoredReasons": null,
+            "confidence": {
+              "randomizedTriggerRate": 0.4994798,
+              "value": "low"
+            }
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://localhost:3002/v2/shore-dither.png",
+            "entryType": "resource",
+            "startTime": 55.69999999925494,
+            "duration": 13.300000000745058,
+            "navigationId": 2997,
+            "initiatorType": "link",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "image/png",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 55.69999999925494,
+            "domainLookupStart": 55.69999999925494,
+            "domainLookupEnd": 55.69999999925494,
+            "connectStart": 55.69999999925494,
+            "secureConnectionStart": 0,
+            "connectEnd": 55.69999999925494,
+            "requestStart": 59.69999999925494,
+            "responseStart": 68.30000000074506,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 68.30000000074506,
+            "responseEnd": 69,
+            "transferSize": 4754,
+            "encodedBodySize": 4454,
+            "decodedBodySize": 4454,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/v2/shore.webp",
+            "entryType": "resource",
+            "startTime": 56.100000001490116,
+            "duration": 22.199999999254942,
+            "navigationId": 2997,
+            "initiatorType": "link",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "image/webp",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 56.100000001490116,
+            "domainLookupStart": 67.19999999925494,
+            "domainLookupEnd": 67.19999999925494,
+            "connectStart": 67.19999999925494,
+            "secureConnectionStart": 0,
+            "connectEnd": 68.69999999925494,
+            "requestStart": 69.10000000149012,
+            "responseStart": 77.60000000149012,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 77.60000000149012,
+            "responseEnd": 78.30000000074506,
+            "transferSize": 191084,
+            "encodedBodySize": 190784,
+            "decodedBodySize": 190784,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/d3ebbfd689654d3a-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 106.69999999925494,
+            "duration": 13.100000001490116,
+            "navigationId": 2997,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 106.69999999925494,
+            "domainLookupStart": 108.60000000149012,
+            "domainLookupEnd": 108.60000000149012,
+            "connectStart": 108.60000000149012,
+            "secureConnectionStart": 0,
+            "connectEnd": 109.90000000223517,
+            "requestStart": 110.10000000149012,
+            "responseStart": 119.19999999925494,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 119.19999999925494,
+            "responseEnd": 119.80000000074506,
+            "transferSize": 10352,
+            "encodedBodySize": 10052,
+            "decodedBodySize": 10052,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/5611c55482296524-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 106.90000000223517,
+            "duration": 16.299999997019768,
+            "navigationId": 2997,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 106.90000000223517,
+            "domainLookupStart": 106.90000000223517,
+            "domainLookupEnd": 106.90000000223517,
+            "connectStart": 106.90000000223517,
+            "secureConnectionStart": 0,
+            "connectEnd": 106.90000000223517,
+            "requestStart": 114.10000000149012,
+            "responseStart": 122.69999999925494,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 122.69999999925494,
+            "responseEnd": 123.19999999925494,
+            "transferSize": 58452,
+            "encodedBodySize": 58152,
+            "decodedBodySize": 58152,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/4b9bb515ce6d026f-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 107,
+            "duration": 19.100000001490116,
+            "navigationId": 2997,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 107,
+            "domainLookupStart": 107,
+            "domainLookupEnd": 107,
+            "connectStart": 107,
+            "secureConnectionStart": 0,
+            "connectEnd": 107,
+            "requestStart": 116.90000000223517,
+            "responseStart": 125.69999999925494,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 125.69999999925494,
+            "responseEnd": 126.10000000149012,
+            "transferSize": 64800,
+            "encodedBodySize": 64500,
+            "decodedBodySize": 64500,
+            "responseStatus": 200,
+            "serverTiming": []
+          }
+        ],
+        "fontStatus": "loaded",
+        "faces": [
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader Fallback",
+            "weight": "normal",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "IBM Plex Mono Fallback",
+            "weight": "normal",
+            "style": "normal",
+            "status": "loaded"
+          }
+        ],
+        "images": [
+          {
+            "src": "http://localhost:3002/v2/shore-dither.png",
+            "complete": true,
+            "naturalWidth": 240,
+            "naturalHeight": 160,
+            "decoded": true
+          },
+          {
+            "src": "http://localhost:3002/v2/shore.webp",
+            "complete": true,
+            "naturalWidth": 1400,
+            "naturalHeight": 933,
+            "decoded": true
+          }
+        ]
+      },
+      "scrollDistance": 13500,
+      "before": {
+        "dom": {
+          "documents": 1,
+          "nodes": 585,
+          "jsEventListeners": 361
+        },
+        "heap": {
+          "usedSize": 4609860,
+          "totalSize": 5881856,
+          "embedderHeapUsedSize": 2384608,
+          "backingStorageSize": 680297
+        }
+      },
+      "forwardReverseStates": [
+        {
+          "scrollY": 13500,
+          "act": "4",
+          "progress": "1.0000"
+        },
+        {
+          "scrollY": 0,
+          "act": "0",
+          "progress": "0.0000"
+        }
+      ],
+      "normalScroll": {
+        "supported": [
+          "element",
+          "event",
+          "first-input",
+          "interaction-contentful-paint",
+          "largest-contentful-paint",
+          "layout-shift",
+          "long-animation-frame",
+          "longtask",
+          "mark",
+          "measure",
+          "navigation",
+          "paint",
+          "resource",
+          "soft-navigation",
+          "visibility-state"
+        ],
+        "longTasks": [],
+        "layoutShifts": [],
+        "start": 1054.1000000014901,
+        "end": 8989.60000000149,
+        "scrollY": 0,
+        "act": "0",
+        "documentId": "51c7b402-6c57-4b8b-90f2-b362d50942b9",
+        "rafTiming": {
+          "count": 930,
+          "meanMs": 8.52462365591398,
+          "p50Ms": 8.399999999999636,
+          "p95Ms": 11.199999999999818,
+          "maxMs": 34.90000000000009,
+          "over20ms": 4,
+          "over33_4ms": 1,
+          "over50ms": 0
+        },
+        "clsMaxSessionWindow": 0,
+        "layoutShiftTotalWithoutRecentInput": 0,
+        "longTaskTotalMs": 0
+      },
+      "normalMetricDelta": {
+        "Timestamp": 7.947384000002785,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 10,
+        "LayoutObjects": 0,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 0,
+        "Resources": 2,
+        "ContextLifecycleStateObservers": 0,
+        "V8PerContextDatas": 0,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 0,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 30,
+        "RecalcStyleCount": 922,
+        "LayoutDuration": 0.00541599999999999,
+        "RecalcStyleDuration": 0.166048,
+        "DevToolsCommandDuration": 0.0019169999999999986,
+        "ScriptDuration": 0.285914,
+        "V8CompileDuration": 0.0,
+        "TaskDuration": 1.4861229999999999,
+        "TaskOtherDuration": 1.0268279999999999,
+        "ThreadTime": 1.397196,
+        "ProcessTime": 2.856494,
+        "JSHeapUsedSize": 915956,
+        "JSHeapTotalSize": 2883584,
+        "FirstMeaningfulPaint": 0.0,
+        "DomContentLoaded": 0.0,
+        "NavigationStart": 0.0
+      },
+      "trace": {
+        "error": "Tracing.tracingComplete missing"
+      },
+      "memoryTraversals": [
+        {
+          "cycle": 1,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5218480,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2625784,
+            "backingStorageSize": 685903
+          }
+        },
+        {
+          "cycle": 2,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5222608,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2604752,
+            "backingStorageSize": 685903
+          }
+        },
+        {
+          "cycle": 3,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5222620,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2628864,
+            "backingStorageSize": 685903
+          }
+        },
+        {
+          "cycle": 4,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5222228,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2607408,
+            "backingStorageSize": 685903
+          }
+        },
+        {
+          "cycle": 5,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5226288,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2631304,
+            "backingStorageSize": 685903
+          }
+        },
+        {
+          "cycle": 6,
+          "states": [
+            {
+              "scrollY": 13500,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 5226964,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2593256,
+            "backingStorageSize": 685903
+          }
+        }
+      ],
+      "afterSixTraversals": {
+        "dom": {
+          "documents": 1,
+          "nodes": 585,
+          "jsEventListeners": 361
+        },
+        "heap": {
+          "usedSize": 5226964,
+          "totalSize": 6144000,
+          "embedderHeapUsedSize": 2593256,
+          "backingStorageSize": 685903
+        }
+      },
+      "stressStates": [
+        {
+          "scrollY": 13500,
+          "act": "4",
+          "progress": "1.0000"
+        },
+        {
+          "scrollY": 0,
+          "act": "0",
+          "progress": "0.0000"
+        }
+      ],
+      "cpu4xScroll": {
+        "supported": [
+          "element",
+          "event",
+          "first-input",
+          "interaction-contentful-paint",
+          "largest-contentful-paint",
+          "layout-shift",
+          "long-animation-frame",
+          "longtask",
+          "mark",
+          "measure",
+          "navigation",
+          "paint",
+          "resource",
+          "soft-navigation",
+          "visibility-state"
+        ],
+        "longTasks": [],
+        "layoutShifts": [],
+        "start": 22243.199999999255,
+        "end": 30102.800000000745,
+        "scrollY": 0,
+        "act": "0",
+        "documentId": "51c7b402-6c57-4b8b-90f2-b362d50942b9",
+        "rafTiming": {
+          "count": 710,
+          "meanMs": 11.051408450704225,
+          "p50Ms": 9.200000000000728,
+          "p95Ms": 17.899999999997817,
+          "maxMs": 41,
+          "over20ms": 9,
+          "over33_4ms": 2,
+          "over50ms": 0
+        },
+        "clsMaxSessionWindow": 0,
+        "layoutShiftTotalWithoutRecentInput": 0,
+        "longTaskTotalMs": 0
+      },
+      "cpu4xMetricDelta": {
+        "Timestamp": 7.867096999998466,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 0,
+        "LayoutObjects": 0,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 0,
+        "Resources": 0,
+        "ContextLifecycleStateObservers": 0,
+        "V8PerContextDatas": 0,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 0,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 28,
+        "RecalcStyleCount": 670,
+        "LayoutDuration": 0.024506,
+        "RecalcStyleDuration": 0.515449,
+        "DevToolsCommandDuration": 0.007056,
+        "ScriptDuration": 0.930108,
+        "V8CompileDuration": 0.0,
+        "TaskDuration": 4.706989,
+        "TaskOtherDuration": 3.2298700000000005,
+        "ThreadTime": 1.1829969999999999,
+        "ProcessTime": 10.167867000000001,
+        "JSHeapUsedSize": 597932,
+        "JSHeapTotalSize": 1572864,
+        "FirstMeaningfulPaint": 0.0,
+        "DomContentLoaded": 0.0,
+        "NavigationStart": 0.0
+      },
+      "stressTrace": {
+        "eventCount": 379220,
+        "selectedCounts": {
+          "ActivateLayerTree": 670,
+          "AnimationFrame": 2852,
+          "BeginFrame": 975,
+          "Commit": 1354,
+          "CompositeLayers": 0,
+          "DrawFrame": 906,
+          "EvaluateScript": 0,
+          "FireAnimationFrame": 2139,
+          "FunctionCall": 6978,
+          "Layout": 28,
+          "Paint": 590,
+          "PrePaint": 715,
+          "RasterTask": 903,
+          "RequestAnimationFrame": 2144,
+          "RunTask": 0,
+          "SubmitCompositorFrame": 0,
+          "UpdateLayoutTree": 670
+        },
+        "selectedInclusiveDurationMs": {
+          "ActivateLayerTree": 0.0,
+          "AnimationFrame": 0.0,
+          "BeginFrame": 0.0,
+          "Commit": 0.0,
+          "CompositeLayers": 0.0,
+          "DrawFrame": 0.0,
+          "EvaluateScript": 0.0,
+          "FireAnimationFrame": 216.25799999999933,
+          "FunctionCall": 1589.8989999999883,
+          "Layout": 22.699999999999996,
+          "Paint": 169.81799999999978,
+          "PrePaint": 336.8260000000001,
+          "RasterTask": 22.932999999999964,
+          "RequestAnimationFrame": 0.0,
+          "RunTask": 0.0,
+          "SubmitCompositorFrame": 0.0,
+          "UpdateLayoutTree": 513.5449999999997
+        },
+        "topCounts": [
+          [
+            "ThreadControllerImpl::RunTask",
+            32731
+          ],
+          [
+            "IOHandler::OnIOCompleted",
+            24459
+          ],
+          [
+            "SimpleWatcher::OnHandleReady",
+            11398
+          ],
+          [
+            "auto cc::LayerTreeHost::SetNeedsCommit(bool)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+            10872
+          ],
+          [
+            "Receive mojo message",
+            9233
+          ],
+          [
+            "EventLatency",
+            8404
+          ],
+          [
+            "GenerationToBrowserMain",
+            8404
+          ],
+          [
+            "BrowserMainToRendererCompositor",
+            8404
+          ],
+          [
+            "RendererCompositorQueueingDelay",
+            8404
+          ],
+          [
+            "RendererCompositorProcessing",
+            8254
+          ],
+          [
+            "ThreadPool_RunTask",
+            7521
+          ],
+          [
+            "FunctionCall",
+            6978
+          ],
+          [
+            "RenderSurfaceReasonCount",
+            6360
+          ],
+          [
+            "ScrollTree::SetScrollOffset",
+            5831
+          ],
+          [
+            "cc::TaskGraphWorkQueue::ScheduleTasks",
+            4976
+          ],
+          [
+            "EndActivateToSubmitCompositorFrame",
+            4976
+          ],
+          [
+            "SubmitCompositorFrameToPresentationCompositorFrame",
+            4976
+          ],
+          [
+            "SubmitToReceiveCompositorFrame",
+            4976
+          ],
+          [
+            "ReceiveCompositorFrameToStartDraw",
+            4972
+          ],
+          [
+            "StartDrawToSwapStart",
+            4972
+          ]
+        ],
+        "selectedThreads": {
+          "(31976, 7720)": 3905,
+          "(31976, 29264)": 16116,
+          "(31976, 10848)": 903
+        }
+      },
+      "navigationCycles": [
+        {
+          "cycle": 1,
+          "beforeDocumentId": "51c7b402-6c57-4b8b-90f2-b362d50942b9",
+          "aboutDocumentId": "06da8575-19ce-441a-831e-30563cc26d99",
+          "returnedDocumentId": "2fd3c8f0-117a-4649-9d34-ade3418b6e48",
+          "dom": {
+            "documents": 1,
+            "nodes": 582,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 4689192,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2393256,
+            "backingStorageSize": 680408
+          }
+        },
+        {
+          "cycle": 2,
+          "beforeDocumentId": "2fd3c8f0-117a-4649-9d34-ade3418b6e48",
+          "aboutDocumentId": "9f8278ec-fbeb-408e-9479-869a093e04ba",
+          "returnedDocumentId": "bd0fa361-882e-43ec-bd2c-7e9f1204b9a7",
+          "dom": {
+            "documents": 1,
+            "nodes": 583,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 4688608,
+            "totalSize": 5881856,
+            "embedderHeapUsedSize": 2416176,
+            "backingStorageSize": 680408
+          }
+        },
+        {
+          "cycle": 3,
+          "beforeDocumentId": "bd0fa361-882e-43ec-bd2c-7e9f1204b9a7",
+          "aboutDocumentId": "1768f584-341f-4c00-82dd-b391cfdfc9f0",
+          "returnedDocumentId": "fa93911d-f342-4386-ab58-0f4eb1a33568",
+          "dom": {
+            "documents": 1,
+            "nodes": 582,
+            "jsEventListeners": 361
+          },
+          "heap": {
+            "usedSize": 4690676,
+            "totalSize": 5881856,
+            "embedderHeapUsedSize": 2421040,
+            "backingStorageSize": 680408
+          }
+        }
+      ]
+    },
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mobileEmulation": true,
+      "errors": [],
+      "consoleErrors": [],
+      "browser": {
+        "protocolVersion": "1.3",
+        "product": "Chrome/156.0.8078.4",
+        "revision": "@f842f52ef39fd97b449eb27cff414bf05a98ddce",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "jsVersion": "15.6.75"
+      },
+      "status": 200,
+      "buildMarker": {
+        "aboutHref": "#v2-reading",
+        "scripts": [
+          "http://localhost:3002/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+          "http://localhost:3002/_next/static/chunks/255-2005b055456c798b.js",
+          "http://localhost:3002/_next/static/chunks/main-app-e7add8873b4fcee2.js",
+          "http://localhost:3002/_next/static/chunks/c15bf2b0-52e8419f34af26ab.js",
+          "http://localhost:3002/_next/static/chunks/674-11ce4e20ffeb7102.js",
+          "http://localhost:3002/_next/static/chunks/app/v2/page-5274031becb12835.js",
+          "http://localhost:3002/_next/static/chunks/polyfills-42372ed130431b0a.js",
+          "http://localhost:3002/_next/static/chunks/webpack-8c6e4cf20c311de7.js"
+        ],
+        "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"
+      },
+      "load": {
+        "nav": [
+          {
+            "name": "http://localhost:3002/v2",
+            "entryType": "navigation",
+            "startTime": 0,
+            "duration": 199.60000000149012,
+            "navigationId": 9064,
+            "initiatorType": "navigation",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "text/html",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 0.5,
+            "domainLookupStart": 0.5,
+            "domainLookupEnd": 0.5,
+            "connectStart": 0.5,
+            "secureConnectionStart": 0,
+            "connectEnd": 0.5,
+            "requestStart": 1.5,
+            "responseStart": 11.699999999254942,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 11.699999999254942,
+            "responseEnd": 12,
+            "transferSize": 22454,
+            "encodedBodySize": 22154,
+            "decodedBodySize": 22154,
+            "responseStatus": 200,
+            "serverTiming": [],
+            "unloadEventStart": 0,
+            "unloadEventEnd": 0,
+            "domInteractive": 136.89999999850988,
+            "domContentLoadedEventStart": 136.89999999850988,
+            "domContentLoadedEventEnd": 137.30000000074506,
+            "domComplete": 182.80000000074506,
+            "loadEventStart": 182.89999999850988,
+            "loadEventEnd": 199.60000000149012,
+            "type": "navigate",
+            "redirectCount": 0,
+            "activationStart": 0,
+            "criticalCHRestart": 0,
+            "notRestoredReasons": null,
+            "confidence": {
+              "randomizedTriggerRate": 0.4994798,
+              "value": "high"
+            }
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://localhost:3002/v2/shore-dither.png",
+            "entryType": "resource",
+            "startTime": 22,
+            "duration": 9,
+            "navigationId": 9064,
+            "initiatorType": "link",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "image/png",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 22,
+            "domainLookupStart": 22,
+            "domainLookupEnd": 22,
+            "connectStart": 22,
+            "secureConnectionStart": 0,
+            "connectEnd": 22,
+            "requestStart": 24.199999999254942,
+            "responseStart": 30.399999998509884,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 30.399999998509884,
+            "responseEnd": 31,
+            "transferSize": 4754,
+            "encodedBodySize": 4454,
+            "decodedBodySize": 4454,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/v2/shore.webp",
+            "entryType": "resource",
+            "startTime": 22.100000001490116,
+            "duration": 19.5,
+            "navigationId": 9064,
+            "initiatorType": "link",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "image/webp",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 22.100000001490116,
+            "domainLookupStart": 29.800000000745058,
+            "domainLookupEnd": 29.800000000745058,
+            "connectStart": 29.800000000745058,
+            "secureConnectionStart": 0,
+            "connectEnd": 30.800000000745058,
+            "requestStart": 31.100000001490116,
+            "responseStart": 40.100000001490116,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 40.100000001490116,
+            "responseEnd": 41.600000001490116,
+            "transferSize": 191084,
+            "encodedBodySize": 190784,
+            "decodedBodySize": 190784,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/d3ebbfd689654d3a-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 58.100000001490116,
+            "duration": 86.79999999701977,
+            "navigationId": 9064,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 58.100000001490116,
+            "domainLookupStart": 58.100000001490116,
+            "domainLookupEnd": 58.100000001490116,
+            "connectStart": 58.100000001490116,
+            "secureConnectionStart": 0,
+            "connectEnd": 58.100000001490116,
+            "requestStart": 137.30000000074506,
+            "responseStart": 144.69999999925494,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 144.69999999925494,
+            "responseEnd": 144.89999999850988,
+            "transferSize": 10352,
+            "encodedBodySize": 10052,
+            "decodedBodySize": 10052,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/5611c55482296524-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 58.19999999925494,
+            "duration": 87,
+            "navigationId": 9064,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 58.19999999925494,
+            "domainLookupStart": 58.19999999925494,
+            "domainLookupEnd": 58.19999999925494,
+            "connectStart": 58.19999999925494,
+            "secureConnectionStart": 0,
+            "connectEnd": 58.19999999925494,
+            "requestStart": 137.89999999850988,
+            "responseStart": 145.10000000149012,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 145.10000000149012,
+            "responseEnd": 145.19999999925494,
+            "transferSize": 58452,
+            "encodedBodySize": 58152,
+            "decodedBodySize": 58152,
+            "responseStatus": 200,
+            "serverTiming": []
+          },
+          {
+            "name": "http://localhost:3002/_next/static/media/4b9bb515ce6d026f-s.p.woff2",
+            "entryType": "resource",
+            "startTime": 58.30000000074506,
+            "duration": 86.30000000074506,
+            "navigationId": 9064,
+            "initiatorType": "css",
+            "deliveryType": "",
+            "nextHopProtocol": "http/1.1",
+            "renderBlockingStatus": "non-blocking",
+            "contentType": "",
+            "contentEncoding": "",
+            "workerStart": 0,
+            "workerRouterEvaluationStart": 0,
+            "workerCacheLookupStart": 0,
+            "workerMatchedSourceType": "",
+            "workerFinalSourceType": "",
+            "redirectStart": 0,
+            "redirectEnd": 0,
+            "fetchStart": 58.30000000074506,
+            "domainLookupStart": 58.30000000074506,
+            "domainLookupEnd": 58.30000000074506,
+            "connectStart": 58.30000000074506,
+            "secureConnectionStart": 0,
+            "connectEnd": 58.30000000074506,
+            "requestStart": 137.89999999850988,
+            "responseStart": 144.10000000149012,
+            "firstInterimResponseStart": 0,
+            "finalResponseHeadersStart": 144.10000000149012,
+            "responseEnd": 144.60000000149012,
+            "transferSize": 64800,
+            "encodedBodySize": 64500,
+            "decodedBodySize": 64500,
+            "responseStatus": 200,
+            "serverTiming": []
+          }
+        ],
+        "fontStatus": "loaded",
+        "faces": [
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "italic",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "italic",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "300",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "400",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader",
+            "weight": "500",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "Newsreader Fallback",
+            "weight": "normal",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "unloaded"
+          },
+          {
+            "family": "IBM Plex Mono",
+            "weight": "400",
+            "style": "normal",
+            "status": "loaded"
+          },
+          {
+            "family": "IBM Plex Mono Fallback",
+            "weight": "normal",
+            "style": "normal",
+            "status": "loaded"
+          }
+        ],
+        "images": [
+          {
+            "src": "http://localhost:3002/v2/shore-dither.png",
+            "complete": true,
+            "naturalWidth": 240,
+            "naturalHeight": 160,
+            "decoded": true
+          },
+          {
+            "src": "http://localhost:3002/v2/shore.webp",
+            "complete": true,
+            "naturalWidth": 1400,
+            "naturalHeight": 933,
+            "decoded": true
+          }
+        ]
+      },
+      "scrollDistance": 11394,
+      "before": {
+        "dom": {
+          "documents": 1,
+          "nodes": 585,
+          "jsEventListeners": 363
+        },
+        "heap": {
+          "usedSize": 4640848,
+          "totalSize": 5619712,
+          "embedderHeapUsedSize": 2239800,
+          "backingStorageSize": 680354
+        }
+      },
+      "forwardReverseStates": [
+        {
+          "scrollY": 11394,
+          "act": "4",
+          "progress": "1.0000"
+        },
+        {
+          "scrollY": 0,
+          "act": "0",
+          "progress": "0.0000"
+        }
+      ],
+      "normalScroll": {
+        "supported": [
+          "element",
+          "event",
+          "first-input",
+          "interaction-contentful-paint",
+          "largest-contentful-paint",
+          "layout-shift",
+          "long-animation-frame",
+          "longtask",
+          "mark",
+          "measure",
+          "navigation",
+          "paint",
+          "resource",
+          "soft-navigation",
+          "visibility-state"
+        ],
+        "longTasks": [],
+        "layoutShifts": [],
+        "start": 1006.1000000014901,
+        "end": 7717.39999999851,
+        "scrollY": 0,
+        "act": "0",
+        "documentId": "26f3a402-8c88-4415-8219-0d2a07d08a09",
+        "rafTiming": {
+          "count": 796,
+          "meanMs": 8.416080402010051,
+          "p50Ms": 8.399999999999864,
+          "p95Ms": 10,
+          "maxMs": 17.199999999999818,
+          "over20ms": 0,
+          "over33_4ms": 0,
+          "over50ms": 0
+        },
+        "clsMaxSessionWindow": 0,
+        "layoutShiftTotalWithoutRecentInput": 0,
+        "longTaskTotalMs": 0
+      },
+      "normalMetricDelta": {
+        "Timestamp": 6.716751000003569,
+        "AudioHandlers": 0,
+        "AudioWorkletProcessors": 0,
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 5,
+        "LayoutObjects": 0,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 0,
+        "Resources": 1,
+        "ContextLifecycleStateObservers": 0,
+        "V8PerContextDatas": 0,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 0,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 0,
+        "ArrayBufferContents": 0,
+        "LayoutCount": 27,
+        "RecalcStyleCount": 798,
+        "LayoutDuration": 0.004511000000000001,
+        "RecalcStyleDuration": 0.13144599999999998,
+        "DevToolsCommandDuration": 0.0018949999999999974,
+        "ScriptDuration": 0.23169800000000002,
+        "V8CompileDuration": 0.0,
+        "TaskDuration": 1.1215979999999999,
+        "TaskOtherDuration": 0.752048,
+        "ThreadTime": 1.0681180000000001,
+        "ProcessTime": 2.166296,
+        "JSHeapUsedSize": 685304,
+        "JSHeapTotalSize": 4718592,
+        "FirstMeaningfulPaint": 0.0,
+        "DomContentLoaded": 0.0,
+        "NavigationStart": 0.0
+      },
+      "trace": {
+        "eventCount": 361127,
+        "selectedCounts": {
+          "ActivateLayerTree": 756,
+          "AnimationFrame": 3192,
+          "BeginFrame": 814,
+          "Commit": 1536,
+          "CompositeLayers": 0,
+          "DrawFrame": 765,
+          "EvaluateScript": 0,
+          "FireAnimationFrame": 2375,
+          "FunctionCall": 7821,
+          "Layout": 27,
+          "Paint": 1185,
+          "PrePaint": 800,
+          "RasterTask": 1127,
+          "RequestAnimationFrame": 2380,
+          "RunTask": 0,
+          "SubmitCompositorFrame": 0,
+          "UpdateLayoutTree": 798
+        },
+        "selectedInclusiveDurationMs": {
+          "ActivateLayerTree": 0.0,
+          "AnimationFrame": 0.0,
+          "BeginFrame": 0.0,
+          "Commit": 0.0,
+          "CompositeLayers": 0.0,
+          "DrawFrame": 0.0,
+          "EvaluateScript": 0.0,
+          "FireAnimationFrame": 41.1650000000002,
+          "FunctionCall": 390.31099999999276,
+          "Layout": 4.291000000000001,
+          "Paint": 45.322000000000116,
+          "PrePaint": 71.82000000000005,
+          "RasterTask": 29.938000000000095,
+          "RequestAnimationFrame": 0.0,
+          "RunTask": 0.0,
+          "SubmitCompositorFrame": 0.0,
+          "UpdateLayoutTree": 131.22200000000004
+        },
+        "topCounts": [
+          [
+            "ThreadControllerImpl::RunTask",
+            29095
+          ],
+          [
+            "IOHandler::OnIOCompleted",
+            22481
+          ],
+          [
+            "auto cc::LayerTreeHost::SetNeedsCommit(bool)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+            11878
+          ],
+          [
+            "SimpleWatcher::OnHandleReady",
+            10546
+          ],
+          [
+            "Receive mojo message",
+            8555
+          ],
+          [
+            "FunctionCall",
+            7821
+          ],
+          [
+            "EventLatency",
+            7100
+          ],
+          [
+            "GenerationToBrowserMain",
+            7100
+          ],
+          [
+            "BrowserMainToRendererCompositor",
+            7100
+          ],
+          [
+            "RendererCompositorQueueingDelay",
+            7100
+          ],
+          [
+            "RendererCompositorProcessing",
+            6951
+          ],
+          [
+            "RenderSurfaceReasonCount",
+            6750
+          ],
+          [
+            "cc::TaskGraphWorkQueue::ScheduleTasks",
+            6077
+          ],
+          [
+            "ScrollTree::SetScrollOffset",
+            6055
+          ],
+          [
+            "EndActivateToSubmitCompositorFrame",
+            4586
+          ],
+          [
+            "SubmitCompositorFrameToPresentationCompositorFrame",
+            4578
+          ],
+          [
+            "SubmitToReceiveCompositorFrame",
+            4576
+          ],
+          [
+            "ReceiveCompositorFrameToStartDraw",
+            4576
+          ],
+          [
+            "StartDrawToSwapStart",
+            4576
+          ],
+          [
+            "Swap",
+            4576
+          ]
+        ],
+        "selectedThreads": {
+          "(21636, 13304)": 3863,
+          "(21636, 32368)": 18578,
+          "(21636, 3688)": 1085,
+          "(21636, 23796)": 42,
+          "(27440, 8500)": 8
+        }
+      },
+      "memoryTraversals": [
+        {
+          "cycle": 1,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5230956,
+            "totalSize": 5881856,
+            "embedderHeapUsedSize": 2476976,
+            "backingStorageSize": 685925
+          }
+        },
+        {
+          "cycle": 2,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5253468,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2491984,
+            "backingStorageSize": 685925
+          }
+        },
+        {
+          "cycle": 3,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5246916,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2514824,
+            "backingStorageSize": 685925
+          }
+        },
+        {
+          "cycle": 4,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5246832,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2492920,
+            "backingStorageSize": 685925
+          }
+        },
+        {
+          "cycle": 5,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5246584,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2523624,
+            "backingStorageSize": 685925
+          }
+        },
+        {
+          "cycle": 6,
+          "states": [
+            {
+              "scrollY": 11394,
+              "act": "4",
+              "progress": "1.0000"
+            },
+            {
+              "scrollY": 0,
+              "act": "0",
+              "progress": "0.0000"
+            }
+          ],
+          "dom": {
+            "documents": 1,
+            "nodes": 585,
+            "jsEventListeners": 363
+          },
+          "heap": {
+            "usedSize": 5255584,
+            "totalSize": 6144000,
+            "embedderHeapUsedSize": 2530808,
+            "backingStorageSize": 685925
+          }
+        }
+      ],
+      "afterSixTraversals": {
+        "dom": {
+          "documents": 1,
+          "nodes": 585,
+          "jsEventListeners": 363
+        },
+        "heap": {
+          "usedSize": 5255584,
+          "totalSize": 6144000,
+          "embedderHeapUsedSize": 2530808,
+          "backingStorageSize": 685925
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Headless Chromium on this machine; no actual phone or presented-frame counter.",
+    "Native scroll gestures are protocol scheduled input; rAF timing is callback cadence, not presented FPS.",
+    "Trace event inclusive durations may overlap and are not total CPU time.",
+    "No public GSAP/ScrollTrigger handle exposed, so trigger object counts cannot be queried without app/module instrumentation.",
+    "Current /v2 About anchor targets its reading section. Route probes use hard navigation and cannot prove SPA unmount cleanup.",
+    "GPU hardware/driver and real display characteristics not verified."
+  ],
+  "buildLabel": "Previous production build, captured before final short-height/tablet pose correction"
+}

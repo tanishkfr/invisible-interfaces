@@ -2,6 +2,32 @@
 
 The governing question is: does this spend attention on the thesis, or merely take it?
 
+## V2 cinematic extension
+
+The shared identity below still governs the preserved v1. `/v2` extends it with
+one native-scroll cinematic stage and a semantic reading room; its implemented
+route rules are recorded in [docs/v2/DESIGN.md](docs/v2/DESIGN.md).
+
+V2 retains Newsreader for human statements and IBM Plex Mono for machine
+evidence. Custom-font glyphs were verified in Chromium, with intended faces
+and matching measures corroborated by WebKit. No additional display font or
+fallback substitution is part of Phase 3.
+
+The red-boat photograph is the continuous focal anchor. Thin boundaries and
+shared CSS 3D geometry express depth; connector lines crossing readable text
+have been removed. Portrait context lives beneath the image. Short screens use
+fitted camera geometry, a distinct scroll-cue strip and visible chapter controls,
+without forcing a taller-than-viewport stage. Tablet context entrances retain
+side insets even during perspective movement.
+
+Illustrative terminal microtype is image-like evidence, not a reusable type
+token or an essential control. The complete narrative and generation disclosure
+remain available as semantic text. Reduced motion selects five composed states.
+V2 does not adopt v1's mandatory terminal or hidden-tab work interaction.
+
+The v1 scene-density and motion rules below describe the original exhibition,
+not v2's different scene structure.
+
 ## Typography
 
 Two voices only.

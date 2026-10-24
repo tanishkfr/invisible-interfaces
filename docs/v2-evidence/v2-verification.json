@@ -1,0 +1,51 @@
+{
+  "base_url": "http://localhost:3002",
+  "viewports": {
+    "1440x900": {
+      "no_overflow": true,
+      "sampled_states": 18
+    },
+    "768x1024": {
+      "no_overflow": true,
+      "sampled_states": 18
+    },
+    "390x844": {
+      "no_overflow": true,
+      "sampled_states": 18
+    },
+    "375x844": {
+      "no_overflow": true,
+      "sampled_states": 18
+    }
+  },
+  "limitations": [
+    "Emulated touch input; no physical phone or trackpad.",
+    "Frame intervals measure browser rAF, not display presentation or a low-end device."
+  ],
+  "browser": "151.0.7922.34",
+  "deterministic_states": 18,
+  "repeated_fast_scrub": true,
+  "persistent_dom_anchor": true,
+  "wheel_scroll": true,
+  "refresh_in_transition": true,
+  "direct_hash_entry": true,
+  "resize_rebuild": true,
+  "keyboard_chapter_navigation": true,
+  "reduced_motion_five_static_states": true,
+  "media_cleanup_and_restore": true,
+  "native_scroll_release": true,
+  "skip_animation": true,
+  "replay": true,
+  "refresh_after_chapter_navigation": true,
+  "emulated_touch_scroll": true,
+  "frame_intervals": {
+    "samples": 361,
+    "median_ms": 16.699999999999818,
+    "p95_ms": 16.700000000000728,
+    "over_33ms": 0,
+    "max_ms": 16.800000000000182,
+    "renderer": "WebKit WebGL"
+  },
+  "video": "output/playwright/v2-walkthrough.webm",
+  "page_errors": []
+}

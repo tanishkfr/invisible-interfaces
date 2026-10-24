@@ -1,40 +1,83 @@
 # Invisible Interfaces
 
-A measured interactive essay about attention leaving the interface—and what an invisible system owes us when we return.
+A cinematic, scroll-driven exploration of how human-computer interaction evolved.
+One red-boat photograph travels through command, window, gesture, anticipation
+and absence. Native scrolling controls the continuous film in either direction.
 
-One photograph travels through five relationships with computing:
+The current local v2 release candidate is at `/v2`. The original exhibition
+remains at `/`, with its distinct terminal and entrusted-task experiment intact.
+No push, merge, deployment or homepage replacement is part of this phase.
 
-1. attention is demanded;
-2. operation becomes pointing, touching, asking, and prediction;
-3. software begins acting before it is asked;
-4. the task is entrusted;
-5. absence returns as a tangible result, an authority boundary, and a reversible decision.
+## Experience and documentation
 
-The signature interaction is causal. After the visitor entrusts the restoration, work advances only while the tab is hidden. Returning early pauses the remaining work. Returning after completion reveals an original/restored comparison, a bounded work receipt, the system’s limits, and the visitor’s own local attention receipt.
+- [Lived memory: interactive motion and accountable ending](docs/V2_LIVED_MEMORY.md)
+- [Anticipation continuity: preceding checkpoint](docs/V2_ANTICIPATION_CONTINUITY.md)
+- [Cinematic refinement: preceding checkpoint](docs/V2_CINEMATIC_REFINEMENT.md)
+- [Director's cut: reference study, changes and acceptance](docs/V2_DIRECTORS_CUT.md)
+- [V2 case study](docs/V2_CASESTUDY.md)
+- [Phase 3 critique and corrections](docs/V2_PHASE3_CRITIQUE.md)
+- [Final acceptance and outstanding release gates](docs/V2_PHASE3_ACCEPTANCE.md)
+- [Creative direction](docs/V2_CREATIVE_DIRECTION.md) and [motion system](docs/V2_MOTION_SPEC.md)
+- [Route design system](docs/v2/DESIGN.md) and [shared visual system](VISUAL_SYSTEM.md)
+- [Photographic provenance](docs/V2_ASSET_PROVENANCE.md)
+- [Portfolio copy and media handoff](docs/V2_PORTFOLIO_HANDOFF.md)
+- [Genuine visitor evaluation guide and capture template](docs/V2_VISITOR_TESTING.md)
 
-## Release frames
+Current matched before/after films, desktop/mobile frames and verification are in
+`docs/v2-memory-evidence/`. The Lived memory report is the current
+creative/engineering checkpoint. Earlier phase reports and media remain historical
+checkpoints. Full captures and trial comparisons are in
+`output/playwright/lived-memory/` (ignored).
 
-![The solved terminal](docs/screenshots/terminal.png)
+## Run and build
 
-![The interface morph](docs/screenshots/morph.png)
+```powershell
+npm ci
+npm run dev
+# Production static export:
+npm run build
+npx tsc --noEmit
+```
 
-![The return receipt and restored comparison](docs/screenshots/return.png)
+The project uses Next.js/React/TypeScript, GSAP/ScrollTrigger and CSS 3D for v2,
+with one optional Three.js photographic sheet. The bottom timeline is replaced
+by a native Chapters disclosure. The ending can bring context back on request.
+V1 retains Motion. Security overrides for PostCSS and sharp are intentional;
+see the final acceptance report before changing them.
 
-## Privacy
+## Browser checks
 
-No analytics or remote agent is used. The attention ledger is stored only in session storage, returned to the visitor at the end, never transmitted, and deleted when the tab closes.
+Use Python Playwright with installed browser engines against a running export:
 
-## Run
+```powershell
+$env:II_BASE_URL='http://localhost:3002'
+$env:II_OUTPUT_DIR='output/playwright/lived-memory'
+$env:II_RECORD_VIDEO='0'
+python tests/e2e/test_v2_cinematic.py
+python tests/e2e/test_v2_memory.py
+python tests/e2e/inspect_v2_layout.py
+python tests/e2e/test_v2_surface.py
+```
 
-    npm install
-    npm run dev
+`II_BROWSER=firefox` or `webkit` chooses another engine.
+`II_BROWSER_EXECUTABLE` can select an installed executable. The suite covers
+deterministic forward/reverse states, rapid seeking, wheel/touch emulation,
+restoration, chapter/keyboard navigation, resize, reduced motion and native
+release. Layout inspection includes intermediate tablet widths, 320px screens,
+and transition states where resting-only tests miss clipping.
 
-Production verification:
+V1's existing scripts remain in `tests/e2e/`. Its preserved 320px machine-type
+assertion fails at 8.4px against 10px; this is a confirmed baseline issue, separate
+from v2's corrected narrow layouts.
 
-    npm run build
+## Privacy and disclosure
 
-## Test
+V2 uses authored contextual recall and an optional visit-local framing choice,
+with no inference, background work, analytics
+or attention ledger. Its fictional photographic scene was generated for the
+work, and every era representation derives from that one image. Fonts and images
+are local exported assets. V1's separate attention ledger remains session-only,
+is not transmitted and is removed when the tab closes.
 
-The browser walkthroughs live in tests/e2e and cover the opening, terminal, morph, anticipation scene, entrusted absence, keyboard navigation, mobile layout, reduced motion, copy integrity, and the About/404 routes.
-
-See CASESTUDY.md for the design argument and VISUAL_SYSTEM.md for the current exhibition system.
+The v1 case study is preserved in [CASESTUDY.md](CASESTUDY.md). For the current
+portfolio presentation, use the v2 case study linked above.

@@ -1,0 +1,36 @@
+{
+  "browser": "151.0.7922.34",
+  "engine": "chromium",
+  "keyboard_framing": true,
+  "real_mouse_drag": true,
+  "remembered_reverse_states": {
+    "79": 1.48,
+    "87": 1.0267,
+    "94": 1.0,
+    "96": 1.0355,
+    "98": 1.24,
+    "99": 1.3551,
+    "102": 1.48,
+    "106": 1.48,
+    "140": 1.0
+  },
+  "remembered_reverse_pixels": true,
+  "inspection_focus_trap_escape_and_scroll_restore": true,
+  "resize_and_reduced_motion_memory": true,
+  "reset_and_reload_clear_memory": true,
+  "inspection_layouts": {
+    "1440x900": true,
+    "1366x768": true,
+    "1280x800": true,
+    "932x908": true,
+    "768x1024": true,
+    "390x844": true,
+    "375x844": true,
+    "375x667": true,
+    "320x667": true,
+    "320x650": true,
+    "320x568": true
+  },
+  "emulated_touch_drag_and_native_scroll": true,
+  "page_and_console_errors": []
+}

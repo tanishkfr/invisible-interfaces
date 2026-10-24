@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "test": "v2-chromium",
+      "exit_code": 0
+    },
+    {
+      "test": "v2-firefox",
+      "exit_code": 0
+    },
+    {
+      "test": "v2-webkit",
+      "exit_code": 0
+    },
+    {
+      "test": "v2-layout",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_opening_terminal",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_morph",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_pinned_scenes",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_entrusted_task",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_keyboard",
+      "exit_code": 0
+    },
+    {
+      "test": "v1-test_responsive",
+      "exit_code": 1
+    }
+  ],
+  "notes": [
+    "Early Firefox route failure came from a directory-listing test server; corrected IPv4 export server used in final Firefox/WebKit runs.",
+    "WebKit refresh tests allow300ms native-scroll history settlement.",
+    "WebKit nativeTab policy limitation recorded in engine JSON.",
+    "V1 responsive failure is the known baseline320px typography assertion."
+  ]
+}
