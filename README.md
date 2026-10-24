@@ -4,9 +4,9 @@ A cinematic, scroll-driven exploration of how human-computer interaction evolved
 One red-boat photograph travels through command, window, gesture, anticipation
 and absence. Native scrolling controls the continuous film in either direction.
 
-The current local v2 release candidate is at `/v2`. The original exhibition
-remains at `/`, with its distinct terminal and entrusted-task experiment intact.
-No push, merge, deployment or homepage replacement is part of this phase.
+The cinematic V2 experience is the homepage at `/`. Existing `/v2` links remain
+available with the homepage as their canonical URL. The original exhibition is
+preserved at `/v1`, including its terminal and entrusted-task experiment.
 
 ## Experience and documentation
 

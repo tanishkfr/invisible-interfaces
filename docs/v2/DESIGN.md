@@ -59,7 +59,7 @@ components:
 
 **Creative North Star: "One photograph / five relationships"**
 
-This document records the implemented `/v2` route. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a five-act local release candidate, with an editorial title, an authored mechanical world, and a semantic reading room.
+This document records the cinematic exhibition, now served at `/` and retained at `/v2` for existing links. The original exhibition remains at `/v1`. It supplements the shared `design.md` and `VISUAL_SYSTEM.md`; it does not replace their authority or prescribe a new identity for other routes. The implementation is a five-act local release candidate, with an editorial title, an authored mechanical world, and a semantic reading room.
 
 One photograph remains recognizable as its representation changes from terminal data to a spatial archive, a touch surface, contextual memory, and a final image without surrounding controls. Near-black space, warm machine light, and two typographic voices connect the acts. Native scrolling advances the exhibition; a compact native Chapters disclosure offers direct access to resting states. The bottom timeline has been removed at the owner's request.
 
