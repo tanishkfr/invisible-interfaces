@@ -3,7 +3,7 @@ import {
   SRGBColorSpace, TextureLoader, WebGLRenderer,
 } from "three";
 
-export type PhotoForm = { bend: number; ripple: number; recall: number; release: number; zoom: number; bank: number };
+export type PhotoForm = { bend: number; ripple: number; recall: number; release: number; zoom: number; bank: number; peel: number; tension: number; gripX: number; gripY: number; recoil: number };
 
 /** One scroll-driven sheet, inside the existing CSS camera. No animation loop. */
 export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement) {
@@ -39,11 +39,15 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   const material = new ShaderMaterial({
     side: DoubleSide,
     transparent: true,
-    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uBank: { value: 0 }, uFolds: { value: new Float32Array([.25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0]) }, uZoom: { value: 1 } },
+    uniforms: { uImage: { value: null }, uBend: { value: 0 }, uRipple: { value: 0 }, uBank: { value: 0 }, uPeel: { value: 0 }, uTension: { value: 0 }, uGrip: { value: new Float32Array([0.5, 0.5]) }, uRecoil: { value: 0 }, uFolds: { value: new Float32Array([.25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0, .25, 0]) }, uZoom: { value: 1 } },
     vertexShader: `
       uniform float uBend;
       uniform float uRipple;
       uniform float uBank;
+      uniform float uPeel;
+      uniform float uTension;
+      uniform vec2 uGrip;
+      uniform float uRecoil;
       uniform vec2 uFolds[8];
       attribute float aBand;
       varying vec2 vUv;
@@ -74,7 +78,23 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
         vec2 sheet = -extent * 0.5 + preceding + localX * direction;
         p.x += sheet.x - position.x;
         p.z += sheet.y;
+        // A diagonal ridge peels the image out of its frame, then crosses it in
+        // reverse as the final enclosure releases. Both endpoints remain flat.
+        float crest = exp(-pow((uv.x * 0.65 + uv.y * 0.35 - (1.0 - uPeel)) * 4.0, 2.0));
+        float peel = sin(uPeel * 3.14159265) * crest;
+        p.z += peel * 0.38;
+        p.y += peel * (uv.y - 0.5) * 0.045;
+        // Pressure stays near the actual grip. On release, a small crease runs
+        // away from that point while the tension drains out of the same sheet.
+        vec2 fromGrip = (uv - uGrip) * vec2(1.0, 0.85);
+        float distance = length(fromGrip);
+        float pressure = exp(-dot(fromGrip, fromGrip) * 9.0);
+        float recoil = sin(distance * 10.0 - uRecoil * 5.0) * sin(uRecoil * 3.14159265);
+        p.z += abs(uTension) * pressure * (0.48 + recoil * 0.08);
+        p.x += uTension * pressure * 0.065;
+        p.y += uTension * pressure * (uGrip.y - 0.5) * 0.08;
         p.xy = mat2(cos(uBank), sin(uBank), -sin(uBank), cos(uBank)) * p.xy;
+        vLight *= 1.0 - peel * 0.09 - abs(uTension) * pressure * 0.08;
         vLight *= 1.0 - abs(direction.y) * (mod(leaf, 2.0) < 0.5 ? 0.06 : 0.14);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
       }
@@ -96,15 +116,20 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
   let disposed = false;
   let ready = false;
   let lost = false;
-  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0 };
+  let current: PhotoForm = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0, peel: 0, tension: 0, gripX: 0.5, gripY: 0.5, recoil: 0 };
   const render = (form: PhotoForm) => {
     current = { ...form };
-    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.bank) > 0.001 || Math.abs(form.ripple) > 0.001 || (form.recall > 0.001 && form.release < 0.999));
+    const active = ready && !lost && (Math.abs(form.bend) > 0.001 || Math.abs(form.bank) > 0.001 || Math.abs(form.tension) > 0.001 || (form.peel > 0.001 && form.peel < 0.999) || Math.abs(form.ripple) > 0.001 || (form.recall > 0.001 && form.release < 0.999));
     photo.toggleAttribute("data-surface-active", active);
     if (!active || disposed) return;
     material.uniforms.uBend.value = form.bend;
     material.uniforms.uRipple.value = form.ripple;
     material.uniforms.uBank.value = form.bank;
+    material.uniforms.uPeel.value = form.peel;
+    material.uniforms.uTension.value = form.tension;
+    material.uniforms.uGrip.value[0] = form.gripX;
+    material.uniforms.uGrip.value[1] = form.gripY;
+    material.uniforms.uRecoil.value = form.recoil;
     const folds = material.uniforms.uFolds.value;
     for (let i = 0; i < 8; i++) {
       // Release travels from the distant shore toward the boat on the left.
@@ -139,7 +164,7 @@ export function createPhotoSurface(canvas: HTMLCanvasElement, photo: HTMLElement
       renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
       // Exercise the curved path as well as compilation before its first visible
       // use. Restore the real pose in this same task, before the browser paints.
-      render({ ...initial, bend: 0.38, ripple: 0.025, recall: 0.9, release: 0.35, zoom: 1.2, bank: 0.044 });
+      render({ ...initial, bend: 0.38, ripple: 0.025, recall: 0.9, release: 0.35, zoom: 1.2, bank: 0.044, peel: 0.5, tension: 0.7, recoil: 0.4 });
       const gl = renderer.getContext();
       // Exercise readback as well: software compositors pay for this path when
       // the hidden canvas first joins the visible CSS 3D scene.

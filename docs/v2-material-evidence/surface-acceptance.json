@@ -1,0 +1,21 @@
+{
+  "browser": "151.0.7922.34",
+  "webgl_rendered": true,
+  "reverse_pixel_match": true,
+  "context_loss_fallback_and_restore": true,
+  "reduced_motion_rebuild": true,
+  "reverse_pixel_states": [
+    67,
+    87,
+    94,
+    96,
+    98
+  ],
+  "chapters_menu_viewports": 4,
+  "simulated_webgl_unavailable": true,
+  "console_errors": [],
+  "source_pixels": [
+    1536,
+    1024
+  ]
+}

@@ -27,10 +27,12 @@ Native scroll → section progress → paused 140-unit timeline
 | 0–11.5 | Opening poster yields; approach terminal; command thought |
 | 12–20 | Terminal surface recedes; glyphs separate into foreground/background depth; stronger desktop approach |
 | 20–30 | Same glyphs assemble window perimeter; image grows into dither |
+| 26–54 | One set of amber corners marks the archive window, contracts with the selected photograph and withdraws at the touch boundary |
 | 29–36 | Window and pointer observation plateau |
 | 37–45 | Sideways camera arc; archive windows pass at different depth planes |
 | 41–56 | Selected photograph lifts out of the archive plane; chrome withdraws; enclosure becomes a landscape touch surface |
 | 55–61 | Touch ring establishes proximity; colour representation arrives; optional native framing controls become available |
+| 54–61 | A diagonal material ridge peels the photograph free of the archive; flat endpoints preserve the handoff |
 | 61–79 | Close photographic approach; opposing banks and material bend; caption yields; image and enclosure settle at larger scale |
 | 79–81 | Gesture observation plateau |
 | 81–94 | Touch plane folds away; photograph bows, then forms a connected concertina through a camera orbit |
@@ -39,6 +41,7 @@ Native scroll → section progress → paused 140-unit timeline
 | 100–106 | Photograph gently settles; focus opens to the whole memory; existing context gathers from depth, followed by query completion at 102–105 |
 | 106–112 | Anticipation observation composition with connected memory and provenance |
 | 113–128 | Context recedes into negative Z; transparent enclosure passes the viewer; masthead withdraws; photograph approaches closely |
+| 116–126 | The diagonal ridge crosses in reverse as the last enclosure releases; recognition corners have already withdrawn |
 | 128–134 | Photograph settles from the close approach to the final editorial composition |
 | 134–140 | Closing thought and optional return-to-context link arrive; stillness |
 
@@ -50,11 +53,24 @@ withdraws over 81–88, returns over 95–101, holds through 113, and releases t
 original full photograph over 113–128. It survives media rebuilds, clears on
 reload, and can be explicitly reset. Input never adds React updates per frame.
 
+The picked region supplies a temporary grip coordinate. Distance and filtered
+pointer speed drive local pressure and a restrained whole-sheet bank; a small
+crease travels away from the grip during the 700ms `power3.out` release. Only the
+crop is retained. Pressure clears on cancellation, act exit, keyboard selection
+and media cleanup. Illustrative touch chrome yields until pressure has drained,
+preventing a lifted image from crossing its heading. Native vertical scroll and
+pinch zoom remain available; unavailable WebGL retains DOM perspective feedback.
+
 Why this image opens a native dialog at the ending. Context travels outward
-from the image, and an amber boundary returns around the existing photograph.
+from the image. The same corner element expands from its edge into a frame around
+the explanation, leaving the photograph itself still. Pointer opening uses 900ms
+`power3.inOut` geometry and staggered context; closing contracts in 550ms. The
+opening/closing transforms restore the prior scroll pose exactly. Viewport resize
+closes inspection and retains the sticky ending position; reopening measures the
+new viewport. The framing choice remains visit-local and intact.
 The dialog identifies the actual framing/default, discloses authored recall,
-offers reset and closes without a timeline jump. Pointer entrances use 0.8s
-spatial easing; keyboard, Escape and reduced-motion actions are immediate.
+offers reset and closes without a timeline jump. Keyboard, Escape and
+reduced-motion actions are immediate.
 Modal focus wraps, reset preserves focus, and close explicitly restores focus.
 Body overflow and gutter compensation are restored on close/media cleanup.
 
@@ -72,7 +88,7 @@ Chapter state boundaries are 27, 55, 86 and 118. Navigation targets are 11.5,
 
 Opacity supports the material changes; spatial movement supplies the handoffs.
 Camera easing uses `power2`/`power3.inOut`; mechanical separation uses `steps(8)`;
-query completion `steps(14)`; gesture release `back.out(1.15)`. Reversing native
+query completion `steps(14)`; direct gesture release `power3.out`. Reversing native
 scroll rewinds the same timeline, without an independent autoplay clock.
 
 ## Responsive and accessible behavior
@@ -136,7 +152,8 @@ Navigation is a native top-right chapter disclosure, not a bottom timeline. The
 final optional return-to-context link uses the existing chapter jump path and
 restores visible keyboard focus to Chapters. No new mandatory journey is added.
 
-See [current verification](V2_LIVED_MEMORY.md) for evidence and limits.
+See [current material continuity verification](V2_MATERIAL_CONTINUITY.md) for evidence and limits.
+The [lived memory pass](V2_LIVED_MEMORY.md) records the preceding interaction checkpoint.
 The [Anticipation continuity pass](V2_ANTICIPATION_CONTINUITY.md) is the preceding checkpoint.
 The [cinematic refinement](V2_CINEMATIC_REFINEMENT.md) records the preceding pass.
 The [director's cut](V2_DIRECTORS_CUT.md) and [Phase 2 verification](V2_PHASE2_VERIFICATION.md)

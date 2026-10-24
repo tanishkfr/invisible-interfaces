@@ -10,7 +10,8 @@ preserved at `/v1`, including its terminal and entrusted-task experiment.
 
 ## Experience and documentation
 
-- [Lived memory: interactive motion and accountable ending](docs/V2_LIVED_MEMORY.md)
+- [Material continuity: local grips, scroll peels and accountable reconstruction](docs/V2_MATERIAL_CONTINUITY.md)
+- [Lived memory: preceding interactive motion and accountable ending](docs/V2_LIVED_MEMORY.md)
 - [Anticipation continuity: preceding checkpoint](docs/V2_ANTICIPATION_CONTINUITY.md)
 - [Cinematic refinement: preceding checkpoint](docs/V2_CINEMATIC_REFINEMENT.md)
 - [Director's cut: reference study, changes and acceptance](docs/V2_DIRECTORS_CUT.md)
@@ -23,11 +24,11 @@ preserved at `/v1`, including its terminal and entrusted-task experiment.
 - [Portfolio copy and media handoff](docs/V2_PORTFOLIO_HANDOFF.md)
 - [Genuine visitor evaluation guide and capture template](docs/V2_VISITOR_TESTING.md)
 
-Current matched before/after films, desktop/mobile frames and verification are in
-`docs/v2-memory-evidence/`. The Lived memory report is the current
+Current browser recordings, before/after frames and verification are in
+`docs/v2-material-evidence/`. The Material continuity report is the current
 creative/engineering checkpoint. Earlier phase reports and media remain historical
 checkpoints. Full captures and trial comparisons are in
-`output/playwright/lived-memory/` (ignored).
+`output/playwright/material/` (ignored).
 
 ## Run and build
 
@@ -55,6 +56,8 @@ $env:II_OUTPUT_DIR='output/playwright/lived-memory'
 $env:II_RECORD_VIDEO='0'
 python tests/e2e/test_v2_cinematic.py
 python tests/e2e/test_v2_memory.py
+python tests/e2e/test_v2_material.py
+python tests/e2e/test_v2_hand.py
 python tests/e2e/inspect_v2_layout.py
 python tests/e2e/test_v2_surface.py
 ```

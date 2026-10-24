@@ -197,9 +197,10 @@ the photograph changes the crop; vertical touch movement remains native scroll.
 Two small native buttons provide the same wide/closer choices for keyboard and
 touch access. They appear only during Gesture. No bottom chapter timeline returns.
 
-The photograph responds to horizontal drag distance and speed with a restrained
-signed curl and bank. Pressure follows the hand directly, then settles over 600ms
-with a non-oscillating release. This temporary shape is composed with the existing
+The photograph responds to horizontal drag distance and speed around the picked
+region, with local lift, a restrained bank and a crease travelling away on release.
+Pressure follows the hand directly, then settles over 700ms without oscillation.
+Illustrative touch chrome yields while pressure is present. This temporary shape is composed with the existing
 scroll pose; only the framing is remembered. Cancellation rolls back the unfinished
 choice, and leaving Gesture clears pressure before the next act. Keyboard and
 reduced-motion choices are immediate. Without WebGL, the DOM photograph supplies
@@ -214,15 +215,21 @@ The eight connected panels release from the far shore toward the boat. Cumulativ
 hinge positions keep shared edges together; this is one sheet, not independent
 strips. The same scroll timeline owns the release, including reversal.
 
+The same four corners mark the archive window, contract to the photograph's
+touch boundary, and later recognize the remembered boat. They withdraw before
+material bending. A diagonal ridge peels the image free during 54–61 and crosses
+in reverse during 116–126; both run from native scroll without requiring touch.
+
 At the ending, Why this image opens a native modal inspection around the same
-photograph. Context moves outward into the surrounding space; an amber perimeter
-returns. It identifies the visitor's framing or the authored default, discloses
+photograph. Its existing corners expand into the surrounding space, followed by
+the explanation. Closing contracts the frame back to the image. It identifies the visitor's framing or the authored default, discloses
 generation/authored recall and offers reset. Closing withdraws that information
 without changing scroll position. Escape, focus wrapping/restoration, immediate
 keyboard actions and reduced motion are supported. Short phones arrange concise
 context below the image, retaining readable controls without overlap.
 
-See [interactive motion acceptance](../V2_LIVED_MEMORY.md).
+See [material continuity acceptance](../V2_MATERIAL_CONTINUITY.md) and the
+[preceding interactive motion acceptance](../V2_LIVED_MEMORY.md).
 
 ### Machine artifacts and context
 
