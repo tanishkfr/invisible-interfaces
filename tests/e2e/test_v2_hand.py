@@ -59,7 +59,7 @@ with sync_playwright() as p:
         page.mouse.up()
         page.wait_for_timeout(150)
         assert 0 < pull() < held
-        page.wait_for_timeout(550)
+        page.wait_for_timeout(650)
         assert pull() == 0
         assert page.locator(".v2-photo[data-surface-active]").count() == 0
         settled = page.screenshot(path=str(OUT / f"{engine}-{w}x{h}-settled.png"))
@@ -126,7 +126,7 @@ with sync_playwright() as p:
     assert page.locator(".v2-color").evaluate("e=>getComputedStyle(e).visibility") == "visible"
     page.screenshot(path=str(OUT / f"{engine}-fallback-held.png"))
     page.mouse.up()
-    page.wait_for_timeout(700)
+    page.wait_for_timeout(800)
     assert pull() == 0
     page.close()
     page = original

@@ -1,0 +1,19 @@
+{
+  "engine": "chromium",
+  "browser": "151.0.7922.34",
+  "scroll_material_reverse_pixels": true,
+  "shared_corner_node": true,
+  "grip_region_changes_surface": true,
+  "pressure_yields_illustrative_controls": true,
+  "inspection_opens_and_reverses_geometry": true,
+  "keyboard_and_reduced_motion": true,
+  "act_change_restores_correct_pose": true,
+  "resize_returns_to_photo_and_reopens_fitted": true,
+  "inspection_viewports": {
+    "1440x900": true,
+    "768x1024": true,
+    "375x667": true,
+    "320x568": true
+  },
+  "errors": []
+}

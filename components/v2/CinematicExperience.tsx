@@ -66,7 +66,7 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-memory-index"), { opacity: 0, x: 0, y: -40, z: -180, rotationX: 55 });
       gsap.set(select(".v2-touch-ui"), { x: 0, y: 0, z: 6 });
       gsap.set(select(".v2-query-completion"), { clipPath: "inset(0 100% 0 0)" });
-      gsap.set(select(".v2-photo-focus"), { opacity: 0, scale: 1.15, transformOrigin: "50% 50%" });
+      gsap.set(select(".v2-photo-focus"), { opacity: 0, x: compact ? 0 : -110, y: compact ? -30 : -12, scaleX: shellW / photoW, scaleY: shellH / photoH, transformOrigin: "50% 50%" });
       gsap.set(select(".v2-window-bar, .v2-files, .v2-dither, .v2-color, .v2-touch-ui, .v2-context, .v2-pointer, .v2-thought, .v2-final"), { opacity: 0 });
       gsap.set(select(".v2-final"), { autoAlpha: 0 });
       gsap.set(select(".v2-satellite"), { opacity: 0, transformPerspective: 1200 });
@@ -74,7 +74,7 @@ export default function CinematicExperience() {
       gsap.set(select(".v2-glyph-letter"), { opacity: 1 });
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      const form = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0 };
+      const form = { bend: 0, ripple: 0, recall: 0, release: 0, zoom: 1, bank: 0, peel: 0, tension: 0, gripX: 0.5, gripY: 0.5, recoil: 0 };
       let surface: ReturnType<typeof createPhotoSurface> | undefined;
       let cancelled = false;
       // Load the renderer separately. Failure leaves the original photograph intact.
@@ -85,7 +85,9 @@ export default function CinematicExperience() {
           paintFraming();
         } catch { /* WebGL is optional; CSS spatial choreography remains complete. */ }
       }).catch(() => { /* A failed optional chunk must not interrupt the exhibition. */ });
-      timeline.to(form, { bend: compact ? 0.16 : 0.38, ripple: compact ? 0.025 : 0.06, duration: 7, ease: "power2.inOut" }, 61)
+      timeline.to(form, { peel: 1, duration: 7, ease: "power2.inOut" }, 54)
+        .to(form, { peel: 0, duration: 10, ease: "power2.inOut" }, 116)
+        .to(form, { bend: compact ? 0.16 : 0.38, ripple: compact ? 0.025 : 0.06, duration: 7, ease: "power2.inOut" }, 61)
         .to(form, { bend: compact ? -0.1 : -0.22, ripple: 0.015, duration: 7, ease: "power2.inOut" }, 68)
         .to(form, { bend: 0, ripple: 0, duration: 4, ease: "power2.out" }, 75)
         .to(form, { bend: compact ? 0.75 : 1.25, ripple: 0.025, duration: 6, ease: "power2.inOut" }, 81)
@@ -119,6 +121,11 @@ export default function CinematicExperience() {
           .to(glyph, { opacity: 0, duration: 2 }, 28);
       });
       timeline.to(select(".v2-photo"), { scale: 1, duration: 9, ease: "power3.inOut" }, 19)
+        // The same four corners leave the window, settle around touch, and later
+        // find the remembered subject. They never become a second frame system.
+        .to(select(".v2-photo-focus"), { opacity: 0.55, duration: 3 }, 26)
+        .to(select(".v2-photo-focus"), { x: 0, y: 0, scaleX: 1.08, scaleY: 1.08, duration: 9, ease: "power3.inOut" }, 43)
+        .to(select(".v2-photo-focus"), { scaleX: 1, scaleY: 1, opacity: 0, duration: 2 }, 52)
         .to(select(".v2-dither"), { opacity: 1, duration: 5 }, 20)
         .to(select(".v2-shell"), { backgroundColor: "#141414", borderColor: "#68645c", duration: 5 }, 22)
         .to(select(".v2-shell"), { opacity: 1, duration: 3 }, 26)
@@ -198,7 +205,8 @@ export default function CinematicExperience() {
         .to(select(".v2-shell"), { opacity: 0.4, duration: 3 }, 113)
         .to(select(".v2-shell"), { z: compact ? 250 : 600, scaleX: compact ? 1.4 : 1.65, scaleY: 1.35, duration: 12, ease: "power2.inOut" }, 113)
         .to(select(".v2-shell"), { opacity: 0, duration: 3 }, 122)
-        .to(select(".v2-photo-focus"), { scale: 0.75, opacity: 0, duration: 10 }, 115)
+        .to(select(".v2-photo-focus"), { opacity: 0, duration: 1.5 }, 114.5)
+        .to(select(".v2-photo-focus"), { scale: 0.75, duration: 10 }, 115)
         .to(select(".v2-photo"), { scale: compact ? 1.34 : tablet ? 1.65 : 2.35, z: compact ? 30 : tablet ? 45 : 140, y: compact ? -48 : -92, borderRadius: 1, duration: 10, ease: "power2.inOut" }, 118)
         .to(select(".v2-photo"), { scale: compact ? 1.12 : tablet ? 1.45 : 1.62, z: 4, y: compact ? -70 : -145, duration: 6, ease: "power2.inOut" }, 128)
         .to(select(".v2-header, .v2-side-note"), { autoAlpha: 0, duration: 7 }, 120)
@@ -207,6 +215,7 @@ export default function CinematicExperience() {
       const photo = el.querySelector<HTMLElement>(".v2-photo")!;
       const image = el.querySelector<HTMLElement>(".v2-color img")!;
       const color = el.querySelector<HTMLElement>(".v2-color")!;
+      const focus = el.querySelector<HTMLElement>(".v2-photo-focus")!;
       const framing = el.querySelector<HTMLElement>(".v2-framing")!;
       const frameButtons = Array.from(framing.querySelectorAll<HTMLButtonElement>("button"));
       const status = el.querySelector<HTMLElement>(".v2-framing-status")!;
@@ -218,9 +227,10 @@ export default function CinematicExperience() {
       let sceneTime = 0;
       let frameTween: gsap.core.Tween | undefined;
       // Temporary hand pressure is composed with, never written into, the scroll pose.
-      const hand = { pull: 0 };
+      const hand = { pull: 0, x: 0.5, y: 0.5, recoil: 0 };
       let handTween: gsap.core.Tween | undefined;
-      let inspectionTween: gsap.core.Tween | undefined;
+      let inspectionTween: gsap.core.Timeline | undefined;
+      let inspectionPose: Record<string, string | number> | undefined;
       let previousOverflow = "";
       let previousPadding = "";
       let lastZoom = -1;
@@ -237,14 +247,15 @@ export default function CinematicExperience() {
         if (hand.pull !== lastPull) {
           // The DOM photograph also responds if the optional GPU surface is absent.
           color.style.transform = hand.pull ? `perspective(700px) rotateY(${hand.pull * 5}deg) rotateZ(${-hand.pull * 2.5}deg)` : "";
+          photo.toggleAttribute("data-pressure", hand.pull !== 0);
           lastPull = hand.pull;
         }
-        surface?.render({ ...form, bend: form.bend + hand.pull * 0.45, bank: hand.pull * 0.044 });
+        surface?.render({ ...form, bend: form.bend + hand.pull * 0.16, bank: hand.pull * 0.044, tension: hand.pull, gripX: hand.x, gripY: 1 - hand.y, recoil: hand.recoil });
       };
       const settleHand = (immediate = false) => {
         handTween?.kill();
-        if (immediate || reduced || hand.pull === 0) { hand.pull = 0; paintFraming(); }
-        else handTween = gsap.to(hand, { pull: 0, duration: 0.6, ease: "power3.out", onUpdate: paintFraming });
+        if (immediate || reduced || hand.pull === 0) { hand.pull = 0; hand.recoil = 0; paintFraming(); }
+        else handTween = gsap.to(hand, { pull: 0, recoil: 1, duration: 0.7, ease: "power3.out", onUpdate: paintFraming });
       };
       const describeFraming = () => {
         const close = memory.current.value > 0.5;
@@ -272,6 +283,11 @@ export default function CinematicExperience() {
         if (framing.hidden || !event.isPrimary || event.button !== 0) return;
         frameTween?.kill();
         handTween?.kill();
+        const bounds = photo.getBoundingClientRect();
+        hand.x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+        hand.y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
+        hand.recoil = 0;
+        color.style.transformOrigin = `${hand.x * 100}% ${hand.y * 100}%`;
         drag = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, at: event.timeStamp, velocity: 0, value: memory.current.value, chosen: memory.current.chosen, moved: false };
         photo.setPointerCapture(event.pointerId);
       };
@@ -309,6 +325,8 @@ export default function CinematicExperience() {
       const finishInspection = () => {
         if (!dialog.open) return;
         dialog.close();
+        if (inspectionPose) gsap.set(focus, inspectionPose);
+        inspectionPose = undefined;
         delete el.dataset.inspecting;
         document.body.style.overflow = previousOverflow;
         document.body.style.paddingRight = previousPadding;
@@ -318,7 +336,20 @@ export default function CinematicExperience() {
         inspectionTween?.kill();
         if (!dialog.open) return;
         if (immediate || reduced) finishInspection();
-        else inspectionTween = gsap.to(inspectionParts, { opacity: 0, x: i => i === 1 ? 48 : i === 2 ? -48 : 0, y: 8, duration: 0.3, ease: "power2.in", onComplete: finishInspection });
+        else inspectionTween = gsap.timeline({ onComplete: finishInspection })
+          .to(inspectionParts, { opacity: 0, x: i => i === 1 ? 48 : i === 2 ? -48 : 0, y: 8, duration: 0.25, ease: "power2.in" }, 0)
+          .to(focus, { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.55, ease: "power3.inOut" }, 0)
+          .to(focus, { opacity: 0, duration: 0.15 }, 0.4);
+      };
+      const inspectionFrame = () => {
+        const bounds = photo.getBoundingClientRect();
+        const top = compact ? 72 : 18;
+        return {
+          x: (innerWidth / 2 - bounds.left - bounds.width / 2) * photoW / bounds.width,
+          y: ((top + innerHeight - 18) / 2 - bounds.top - bounds.height / 2) * photoH / bounds.height,
+          scaleX: (innerWidth - 36) / bounds.width * 430 / 428,
+          scaleY: (innerHeight - top - 18) / bounds.height * 287 / 285,
+        };
       };
       const openInspection = (event: MouseEvent) => {
         if (sceneTime < 134 || dialog.open) return;
@@ -333,9 +364,26 @@ export default function CinematicExperience() {
         dialog.showModal();
         inspectionTween?.kill();
         const instant = reduced || event.detail === 0;
-        inspectionTween = gsap.fromTo(inspectionParts, { opacity: instant ? 1 : 0, x: (i: number) => instant ? 0 : i === 1 ? 64 : i === 2 ? -64 : 0, y: (i: number) => instant ? 0 : i === 0 ? -12 : i === 3 ? 20 : 0 }, { opacity: 1, x: 0, y: 0, duration: instant ? 0 : 0.8, stagger: instant ? 0 : 0.07, ease: "power3.out" });
+        inspectionPose = Object.fromEntries(["x", "y", "xPercent", "yPercent", "scaleX", "scaleY", "opacity"].map(key => [key, gsap.getProperty(focus, key)]));
+        gsap.set(focus, { x: 0, y: 0, xPercent: 0, yPercent: 0, scaleX: 1, scaleY: 1, opacity: 0.65 });
+        if (instant) {
+          gsap.set(focus, inspectionFrame());
+          gsap.set(inspectionParts, { opacity: 1, x: 0, y: 0 });
+        } else inspectionTween = gsap.timeline()
+          .to(focus, { ...inspectionFrame(), duration: 0.9, ease: "power3.inOut" }, 0)
+          .fromTo(inspectionParts, { opacity: 0, x: (i: number) => i === 1 ? 64 : i === 2 ? -64 : 0, y: (i: number) => i === 0 ? -12 : i === 3 ? 20 : 0 }, { opacity: 1, x: 0, y: 0, duration: 0.65, stagger: 0.07, ease: "power3.out" }, 0.15);
         closeButton.focus({ preventScroll: true });
       };
+      const resizeInspection = () => {
+        if (!dialog.open) return;
+        closeInspection(true);
+        // A svh-height change moves the sticky endpoint. Retain the ending's
+        // relative position before measuring its frame, even while body-locked.
+        const scroll = el.querySelector<HTMLElement>(".v2-scroll")!;
+        window.scrollTo({ top: scroll.offsetTop + (scroll.offsetHeight - innerHeight) * sceneTime / EXHIBITION_DURATION, behavior: "instant" });
+        refreshLayout();
+      };
+      window.addEventListener("resize", resizeInspection);
       const onCloseInspection = (event: MouseEvent) => closeInspection(event.detail === 0);
       const onCancelInspection = (event: Event) => { event.preventDefault(); closeInspection(true); };
       const onInspectionKeyDown = (event: KeyboardEvent) => {
@@ -363,6 +411,7 @@ export default function CinematicExperience() {
         const boundary = ACT_BOUNDARIES.findIndex((at) => time < at);
         const index = boundary < 0 ? 4 : boundary;
         sceneTime = reduced ? acts[index].rest : time;
+        if (dialog.open && sceneTime < 134) closeInspection(true);
         timeline.time(sceneTime, false);
         const canFrame = sceneTime >= 55 && sceneTime <= 81;
         if (!canFrame && drag) {
@@ -379,7 +428,6 @@ export default function CinematicExperience() {
           framing.hidden = !canFrame;
           el.toggleAttribute("data-framing-available", canFrame);
         }
-        if (dialog.open && sceneTime < 134) closeInspection(true);
         el.dataset.act = String(index);
         el.dataset.progress = progress.toFixed(4);
         if (index !== active) {
@@ -440,6 +488,7 @@ export default function CinematicExperience() {
       return () => {
         frameTween?.kill(); handTween?.kill(); inspectionTween?.kill(); finishInspection();
         color.style.transform = "";
+        color.style.transformOrigin = "";
         frameButtons.forEach(button => button.removeEventListener("click", chooseFrame));
         photo.removeEventListener("pointerdown", onPointerDown);
         photo.removeEventListener("pointermove", onPointerMove);
@@ -451,7 +500,9 @@ export default function CinematicExperience() {
         resetButton.removeEventListener("click", resetFraming);
         dialog.removeEventListener("cancel", onCancelInspection);
         dialog.removeEventListener("keydown", onInspectionKeyDown);
+        window.removeEventListener("resize", resizeInspection);
         delete photo.dataset.dragging;
+        delete photo.dataset.pressure;
         cancelled = true;
         surface?.dispose();
         cancelAnimationFrame(frame);
@@ -511,7 +562,7 @@ export default function CinematicExperience() {
                 <div className="v2-dither"><PhotoArtifact era="dither" /></div>
                 <div className="v2-color"><PhotoArtifact era="full" /></div>
                 <canvas className="v2-photo-surface" aria-hidden="true" />
-                <svg className="v2-photo-focus" viewBox="0 0 430 287" preserveAspectRatio="none"><path vectorEffect="non-scaling-stroke" d="M1 23V1H23M407 1H429V23M429 264V286H407M23 286H1V264" /></svg>
+                <div className="v2-photo-focus"><svg viewBox="0 0 430 287" preserveAspectRatio="none"><path vectorEffect="non-scaling-stroke" d="M1 23V1H23M407 1H429V23M429 264V286H407M23 286H1V264" /></svg></div>
               </div>
               <div className="v2-data-field">{Array.from({ length: 40 }, (_, i) => <span className="v2-glyph" key={i}><span className="v2-glyph-letter">{GLYPHS[(i * 3 + Math.floor(i / 8)) % GLYPHS.length]}</span><i className="v2-glyph-piece" /></span>)}</div>
               <svg className="v2-pointer" width="24" height="30" viewBox="0 0 24 30"><path d="M2 2v23l6-6 5 10 4-2-5-10h9Z" fill="#e8e6e3" stroke="#111" strokeWidth="1.5" /></svg>

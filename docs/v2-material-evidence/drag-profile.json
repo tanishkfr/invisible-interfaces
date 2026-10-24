@@ -1,0 +1,28 @@
+{
+  "1440x900": {
+    "samples": 550,
+    "median_ms": 16.699999999999818,
+    "p95_ms": 16.799999999999727,
+    "max_ms": 33.40000000000009,
+    "long_tasks": [],
+    "cpu_seconds": {
+      "ScriptDuration": 0.095362,
+      "TaskDuration": 4.228483000000001,
+      "LayoutDuration": 0.002454,
+      "RecalcStyleDuration": 0.026947
+    }
+  },
+  "390x844": {
+    "samples": 502,
+    "median_ms": 16.699999999999818,
+    "p95_ms": 16.799999999999272,
+    "max_ms": 16.80000000000109,
+    "long_tasks": [],
+    "cpu_seconds": {
+      "ScriptDuration": 0.089639,
+      "TaskDuration": 2.182897,
+      "LayoutDuration": 0.002039,
+      "RecalcStyleDuration": 0.023996
+    }
+  }
+}
